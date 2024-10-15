@@ -1,0 +1,32 @@
+.step-indicator {
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+}
+.step-indicator.active {
+    background-color: #71d0a4;
+}
+.step-line {
+    width: 60px; /* Ajusta el ancho de la línea */
+    height: 5px; /* Altura de la línea */
+    background-color: #e0e0e0; /* Color de la línea */
+    align-self: center; /* Centra la línea verticalmente */
+    margin: 0 10px; /* Espaciado horizontal entre la línea y los pasos */
+}
+.info-box {
+    background-color: white; /* Color de fondo blanco */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin-top: 20px; /* Margen superior */
+}
+.certificado-img {
+    width: 300px; /* Ancho fijo */
+    height: auto; /* Mantener la proporción */
+}

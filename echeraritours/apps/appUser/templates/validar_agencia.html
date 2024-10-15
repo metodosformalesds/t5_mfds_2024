@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar Datos de la Agencia - Paso 2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/validar_agencia.css' %}">
+<body>
+    <div class="container mt-5">
+        <div class="info-box text-center">
+            <h5>VALIDAR DATOS DE LA AGENCIA</h5>
+            <div class="d-flex justify-content-center mb-4">
+                <div class="step-indicator">1</div>
+                <div class="step-line"></div> <!-- Línea entre los pasos -->
+                <div class="step-indicator active">2</div>
+            </div>
+            <p class="mb-4">Por favor, sube tu certificado de autenticidad para continuar.</p>
+            <img src="{% static 'img/Registro Nacional de Turismo.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
+            <form id="validacionForm">
+                <div class="mb-3">
+                    <label for="certificado" class="form-label">Certificado de autenticidad</label>
+                    <input type="file" id="certificado" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+                <button type="submit" class="btn btn-custom">Enviar Certificado</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
