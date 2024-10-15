@@ -1,0 +1,67 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: url("../img/montanas.jpg") no-repeat center center fixed;
+    background-color: #68DDBD;
+    background-size: cover;
+    display: block; 
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(104, 221, 189, 0.5);
+    z-index: -1;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 56px); 
+}
+
+.login-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    min-width: 400px;
+    width: 100%;
+    text-align: left;
+}
+
+.login-box img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.login-box form {
+    padding: 20px;
+}
+
+.btn-custom {
+    background-color: #68DDBD;
+    color: white;
+    width: 100%;
+}
+
+.btn-custom:hover {
+    background-color: #68DDBD;
+}
+
+.navbar {
+    position: relative;
+    z-index: 2; 
+}

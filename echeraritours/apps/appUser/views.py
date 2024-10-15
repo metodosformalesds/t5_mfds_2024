@@ -5,6 +5,9 @@ from django.http import HttpResponse
 def index(request):
     return render(request, 'index.html')
 
+def seleccion_registro(request):
+    return render(request, 'seleccion_registro.html')
+
 def agencia_registro(request):
     return render(request, 'agencia_registro.html')
 
@@ -14,3 +17,6 @@ def validar_agencia(request):
         # Aquí puedes guardar el archivo o realizar la validación.
         return HttpResponse('Certificado recibido.')
     return render(request, 'validar_agencia.html')
+
+def login(request):
+    return render(request, 'login.html')
