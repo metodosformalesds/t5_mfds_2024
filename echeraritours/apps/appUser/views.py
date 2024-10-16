@@ -11,6 +11,5 @@ def agencia_registro(request):
 def validar_agencia(request):
     if request.method == 'POST':
         certificado = request.FILES.get('certificado')
-        # Aquí puedes guardar el archivo o realizar la validación.
         return HttpResponse('Certificado recibido.')
     return render(request, 'validar_agencia.html')
