@@ -19,3 +19,6 @@ def validar_agencia(request):
 
 def login(request):
     return render(request, 'login.html')
+
+def sobre_nosotros(request):
+    return render(request, 'sobre_nosotros.html')
