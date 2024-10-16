@@ -21,3 +21,7 @@
 - **ClickUP Task Management**  
   Track team progress and tasks on ClickUP:  
   [✅ ClickUP](https://app.clickup.com/9011196954/v/l/8chqx0u-531)
+
+- **Deploy in PythonAnywhere**
+  The system was deployed in PythonAnywhere in this link:
+  [🤓 Deploy](https://echeraritours.pythonanywhere.com/)
