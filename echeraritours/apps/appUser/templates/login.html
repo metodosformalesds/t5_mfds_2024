@@ -14,7 +14,7 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand logo" href="#">EchérariTours</a>
+                <a class="navbar-brand logo" href="{% url "index" %}">EchérariTours</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -55,7 +55,7 @@
                         <a href="#">¿Olvidaste tu contraseña?</a>
                     </div>
                     <div class="mt-4">
-                        <p>¿No eres miembro? <a href="#">Regístrate</a></p>
+                        <p>¿No eres miembro? <a href="{% url "seleccion_registro" %}">Regístrate</a></p>
                     </div>
                 </form>
             </div>
