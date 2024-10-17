@@ -5,37 +5,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Echérari Tours</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand logo" href="{% url "index" %}">EchérariTours</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'seleccion_registro' %}">Registrarse</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Tours</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Agencias</a>
-                    </li>
-                </ul>
-            </div>
+        <a class="navbar-brand" href="{% url "index" %}">
+            <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "login" %}">Iniciar sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "seleccion_registro" %}">Registrarse</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tours</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Agencias</a>
+                </li>
+            </ul>
         </div>
     </nav>
 
-    <h1>Main page WIP</h1>
+    <div class="container "> 
+        <!-- Search Section -->
+        <div class="search-section text-center ">
+            <h2>Planifica con precisión, explora sin límites.</h2>
+            <div class="container mt-4">
+                {% comment %} Obviamente no manda a ningun lado juas juas {% endcomment %}
+                <form method="get" action="{% url 'index' %}">
+                    {% comment %} No se si para esto hay que hacerlo con GET o POST {% endcomment %}
+                    <div class="form-row justify-content-center">
+                        <div class="col-md-3 mb-3">
+                            <input type="text" class="form-control" placeholder="Elige tu punta de partida" name="punto-partida">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" class="form-control" placeholder="Elige tu destino" name="punto-salida">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <input type="text" class="form-control" placeholder="Elige tu fecha" name="fecha-partida">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Image de México para rellenar ouyeah-->
+        <div class="container text-center">
+            <img src="{% static 'img/mexico.png'%}" alt="Mapa de México" class="img-fluid">
+        </div>
+    </div>
+
+    <!-- Para hacer una linea nomas jiji -->
+    <div class="w-100 linea-color"></div>
+
+
+    <!-- Carrusel para los tours -->
+    <div class="container mt-5">
+        <div id="tourCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="{% static 'img/cancun.jpg'%}" alt="Tour Cancún">
+                </div>
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="{% static 'img/montanas.jpg'%}" alt="Tour Cancún">
+                </div>
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="{% static 'img/cancun.jpg'%}" alt="Tour Cancún">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#tourCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#tourCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Siguiente</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Seccion ultimas reviews  -->
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">Últimas reseñas</h3>
+        <div class="card-columns">
+            {% comment %} {% for reviews in ultimas_reviews???? %} Esto obviamente queda despues {% endcomment %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"> Tour a Cancun - 4 ⭐ </h5>
+                    <p class="card-text"> Esta es la descripción del tour a cancun hola mundo </p>
+                    <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
+                </div>
+            </div>
+            {% comment %} {% endfor %} {% endcomment %}
+        </div>
+    </div>
+
+    {% comment %} Aqui va para incluir el footer {% endcomment %}
+    <!-- Footer -->
+    <footer class="text-center mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Sobre nosotros</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url "sobre_nosotros" %}">Quiénes somos</a></li>
+                        <li><a href="#">Misión</a></li>
+                        <li><a href="#">Visión</a></li>
+                        <li><a href="#">Valores</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Explora la Página</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Reservas de Viajeros</a></li>
+                        <li><a href="#">Agencias Afiliadas</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Términos legales y privacidad</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Aviso de privacidad</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>¿Necesitas ayuda?</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Preguntas frecuentes (FAQs)</a></li>
+                        <li><a href="#">Politicas de cancelación</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
