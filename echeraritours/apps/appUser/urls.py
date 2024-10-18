@@ -15,4 +15,6 @@ urlpatterns = [
     path('viajero_registro2', views.viajero_registro2, name='viajero_registro2'),
     path('terminos_y_condiciones/', views.terminos_y_condiciones, name='terminos_y_condiciones'),
     path('terminos_y_condiciones2/', views.terminos_y_condiciones2, name='terminos_y_condiciones2'),
+    path('terminos_y_condiciones2/', views.terminos_y_condiciones2, name='terminos_y_condiciones2'),
+    path('terminos_legales', views.terminos_legales, name='terminos_legales'),
 ]

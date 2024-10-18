@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - EchérariTours</title>
+    <style>
+        body {
+            font-family: Oswald, Merriweather;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ffffff;
+            padding: 5px 20px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end; 
+        }
+        .logo-container {
+            display: flex; 
+            align-items: flex-end; 
+        }
+        header img {
+            width: 110px;
+            margin-right: 10px; 
+            padding-bottom: 5px; 
+        }
+        header h1 {
+            margin: 0; 
+            color: #68ddbd;
+            padding-bottom: 5px; 
+        }
+        nav {
+            text-align: right;
+        }
+        nav a {
+            margin-right: 20px; 
+            text-decoration: none;
+            color: #68ddbd;
+        }
+        nav a:last-child {
+            margin-right: 0; 
+        }
+        .container {
+            max-width: 70%; 
+            margin: 0 auto;
+            padding: 25px;
+        }
+        h2 {
+            color: #68ddbd;
+            border-bottom: 1px solid #68ddbd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #68ddbd;
+            margin-top: 30px;
+            border-bottom: 1px solid #68ddbd;
+            padding-bottom: 10px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+    {% load static %}
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'img/logo_eheraritours.jpeg' %}" alt="Logo de EchérariTours"> 
+            <h1>EchérariTours</h1>
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">Inicio</a>
+            <a href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
+            <a href="#">Términos legales y privacidad</a>
+            <a href="#">¿Necesitas Ayuda?</a>
+            <a href="{% url 'index' %}">Contacto</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Términos y Condiciones de EchérariTours</h2>
+
+        
+        <p>1. Introducción</p>
+        <p>Bienvenido a EchérariTours. Estos términos y condiciones regulan el acceso y uso de nuestros servicios, que conectan a usuarios con agencias de viajes certificadas en México. Al utilizar EchérariTours, aceptas estos términos en su totalidad. Si no estás de acuerdo, por favor no utilices nuestros servicios.</p>
+
+        <p>2. Descripción del Servicio</p>
+        <p>EchérariTours actúa como intermediario entre los usuarios y las agencias de viajes certificadas, facilitando la búsqueda, comparación y reserva de tours. No somos una agencia de viajes, sino una plataforma de intermediación, y nuestras responsabilidades se limitan a la gestión de reservas.</p>
+
+        <p>3. Restricciones para Menores de Edad</p>
+        <p>3.1 Prohibición de Compra y Viaje Solo:</p>
+        <p>Los menores de 18 años no están autorizados a realizar compras o reservas de forma independiente en EchérariTours. Si un menor desea viajar, deberá estar acompañado por un adulto responsable, que será el titular de la reserva y la compra.</p>
+        
+        <p>3.2 Validación de Edad:</p>
+        <p>Durante el proceso de registro y compra, se requerirá que los usuarios proporcionen su fecha de nacimiento para verificar que son mayores de edad. Si se descubre que un menor ha realizado una compra sin supervisión, la reserva será cancelada y se procederá al reembolso correspondiente.</p>
+
+        <p>4. Disponibilidad de Asientos</p>
+        <p>4.1 Capacidad de los Tours:</p>
+        <p>EchérariTours solo ofrece el número de asientos disponibles proporcionados por las agencias de viajes. No somos responsables si, por causas ajenas a la plataforma, las agencias no cumplen con el número de asientos o cupos disponibles indicados.</p>
+
+        <p>4.2 Actualización de Disponibilidad:</p>
+        <p>La disponibilidad de tours y asientos se actualiza en tiempo real según la información proporcionada por las agencias. En casos excepcionales, la disponibilidad puede variar debido a demoras en la actualización de la información. En caso de sobreventa, se realizará el reembolso correspondiente.</p>
+
+        <p>5. Proceso de Reserva</p>
+        <p>5.1 Confirmación de Reserva:</p>
+        <p>Una vez que el usuario selecciona y confirma un tour, EchérariTours gestionará la reserva. La confirmación final estará sujeta a la disponibilidad real proporcionada por la agencia.</p>
+
+        <p>5.2 Modificaciones y Cancelaciones:</p>
+        <p>Las modificaciones o cancelaciones estarán sujetas a las políticas de cada agencia de viajes. EchérariTours no garantiza reembolsos o cambios fuera de lo establecido por la agencia.</p>
+
+        <p>6. Responsabilidad de las Agencias de Viaje</p>
+        <p>6.1 Certificación de las Agencias:</p>
+        <p>Todas las agencias que operan en EchérariTours deben estar certificadas por el Registro Nacional de Turismo (RNT). La plataforma verifica este registro, pero no se responsabiliza de la validez continua de la certificación o el cumplimiento de las leyes locales por parte de la agencia.</p>
+
+        <p>6.2 Incumplimiento por Parte de la Agencia:</p>
+        <p>EchérariTours no se responsabiliza por la cancelación o modificación de tours por parte de las agencias, ni por el incumplimiento de los servicios prestados. Cualquier disputa deberá ser resuelta directamente con la agencia.</p>
+
+        <p>7. Prohibiciones</p>
+        <p>7.1 Reventa de Reservas:</p>
+        <p>Queda estrictamente prohibida la reventa de asientos o reservas realizadas a través de EchérariTours. Las reservas son intransferibles a terceros sin el consentimiento previo de la agencia de viajes correspondiente.</p>
+
+        <p>7.2 Conducta Inadecuada:</p>
+        <p>EchérariTours se reserva el derecho de cancelar las cuentas de usuarios que realicen conductas fraudulentas, inapropiadas o que violen estos términos y condiciones.</p>
+
+        <p>8. Ley Aplicable y Jurisdicción</p>
+        <p>Estos términos se rigen por las leyes vigentes en México. Cualquier disputa relacionada con el uso de EchérariTours será resuelta en los tribunales de México.</p>
+
+        <h2>Avisos de privacidad</h2>
+        <p>1. Responsable de los Datos Personales</p>
+        <p>EchérariTours es una plataforma intermediaria entre viajeros y agencias de viajes certificadas. No contamos con una ubicación presencial y operamos exclusivamente en línea.</p>
+
+        <h2>2. Datos Recabados</h2>
+            <p>Para ofrecerte nuestros servicios, recabamos los siguientes datos personales:</p>
+            <ol>
+                <li>Nombre completo</li>
+                <li>Fecha de nacimiento</li>
+                <li>Correo electrónico</li>
+                <li>Número de teléfono</li>
+                <li>Datos de pago (tarjetas de crédito/débito y PayPal)</li>
+            </ol>
+
+        <p>Finalidades Primarias:</p>
+        <p>Los datos recabados serán utilizados para:</p>
+        <ol>
+            <li>1. Gestión de reservas y compra de tours.</li>
+            <li>2. Verificación de identidad y edad (solo se acepta INE como identificación oficial).</li>
+            <li>3. Comunicación de confirmaciones o modificaciones en tus reservas.</li>
+            <li>4. Facturación y procesamiento de pagos mediante tarjetas de crédito, débito, o PayPal.</li>
+        </ol>
+        <p>Finalidades Secundarias:</p>
+        <p>Adicionalmente, podremos utilizar tus datos para:</p>
+        <ul>
+            <li>Envío de promociones, ofertas, y novedades relacionadas con nuestros servicios.</li>
+        </ul>
+
+        <p>3. Uso de Cookies</p>
+        <p>Nuestro sitio web utiliza cookies para mejorar tu experiencia de navegación y personalizar contenido. Puedes deshabilitar el uso de cookies desde la configuración de tu navegador, pero esto puede afectar la funcionalidad del sitio.</p>
+
+        <p>4. Derechos ARCO</p>
+        <p>Como titular de tus datos personales, tienes derecho a acceder, rectificar, cancelar u oponerte al uso de tus datos personales (derechos ARCO). Para ejercer estos derechos, puedes ponerte en contacto con nosotros a través del correo electrónico: echeraritours@gmail.com</p>
+
+        <p>5. Cambios a los Términos y Condiciones</p>
+        <p>EchérariTours se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Te recomendamos revisar periódicamente esta sección para estar informado sobre cualquier cambio.</p>
+
+        <h2>Aceptación de Términos</h2>
+        <p>Al utilizar nuestros servicios, confirmas que has leído, entendido y aceptas estos términos y condiciones.</p>
+    </div>
+
+</body>
+</html>

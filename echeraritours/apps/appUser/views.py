@@ -45,3 +45,8 @@ def terminos_y_condiciones(request):
 
 def terminos_y_condiciones2(request):
     return render(request, 'terminos_y_condiciones2.html')
+
+def terminos_legales(request):
+    return render(request, 'terminos_legales.html')
+
+

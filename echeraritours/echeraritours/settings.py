@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Imprime la ruta del directorio static para verificar su existencia
 # Asegúrate de que esta ruta sea correcta
-print(os.path.join(BASE_DIR, 'static'))
+print(BASE_DIR / 'static')  # Usar el operador / de Path
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -63,7 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            BASE_DIR / 'templates',  # Usar Path
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,10 +123,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    # This is where Django will look for static files
-    os.path.join(BASE_DIR, 'static'),
-    BASE_DIR / "appUser/static",
-    BASE_DIR / "static",
+    BASE_DIR / 'static',  # Usar Path
     BASE_DIR / "appUser/static",
 ]
 
@@ -148,7 +145,10 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'tu-facebook-app-secret'
 
 SOCIAL_AUTH_APPLE_ID_CLIENT = 'tu-apple-client-id'
 SOCIAL_AUTH_APPLE_ID_TEAM = 'tu-apple-team-id'
-SOCIAL_AUTH_APPLE_ID_KEY = open('ruta/a/tu_clave_privada.pem').read()
-
+try:
+    SOCIAL_AUTH_APPLE_ID_KEY = open(BASE_DIR / 'tu_clave_privada.pem').read()
+except FileNotFoundError:
+    print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
+    SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
+    
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
