@@ -1,14 +1,14 @@
-html, body {
+/* login.css */
+html,
+body {
     height: 100%;
     margin: 0;
 }
 
+/* Ajustar el fondo */
 body {
-    background: url("../img/montanas.jpg") no-repeat center center fixed;
-    background-color: #68DDBD;
-    background-size: cover;
-    display: block; 
-    position: relative;
+    background: url("../../img/montanas.jpg") no-repeat center center fixed;
+    width: 100%;
 }
 
 body::before {
@@ -18,17 +18,23 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(104, 221, 189, 0.5);
+
     z-index: -1;
+    /* Mantener el fondo detrás de otros elementos */
 }
 
+/* Contenedor de login */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 56px); 
+    min-height: calc(100vh - 56px);
+    /* Restar la altura del navbar */
+    margin-top: 56px;
+    /* Ajustar según la altura real del navbar */
 }
 
+/* Estilos para el login-box */
 .login-box {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 0;
@@ -36,7 +42,7 @@ body::before {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     max-width: 700px;
     min-width: 400px;
-    width: 100%;
+    width: 50%;
     text-align: left;
 }
 
@@ -59,9 +65,4 @@ body::before {
 
 .btn-custom:hover {
     background-color: #68DDBD;
-}
-
-.navbar {
-    position: relative;
-    z-index: 2; 
 }

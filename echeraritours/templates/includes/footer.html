@@ -1,0 +1,63 @@
+{% load static %}
+
+<div class="container-fluid bg-light text-center">
+    <footer class="py-4">
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Sobre nosotros</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'sobre_nosotros' %}">Quiénes somos</a></li>
+                    <li><a href="#">Misión</a></li>
+                    <li><a href="#">Visión</a></li>
+                    <li><a href="#">Valores</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Explora la Página</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Reservas de Viajeros</a></li>
+                    <li><a href="#">Agencias Afiliadas</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Términos legales y privacidad</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Términos y condiciones</a></li>
+                    <li><a href="#">Aviso de privacidad</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>¿Necesitas ayuda?</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Preguntas frecuentes (FAQs)</a></li>
+                    <li><a href="#">Políticas de cancelación</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <ul class="nav justify-content-center border-top pt-3">
+                <li class="nav-item"><a href="{% url "index" %}" class="nav-link px-2 text-body-secondary">Inicio</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Tours</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Agencias</a></li>
+            </ul>
+            <p class="text-body-secondary">&copy; 2024 EchérariTours</p>
+        </div>
+    </footer>
+</div>
+
+
+<style>
+    h5 {
+        color: #757575
+    }
+
+    a {
+        text-decoration: none;
+        color: #12AF81;
+    }
+
+    footer a:hover {
+        text-decoration: none; 
+        color: #68DDBD;
+    }
+</style>

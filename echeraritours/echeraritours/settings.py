@@ -17,7 +17,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Imprime la ruta del directorio static para verificar su existencia
-print(os.path.join(BASE_DIR, 'static'))  # Asegúrate de que esta ruta sea correcta
+# Asegúrate de que esta ruta sea correcta
+print(os.path.join(BASE_DIR, 'static'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -121,7 +122,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # This is where Django will look for static files
+    # This is where Django will look for static files
+    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "appUser/static",
 ]
 
 # Default primary key field type

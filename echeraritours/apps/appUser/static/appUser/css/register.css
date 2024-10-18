@@ -1,0 +1,58 @@
+body {
+    background-image: url('{% static "img/montanas.jpg" %}');
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.registro-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.step-indicator {
+    width: 30px;
+    height: 30px;
+    background-color: lightgray;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+}
+
+.step-indicator.active {
+    background-color: #68ddbd;
+}
+
+.step-line {
+    width: 30px;
+    height: 5px;
+    background-color: lightgray;
+    margin: 0 10px;
+}
+
+.btn-custom {
+    background-color: #68ddbd;
+    color: white;
+    width: 100%;
+}
+
+.btn-custom:hover {
+    background-color: #57c0a8;
+}
+
+input::placeholder {
+    color: #000;
+}

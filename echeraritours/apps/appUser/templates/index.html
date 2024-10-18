@@ -1,122 +1,45 @@
+{% extends "base.html" %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Echérari Tours</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        body {
-            background-color: #f8f9fa; /* Fondo general */
-        }
+{% block content %}
+    <link rel="stylesheet" href="{% static "appUser/css/style.css" %}"> 
 
-        /* Estilo para el encabezado */
-        nav {
-            background-color: white; /* Fondo blanco */
-        }
-
-        nav a {
-            color: #68DBDD; /* Color de las letras en el navbar */
-        }
-
-        .search-section {
-            background-color: #68ddbd;  
-            padding: 20px;               
-            border-radius: 8px;          
-            margin-bottom: 20px;         
-            text-align: center;            
-            width: 100%;                  
-            box-sizing: border-box;   
-        }
-
-        .map-image {
-            float: right; 
-            max-width: 45%; 
-            height: auto; 
-            margin-left: 20px; 
-        }
-
-        .carousel-inner img {
-            max-height: 400px; 
-            object-fit: cover; 
-        }
-
-        .spacer {
-            margin-top: 110px; 
-        }
-
-        /* Estilo para el título */
-        .main-title {
-            font-size: 3rem; /* Tamaño del texto */
-            font-weight: bold; /* Grosor del texto */
-            margin: 0; /* Eliminar márgenes */
-            color: #68DBDD; /* Color del texto */
-            text-align: center; /* Centrar texto */
-        }
-    </style>
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'img/logo_eheraritours.jpeg' %}" alt="Echérari Tours" style="height: 40px;">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'seleccion_registro' %}">Registrarse</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Tours</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Agencias</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container"> 
-        <!-- Título centrado -->
-        <h1 class="main-title">Echérari Tours</h1>
-
-        <!-- Search Section -->
-        <div class="search-section">
-            <h2>Planifica con precisión, explora sin límites.</h2>
-            <div class="container mt-4">
-                <form method="get" action="{% url 'index' %}">
-                    <div class="form-row justify-content-start">
-                        <div class="col-md-3 mb-3">
-                            <input type="text" class="form-control" placeholder="Elige tu punta de partida" name="punto-partida">
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <input type="text" class="form-control" placeholder="Elige tu destino" name="punto-salida">
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <input type="text" class="form-control" placeholder="Elige tu fecha" name="fecha-partida">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                        </div>
-                    </div>
-                </form>
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+        <div class="row align-items-center g-lg-5 py-5"> 
+            <div class="col-md-10 mx-auto col-lg-5">
+                <img src="{% static "img/logo_eheraritours.jpeg" %}" alt="">
+            </div>
+            <div class="col-lg-7 text-center text-lg-start">
+                <h1 class="display-1 titulo">Echerari Tours</h1>
             </div>
         </div>
+        <hr class="my-4">
+        <h2 class="text-center">De Chihuahua a todo México: Tu aventura te espera</h2>
+    </div> 
 
-        <!-- Imagen de México alineada a la izquierda -->
-        <div class="container text-left">
-            <img src="{% static 'img/mexico.png' %}" alt="Mapa de México" class="img-fluid map-image">
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+        <div class="row d-flex g-lg-5 py-5">
+            <div class="col-md-10 mx-auto col-lg-5">
+                <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" style="background-color: #68DDBD"> 
+                    <h4 class="text-center">Planifica con precisión, explora sin límites.</h4>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" placeholder="Elige tu punta de partida" name="punto-partida">
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" placeholder="Elige tu destino" name="punto-salida">
+                    </div>
+                    <input type="text" class="form-control" placeholder="Elige tu fecha" name="fecha-partida">
+                    <hr class="my-4">
+                    <button class="w-100 btn btn-lg btn-secondary" type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="col-lg-7 text-center text-lg-start d-flex align-items-center justify-content-center">
+                <img src="{% static 'img/mexico.png' %}" alt="Mapa de México" class="img-fluid map-image">
+            </div>
         </div>
     </div>
+    
 
     <!-- Línea para separar secciones -->
     <div class="w-100 linea-color"></div>
@@ -129,13 +52,13 @@
         <div id="tourCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
+                    <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="{% static 'img/montanas.jpg' %}" alt="Tour Montañas">
+                    <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Montañas">
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
+                    <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
                 </div>
             </div>
             <a class="carousel-control-prev" href="#tourCarousel" role="button" data-slide="prev">
@@ -152,8 +75,7 @@
     <!-- Sección últimas reseñas -->
     <div class="container mt-5">
         <h3 class="text-center mb-4">Últimas reseñas</h3>
-        <div class="card-columns">
-            {% comment %} {% for reviews in ultimas_reviews %} Esto obviamente queda después {% endcomment %}  
+        <div class="card-columns">  
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
@@ -161,52 +83,9 @@
                     <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
                 </div>
             </div>
-            {% comment %} {% endfor %} {% endcomment %}
         </div>
     </div>
 
-    {% comment %} Aquí va para incluir el footer {% endcomment %}
-    <!-- Footer -->
-    <footer class="text-center mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <h5>Sobre nosotros</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{% url 'sobre_nosotros' %}">Quiénes somos</a></li>
-                        <li><a href="#">Misión</a></li>
-                        <li><a href="#">Visión</a></li>
-                        <li><a href="#">Valores</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Explora la Página</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Reservas de Viajeros</a></li>
-                        <li><a href="#">Agencias Afiliadas</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Términos legales y privacidad</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Términos y condiciones</a></li>
-                        <li><a href="#">Aviso de privacidad</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>¿Necesitas ayuda?</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Preguntas frecuentes (FAQs)</a></li>
-                        <li><a href="#">Políticas de cancelación</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+{% endblock content %}
 
-    <!-- Scripts de Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+

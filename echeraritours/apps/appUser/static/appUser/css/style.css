@@ -1,0 +1,62 @@
+body {
+    background-color: #f8f9fa;
+    /* Fondo general */
+}
+
+.titulo {
+    color: #68ddbd;
+    font-weight: bold;
+}
+
+.search-section {
+    background-color: #68ddbd;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.image-container {
+    background-color: transparent;
+    /* O el color que desees */
+}
+
+
+.map-image {
+    background-color: transparent;
+    mix-blend-mode: multiply;
+}
+
+.carousel-inner img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.spacer {
+    margin-top: 110px;
+}
+
+.logo {
+    font-size: 2.5rem;
+    color: #26a69a;
+    font-weight: bold;
+}
+
+.search-section {
+    background-color: #81c784;
+    padding: 40px;
+    border-radius: 10px;
+    color: white;
+}
+
+.carousel img {
+    height: 400px;
+    object-fit: cover;
+}
+
+
+.review-card {
+    margin-bottom: 20px;
+}
