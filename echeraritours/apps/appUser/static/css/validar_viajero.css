@@ -1,0 +1,32 @@
+.step-indicator {
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+}
+.step-indicator.active {
+    background-color: #71d0a4;
+}
+.step-line {
+    width: 60px;
+    height: 5px;
+    background-color: #e0e0e0;
+    align-self: center;
+    margin: 0 10px;
+}
+.info-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+.certificado-img {
+    width: 300px;
+    height: auto;
+}

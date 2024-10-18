@@ -18,7 +18,14 @@ def viajero_registro2(request):
     return render(request, 'viajero_registro2.html')
 
 def validar_viajero(request):
+    if request.method == 'POST':
+        INE = request.FILES.get('INE')
+        if INE:
+            return HttpResponse('Certificado recibido.')
+        else:
+            return HttpResponse('No se recibió el certificado.', status=400)  
     return render(request, 'validar_viajero.html')
+    pass
 
 def validar_agencia(request):
     if request.method == 'POST':

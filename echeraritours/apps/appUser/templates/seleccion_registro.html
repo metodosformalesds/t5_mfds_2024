@@ -14,13 +14,13 @@
         <div class="options-container">
             <div class="option">
                 <img src="{% static 'img/viajero_icon.png' %}" alt="Icono de Viajero">
-                <button>Soy un Viajero</button>
+                <a href="{% url 'viajero_registro' %}"><button>Soy un Viajero</button></a>
             </div>
             <div class="divider"></div>
             <div class="option">
                 <img src="{% static 'img/empresa_icon.png' %}" alt="Icono de Empresa">
                 <button>
-                    <a href="{% url "agencia_registro" %}">Soy una Empresa</a>
+                    <a href="{% url 'agencia_registro' %}">Soy una Empresa</a>
                 </button>
             </div>
         </div>
