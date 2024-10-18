@@ -90,11 +90,7 @@
     </div>
     <script>
         document.getElementById('registroForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita que el formulario se envíe de manera predeterminada
-
-            // Aquí puedes agregar validaciones adicionales si es necesario
-
-            // Redirecciona a la siguiente página viajero_registro2.html
+            event.preventDefault(); 
             window.location.href = "{% url 'viajero_registro2' %}";
         });
     </script>

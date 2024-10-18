@@ -3,67 +3,16 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/register.css' %}"> <!-- Cambiar a style.css -->
-    <style>
-        body {
-            background-image: url('{% static "img/montanas.jpg" %}');
-            background-size: cover;
-            background-position: center;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .registro-box {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .step-indicator {
-            width: 30px;
-            height: 30px;
-            background-color: lightgray;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-        }
-        .step-indicator.active {
-            background-color: #68ddbd;
-        }
-        .step-line {
-            width: 30px;
-            height: 5px;
-            background-color: lightgray;
-            margin: 0 10px;
-        }
-        .btn-custom {
-            background-color: #68ddbd;
-            color: white;
-            width: 100%;
-        }
-        .btn-custom:hover {
-            background-color: #57c0a8;
-        }
-        input::placeholder {
-            color: #000; 
-        }
-    </style>
-
-
+    
+</head>
+<body>
     <div class="container">
         <div class="registro-box">
             <h5 class="text-center">CREAR UNA CUENTA</h5>
             <div class="d-flex justify-content-center mb-4">
                 <div class="step-indicator active">1</div>
                 <div class="step-line"></div> <!-- Línea entre los pasos -->
-                <div class="step-indicator">2</div>
+                <div class="step-indicator completed">2</div>
             </div>
             <form>
                 <div class="mb-3">
@@ -87,8 +36,8 @@
                     <input type="password" id="contrasena" class="form-control" placeholder="Value" required>
                 </div>
                 <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="terminos">
-                    <label class="form-check-label" for="terminos">Acepto <a href="#">Términos y Condiciones</a></label>
+                    <input type="checkbox" class="form-check-input" id="terminos" required>
+                    <label class="form-check-label" for="terminos">Acepto <a href="{% url 'terminos_y_condiciones' %}" class="link-terminos">Términos y Condiciones </a></label>
                 </div>
                 <button type="submit" class="btn btn-custom">Continuar</button>
             </form>

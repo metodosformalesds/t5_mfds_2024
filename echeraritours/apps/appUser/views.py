@@ -39,3 +39,9 @@ def login(request):
 
 def sobre_nosotros(request):
     return render(request, 'sobre_nosotros.html')
+
+def terminos_y_condiciones(request):
+    return render(request, 'terminos_y_condiciones.html')
+
+def terminos_y_condiciones2(request):
+    return render(request, 'terminos_y_condiciones2.html')
