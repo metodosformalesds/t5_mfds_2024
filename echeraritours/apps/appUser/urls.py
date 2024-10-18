@@ -11,4 +11,6 @@ urlpatterns = [
     path('sobre_nosotros', views.sobre_nosotros, name='sobre_nosotros'),
     path('viajero_registro', views.viajero_registro, name='viajero_registro'),
     path('viajero_registro2', views.viajero_registro2, name='viajero_registro2'),
+    path('terminos_y_condiciones/', views.terminos_y_condiciones, name='terminos_y_condiciones'),
+    path('terminos_y_condiciones2/', views.terminos_y_condiciones2, name='terminos_y_condiciones2'),
 ]
