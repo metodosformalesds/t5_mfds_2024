@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.appTour',
     'apps.appPayment',
     'apps.appDashboard',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -125,9 +126,29 @@ STATICFILES_DIRS = [
     # This is where Django will look for static files
     os.path.join(BASE_DIR, 'static'),
     BASE_DIR / "appUser/static",
+    BASE_DIR / "static",
+    BASE_DIR / "appUser/static",
 ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.apple.AppleIdAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'tu-google-client-id'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'tu-google-client-secret'
+
+SOCIAL_AUTH_FACEBOOK_KEY = 'tu-facebook-app-id'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'tu-facebook-app-secret'
+
+SOCIAL_AUTH_APPLE_ID_CLIENT = 'tu-apple-client-id'
+SOCIAL_AUTH_APPLE_ID_TEAM = 'tu-apple-team-id'
+SOCIAL_AUTH_APPLE_ID_KEY = open('ruta/a/tu_clave_privada.pem').read()
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

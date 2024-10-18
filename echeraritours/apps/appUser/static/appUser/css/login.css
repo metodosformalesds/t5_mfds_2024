@@ -47,7 +47,7 @@ body::before {
 }
 
 .login-box img {
-    width: 100%;
+    width: 60%;
     height: 150px;
     object-fit: cover;
     border-radius: 10px 10px 0 0;
