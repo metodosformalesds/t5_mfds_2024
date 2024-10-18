@@ -6,7 +6,7 @@
     <title>Sobre Nosotros - EchérariTours</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Oswald, Merriweather;
             background-color: #ffffff;
             color: #000000;
             margin: 0;
@@ -14,36 +14,52 @@
         }
         header {
             background-color: #ffffff;
-            padding: 20px;
-            text-align: center;
+            padding: 5px 20px;
             border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end; 
+        }
+        .logo-container {
+            display: flex; 
+            align-items: flex-end; 
+        }
+        header img {
+            width: 110px;
+            margin-right: 10px; 
+            padding-bottom: 5px; 
         }
         header h1 {
-            margin: 0;
+            margin: 0; 
             color: #68ddbd;
+            padding-bottom: 5px; 
         }
         nav {
             text-align: right;
-            margin: 20px 0;
         }
         nav a {
-            margin: 0 15px;
+            margin-right: 20px; 
             text-decoration: none;
             color: #68ddbd;
         }
+        nav a:last-child {
+            margin-right: 0; 
+        }
         .container {
-            max-width: 1000px;
+            max-width: 70%; 
             margin: 0 auto;
-            padding: 20px;
+            padding: 25px;
         }
         h2 {
             color: #68ddbd;
             border-bottom: 1px solid #68ddbd;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
         }
         h3 {
             color: #68ddbd;
             margin-top: 30px;
+            border-bottom: 1px solid #68ddbd;
+            padding-bottom: 10px;
         }
         ul {
             list-style: none;
@@ -53,22 +69,26 @@
             margin-bottom: 10px;
         }
     </style>
+    {% load static %}
 </head>
 <body>
 
     <header>
-        <h1>EchérariTours</h1>
+        <div class="logo-container">
+            <img src="{% static 'img/logo_eheraritours.jpeg' %}" alt="Logo de EchérariTours"> 
+            <h1>EchérariTours</h1>
+        </div>
         <nav>
-            <a href="#">Inicio</a>
-            <a href="#">Sobre Nosotros</a>
-            <a href="#">Explorar la Página</a>
+            <a href="{% url 'index' %}">Inicio</a>
+            <a href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
             <a href="#">Términos legales y privacidad</a>
             <a href="#">¿Necesitas Ayuda?</a>
+            <a href="{% url 'index' %}">Contacto</a>
         </nav>
     </header>
 
     <div class="container">
-        <h2>Sobre Nosotros</h2>
+        <h3>¿Quiénes Somos?</h3>
         <p>Somos un portal de comercio electrónico especializado en la promoción y comercialización de tours y experiencias turísticas en México, con un enfoque particular en las agencias de viaje locales de Chihuahua. Nuestra plataforma facilita a los usuarios el proceso de explorar, comparar y reservar planes turísticos con diferentes empresas en un solo lugar, eliminando la necesidad de contactar a cada agencia por separado. Además, ofrecemos a las agencias una herramienta completa para gestionar sus servicios, disponibilidad y precios, ayudándoles a llegar a más clientes y aumentar su visibilidad.</p>
 
         <h3>Misión</h3>
