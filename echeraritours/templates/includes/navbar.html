@@ -5,6 +5,9 @@
         <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;">
         Echérari Tours   
     </a>
+    {% if user.is_authenticated %}
+    <p>Bienvenido {{ user.username }}</p>
+    {% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -13,12 +16,23 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Inicio</a>
             </li>
+
+            <!-- En la barra de navegacion se actualiza si ya se inicio sesion -->
+
+            {% if user.is_authenticated %}
+            <li>
+                <a class="nav-link" href="{% url "logout" %}">Cerrar sesión</a>
+            </li>
+            {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'seleccion_registro' %}">Registrarse</a>
+                <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
             </li>
+            {% endif %}
+
+
             <li class="nav-item">
                 <a class="nav-link" href="#">Tours</a>
             </li>

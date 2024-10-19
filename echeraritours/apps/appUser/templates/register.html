@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/login.css" %}"> 
+{% endblock extra_styles %}
+
+{% block content %}
+
+<div class="login-container mt-5 mb-5">
+    <div class="login-box">
+        <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
+
+        <form method="POST" action="">
+            {% csrf_token %}
+        
+            <h3 class="mt-4 mb-3">Registro de usuario</h3>
+        
+            <div class="mb-4">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+        
+            <div class="mb-4">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+        
+            <div class="mb-4">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+            </div>
+        
+            <div class="mb-4">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+            </div>
+        
+            <input type="submit" class="btn btn-custom" value="Crear usuario">
+        </form>
+        {{ form.errors }}
+        <div class="mt-4">
+            <p>Ya eres miembro? <a href="{% url "login" %}">Inicia sesion</a></p>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

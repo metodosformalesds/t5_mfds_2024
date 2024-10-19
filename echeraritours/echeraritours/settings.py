@@ -57,7 +57,7 @@ ROOT_URLCONF = 'echeraritours.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,6 +132,11 @@ STATICFILES_DIRS = [
 #     'django.contrib.auth.backends.ModelBackend',
 # )
 
+AUTHENTICATION_BACKENDS = (
+    'apps.appUser.authentication_backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 # SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'tu-google-client-id'
 # SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'tu-google-client-secret'
 
@@ -145,5 +150,5 @@ STATICFILES_DIRS = [
 # except FileNotFoundError:
 #     print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
 #     SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
-    
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
