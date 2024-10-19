@@ -1,85 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content %}
-<link rel="stylesheet" href="{% static "appUser/css/login.css" %}">
-<style>
-    body {
-        background-image: url("{% static 'img/montanas.jpg' %}");
-        background-size: cover;
-        background-position: center;
-    }
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    .login-box {
-        background-color: white;
-        width: 100%;
-        max-width: 300px;
-        border-radius: 10px;
-        padding: 30px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        position: relative; /* Para ajustar la posición del info box */
-    }
-    .login-box img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px 10px 0 0;
-    }
-    .btn-custom {
-        background-color: #68ddbd;
-        color: white;
-        width: 100%;
-    }
-    .btn-custom:hover {
-        background-color: #57c0a8;
-    }
-    .divider {
-        margin: 20px 0;
-        text-align: center;
-        position: relative;
-    }
-    .divider::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background-color: #68ddbd; /* Cambiado a color #68ddbd */
-    }
-    .divider span {
-        background-color: white;
-        padding: 0 10px;
-        position: relative;
-        z-index: 1;
-    }
-    .social-btn {
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center; /* Alinear verticalmente */
-    }
-    .social-btn a {
-        width: 32%; /* Ajustado para alinear iconos */
-        text-align: center;
-        border-radius: 5px;
-        text-decoration: none;
-    }
-    .social-btn a img {
-        width: 100%;
-        height: 40px; /* Ajusta el tamaño de los iconos */
-        object-fit: contain;
-    }
-</style>
+{% block title %}Login - EcherariTours{% endblock title %}
 
-<div class="login-container">
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/login.css" %}"> 
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="login-container mt-5 mb-5">
     <div class="login-box">
-        <img src="{% static 'img/cancun.jpg' %}" alt="Imagen de montaña">
+        <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
         <form>
-            <h5 class="mt-4 mb-3">Iniciar sesión</h5>
+            <h3 class="mt-4 mb-3">Iniciar sesión</h3>
             <div class="mb-4">
                 <input type="email" class="form-control" placeholder="Correo electrónico" required>
             </div>
@@ -96,14 +28,14 @@
 
             <!-- Botones para inicio de sesión social con imágenes -->
             <div class="social-btn">
-                <a href="{% url 'social:begin' 'google-oauth2' %}">
-                    <img src="{% static 'img/google.png' %}" alt="Iniciar con Google">
+                <a href="#">
+                    <img src="{% static 'appUser/img/google.png' %}" alt="Iniciar con Google">
                 </a>
-                <a href="{% url 'social:begin' 'facebook' %}">
-                    <img src="{% static 'img/facebook.png' %}" alt="Iniciar con Facebook">
+                <a href="#">
+                    <img src="{% static 'appUser/img/facebook.png' %}" alt="Iniciar con Facebook">
                 </a>
-                <a href="{% url 'social:begin' 'apple-id' %}">
-                    <img src="{% static 'img/apple.png' %}" alt="Iniciar con Apple">
+                <a href="#">
+                    <img src="{% static 'appUser/img/apple.png' %}" alt="Iniciar con Apple">
                 </a>
             </div>
 
@@ -113,4 +45,5 @@
         </form>
     </div>
 </div>
+
 {% endblock content %}

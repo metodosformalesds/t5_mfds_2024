@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 {% load static %}
+{% block title %}Agencia registro - EcherariTours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/registro.css" %}">
+{% endblock extra_styles %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/register.css' %}"> <!-- Cambiar a style.css -->
-    
-</head>
-<body>
+
     <div class="container">
         <div class="registro-box">
             <h5 class="text-center">CREAR UNA CUENTA</h5>
             <div class="d-flex justify-content-center mb-4">
                 <div class="step-indicator active">1</div>
-                <div class="step-line"></div> <!-- Línea entre los pasos -->
+                <div class="step-line"></div>
                 <div class="step-indicator completed">2</div>
             </div>
-            <form>
+            <form id="registroForm">
                 <div class="mb-3">
                     <label for="nombre-agencia" class="form-label">Nombre de la agencia</label>
                     <input type="text" id="nombre-agencia" class="form-control" placeholder="Value" required>
@@ -44,4 +46,10 @@
         </div>
     </div>
 
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            window.location.href = "{% url 'validar_agencia' %}";
+        });
+    </script>
     {% endblock content %}

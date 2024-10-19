@@ -1,20 +1,26 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+    
+    {% load static %}
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <!-- Fuente de Raleway para titulos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>{% block title %} Echerari Tours {% endblock %}</title>
 
-    <!-- Fuente de Merriweather para los textos -->
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    <title>{% block title %}Echerari Tours {% endblock %}</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}"> 
+    
+    {% comment %} Esto es para poder cargar estilos segun la vista con la que esten trabjando {% endcomment %}
+    {% block extra_styles %}
+    {% endblock extra_styles %}
+    
 </head>
 <body>
+
     {% include "includes/navbar.html" %}
 
     {% block content %}
@@ -23,28 +29,10 @@
 
     {% include "includes/footer.html" %}
 
-    <style>
-        body {
-            padding-top: 70px;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: "Raleway", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 300;
-            font-style: normal;
-        }
-
-        p, a, li {
-            font-family: "Merriweather";
-            font-oprtical-sizing: auto;
-            font-weight: 200;
-            font-style: normal;
-        }
-    </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </body>
 </html>

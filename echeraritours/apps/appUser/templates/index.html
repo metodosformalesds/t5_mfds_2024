@@ -1,91 +1,90 @@
 {% extends "base.html" %}
-
 {% load static %}
+{% block title %}Home - EcherariTours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/style.css" %}"> 
+{% endblock extra_styles %}
 
 {% block content %}
-    <link rel="stylesheet" href="{% static "appUser/css/style.css" %}"> 
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5"> 
+        <div class="col-md-10 mx-auto col-lg-5">
+            <img src="{% static "img/logo_eheraritours.png" %}" alt="Logo EcherariTours">
+        </div>
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-1 titulo">Echerari Tours</h1>
+        </div>
+    </div>
+    <hr class="my-4">
+    <h2 class="text-center">De Chihuahua a todo México: Tu aventura te espera</h2>
+</div> 
 
-    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
-        <div class="row align-items-center g-lg-5 py-5"> 
-            <div class="col-md-10 mx-auto col-lg-5">
-                <img src="{% static "img/logo_eheraritours.png" %}" alt="">
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row d-flex g-lg-5 py-5">
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" style="background-color: #68DDBD"> 
+                <h4 class="text-center">Planifica con precisión, explora sin límites.</h4>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Elige tu punta de partida" name="punto-partida">
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Elige tu destino" name="punto-salida">
+                </div>
+                <input type="text" class="form-control" placeholder="Elige tu fecha" name="fecha-partida">
+                <hr class="my-4">
+                <button class="w-100 btn btn-lg btn-secondary" type="submit">Buscar</button>
+            </form>
+        </div>
+        <div class="col-lg-7 text-center text-lg-start d-flex align-items-center justify-content-center">
+            <img src="{% static 'img/mexico.png' %}" alt="Mapa de México" class="img-fluid map-image">
+        </div>
+    </div>
+</div>
+
+<!-- Línea para separar secciones -->
+<div class="w-100 linea-color"></div>
+
+<!-- Espaciado entre la imagen y el carrusel -->
+<div class="spacer"></div>
+
+<!-- Carrusel para los tours -->
+<div class="container mt-5">
+    <div id="tourCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
             </div>
-            <div class="col-lg-7 text-center text-lg-start">
-                <h1 class="display-1 titulo">Echerari Tours</h1>
+            <div class="carousel-item">
+                <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Montañas">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
             </div>
         </div>
-        <hr class="my-4">
-        <h2 class="text-center">De Chihuahua a todo México: Tu aventura te espera</h2>
-    </div> 
+        <a class="carousel-control-prev" href="#tourCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Anterior</span>
+        </a>
+        <a class="carousel-control-next" href="#tourCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Siguiente</span>
+        </a>
+    </div>
+</div>
 
-    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
-        <div class="row d-flex g-lg-5 py-5">
-            <div class="col-md-10 mx-auto col-lg-5">
-                <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" style="background-color: #68DDBD"> 
-                    <h4 class="text-center">Planifica con precisión, explora sin límites.</h4>
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Elige tu punta de partida" name="punto-partida">
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Elige tu destino" name="punto-salida">
-                    </div>
-                    <input type="text" class="form-control" placeholder="Elige tu fecha" name="fecha-partida">
-                    <hr class="my-4">
-                    <button class="w-100 btn btn-lg btn-secondary" type="submit">Buscar</button>
-                </form>
-            </div>
-            <div class="col-lg-7 text-center text-lg-start d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/mexico.png' %}" alt="Mapa de México" class="img-fluid map-image">
+<!-- Sección últimas reseñas -->
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Últimas reseñas</h3>
+    <div class="card-columns">  
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
+                <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
+                <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
             </div>
         </div>
     </div>
-    
-
-    <!-- Línea para separar secciones -->
-    <div class="w-100 linea-color"></div>
-
-    <!-- Espaciado entre la imagen y el carrusel -->
-    <div class="spacer"></div>
-
-    <!-- Carrusel para los tours -->
-    <div class="container mt-5">
-        <div id="tourCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Montañas">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#tourCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Anterior</span>
-            </a>
-            <a class="carousel-control-next" href="#tourCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Siguiente</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- Sección últimas reseñas -->
-    <div class="container mt-5">
-        <h3 class="text-center mb-4">Últimas reseñas</h3>
-        <div class="card-columns">  
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
-                    <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
-                    <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
 {% endblock content %}
-
-

@@ -11,14 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Imprime la ruta del directorio static para verificar su existencia
-# Asegúrate de que esta ruta sea correcta
-print(BASE_DIR / 'static')  # Usar el operador / de Path
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -44,7 +39,7 @@ INSTALLED_APPS = [
     'apps.appTour',
     'apps.appPayment',
     'apps.appDashboard',
-    'social_django',
+    # 'social_django',
 ]
 
 MIDDLEWARE = [
@@ -62,9 +57,7 @@ ROOT_URLCONF = 'echeraritours.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'templates',  # Usar Path
-        ],
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,32 +116,34 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Usar Path
-    BASE_DIR / "appUser/static",
+    BASE_DIR / 'static',
 ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.apple.AppleIdAuth',
-    'django.contrib.auth.backends.ModelBackend',
-)
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'tu-google-client-id'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'tu-google-client-secret'
+# AL RATO LE MOVEMOS A ESTO JIJI
 
-SOCIAL_AUTH_FACEBOOK_KEY = 'tu-facebook-app-id'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'tu-facebook-app-secret'
+# AUTHENTICATION_BACKENDS = (
+#     'social_core.backends.google.GoogleOAuth2',
+#     'social_core.backends.facebook.FacebookOAuth2',
+#     'social_core.backends.apple.AppleIdAuth',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
 
-SOCIAL_AUTH_APPLE_ID_CLIENT = 'tu-apple-client-id'
-SOCIAL_AUTH_APPLE_ID_TEAM = 'tu-apple-team-id'
-try:
-    SOCIAL_AUTH_APPLE_ID_KEY = open(BASE_DIR / 'tu_clave_privada.pem').read()
-except FileNotFoundError:
-    print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
-    SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'tu-google-client-id'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'tu-google-client-secret'
+
+# SOCIAL_AUTH_FACEBOOK_KEY = 'tu-facebook-app-id'
+# SOCIAL_AUTH_FACEBOOK_SECRET = 'tu-facebook-app-secret'
+
+# SOCIAL_AUTH_APPLE_ID_CLIENT = 'tu-apple-client-id'
+# SOCIAL_AUTH_APPLE_ID_TEAM = 'tu-apple-team-id'
+# try:
+#     SOCIAL_AUTH_APPLE_ID_KEY = open(BASE_DIR / 'tu_clave_privada.pem').read()
+# except FileNotFoundError:
+#     print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
+#     SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
     
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
