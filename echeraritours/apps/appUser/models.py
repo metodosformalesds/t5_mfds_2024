@@ -6,8 +6,10 @@ from django.contrib.auth.models import User
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    maternal_surname = models.CharField(max_length=30, blank=True, null=True)
+    paternal_surname = models.CharField(max_length=30, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=15)
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
@@ -19,13 +21,12 @@ class Client(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.email
+        return self.first_name
 
 
 class Agency(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     agency_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
@@ -37,4 +38,4 @@ class Agency(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return f"Agencia: {self.agency_name} - {self.email}"
+        return f"Agencia: {self.agency_name}"

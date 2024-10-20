@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+<style>
+    body {
+        background-image: url('{% static "img/montanas.jpg" %}');
+        background-size: cover;
+        background-position: center;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .registro-box {
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+    .step-indicator {
+        width: 30px;
+        height: 30px;
+        background-color: lightgray;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+    }
+    .step-indicator.active {
+        background-color: #68ddbd;
+    }
+    .step-line {
+        width: 30px;
+        height: 5px;
+        background-color: lightgray;
+        margin: 0 10px;
+    }
+    .btn-custom {
+        background-color: #68ddbd;
+        color: white;
+        width: 100%;
+    }
+    .btn-custom:hover {
+        background-color: #57c0a8;
+    }
+    input::placeholder {
+        color: #000; 
+    }
+</style>
+
+
+<div class="container">
+    <div class="registro-box">
+        <h5 class="text-center">Crear cuenta de cliente</h5>
+        <div class="d-flex justify-content-center mb-4">
+            <<div class="step-indicator {% if step == 1 %}active{% endif %}">1</div>
+            <div class="step-line"></div>
+            <div class="step-indicator {% if step == 2 %}active{% endif %}">2</div>
+            <div class="step-line"></div>
+            <div class="step-indicator {% if step == 3 %}active{% endif %}">3</div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Paso 1 -->
+            {% if step == 1 %}
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="nombre" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="apellido-paterno" class="form-label">Apellido paterno</label>
+                <input type="text" id="apellido-paterno" name="apellido_paterno" class="form-control" placeholder="apellido paterno" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="apellido-materno" class="form-label">Apellido materno</label>
+                <input type="text" id="apellido-materno" name="apellido_materno" class="form-control" placeholder="Valor" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha-nacimiento" class="form-label">Fecha de nacimiento</label>
+                <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-custom">Continuar</button>
+
+            <!-- Paso 2 -->
+            {% elif step == 2 %}
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ej. 123-456-7890" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="codigo-postal" class="form-label">Código Postal</label>
+                <input type="text" id="codigo-postal" name="codigo-postal" class="form-control" placeholder="Ej. 12345" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad donde reside</label>
+                <input type="text" id="ciudad" name="ciudad" class="form-control" required>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="terminos" required>
+                <label class="form-check-label" for="terminos">Acepto <a href="{% url 'terminos_y_condiciones2' %}" class="link-terminos">Términos y Condiciones</a></label>
+            </div>
+
+            <button type="submit" class="btn btn-custom">Continuar</button>
+
+            <!-- Paso 3 -->
+            {% elif step == 3 %}
+
+            <div class="mb-3">
+                <label for="identificacion" class="form-label">Selecciona tu identificación</label>
+                <input type="file" id="identificacion_oficial" name="identificacion_oficial" class="form-control" accept=".jpg,.jpeg,.png" required>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-custom">Finalizar Registro</button>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
