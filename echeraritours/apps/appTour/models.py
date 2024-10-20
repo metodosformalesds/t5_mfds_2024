@@ -16,7 +16,8 @@ class Tour(models.Model):
     total_bookings = models.PositiveIntegerField(default=0)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    # Fotos del tour
+    place_of_origin = models.CharField(max_length=100, null=True, blank=True)
+    destination_place = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Tour'
