@@ -18,7 +18,8 @@
             border-bottom: 1px solid #ccc;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end; 
+            align-items: flex-end;
+            margin-bottom: 0;
         }
         .logo-container {
             display: flex; 
@@ -36,14 +37,27 @@
         }
         nav {
             text-align: right;
+            display: flex; 
+            align-items: flex-end; 
         }
         nav a {
             margin-right: 20px; 
             text-decoration: none;
             color: #68ddbd;
+            padding: 10px 0;
         }
         nav a:last-child {
             margin-right: 0; 
+        }
+        nav a.active {
+            background-color: #68ddbd; 
+            color: #ffffff; 
+            padding: 10px 10px; 
+            border-radius: 5px 5px 0 0; 
+            position: relative; 
+            top: 1px;
+            margin-bottom: -1px; 
+            line-height: 1; 
         }
         .container {
             max-width: 70%; 
@@ -75,15 +89,15 @@
 
     <header>
         <div class="logo-container">
-            <img src="{% static 'img/logo_eheraritours.jpeg' %}" alt="Logo de EchérariTours"> 
+            <img src="{% static 'img/logo_eheraritours.png' %}" alt="Logo de EchérariTours"> 
             <h1>EchérariTours</h1>
         </div>
         <nav>
             <a href="{% url 'index' %}">Inicio</a>
-            <a href="{% url 'sobre_nosotros' %}">Sobre Nosotros</a>
-            <a href="#">Términos legales y privacidad</a>
-            <a href="#">¿Necesitas Ayuda?</a>
-            <a href="{% url 'index' %}">Contacto</a>
+            <a href="{% url 'sobre_nosotros' %}" class="active">Sobre Nosotros</a>
+            <a href="#">Explora la Página</a>
+            <a href="{% url 'terminos_legales' %}">Términos legales y privacidad</a>
+            <a href="{% url 'necesitas_ayuda' %}">¿Necesitas Ayuda?</a>
         </nav>
     </header>
 

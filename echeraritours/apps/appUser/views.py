@@ -22,21 +22,10 @@ def index(request):
     return render(request, 'index.html')
 
 
+
 def registerPage(request):
-    """Renderiza la pagina de registro de usuario y procesa el formulario de registro.
+    """Renderiza la página de registro de usuario y procesa el formulario de registro."""
 
-    Esta funcion maneja procesamiento de la informacion enviada por el usuario. 
-    Si la solicitud es de tipo POST y el formulario es valido, entonces se guarda el nuevo 
-    usuario en la base de datos, mas especifico en la tabla User.
-
-    Args:
-        request (HttpRequest): Objeto que contiene informacion sobre la solicitud 
-                               HTTP realizada por el usuario.
-
-    Returns:
-        HttpResponse: Renderiza la plantilla 'register.html' con el formulario, ya sea 
-                      vacio (en una solicitud GET) o con datos (en una solicitud POST).
-    """
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -47,12 +36,11 @@ def registerPage(request):
             user = form.cleaned_data.get('username')
             messages.success(request, f"Usuario creado para {user}")
 
-            return redirect('login')
+          
+            return redirect('seleccion_registro')  
 
     context = {'form': form}
-
     return render(request, 'register.html', context)
-
 
 def loginPage(request):
     if request.method == 'POST':
@@ -124,3 +112,6 @@ def terminos_y_condiciones2(request):
 
 def terminos_legales(request):
     return render(request, 'terminos_legales.html')
+
+def necesitas_ayuda(request):
+    return render(request, 'necesitas_ayuda.html')

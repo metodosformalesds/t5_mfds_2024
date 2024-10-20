@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosotros - EchérariTours</title>
+    <style>
+        body {
+            font-family: Oswald, Merriweather;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ffffff;
+            padding: 5px 20px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 0;
+        }
+        .logo-container {
+            display: flex; 
+            align-items: flex-end; 
+        }
+        header img {
+            width: 110px;
+            margin-right: 10px; 
+            padding-bottom: 5px; 
+        }
+        header h1 {
+            margin: 0; 
+            color: #68ddbd;
+            padding-bottom: 5px; 
+        }
+        nav {
+            text-align: right;
+            display: flex; 
+            align-items: flex-end; 
+        }
+        nav a {
+            margin-right: 20px; 
+            text-decoration: none;
+            color: #68ddbd;
+            padding: 10px 0;
+        }
+        nav a:last-child {
+            margin-right: 0; 
+        }
+        nav a.active {
+            background-color: #68ddbd; 
+            color: #ffffff; 
+            padding: 10px 10px; 
+            border-radius: 5px 5px 0 0; 
+            position: relative; 
+            top: 1px;
+            margin-bottom: -1px; 
+            line-height: 1; 
+        }
+        .container {
+            max-width: 70%; 
+            margin: 0 auto;
+            padding: 25px;
+        }
+        h2 {
+            color: #68ddbd;
+            border-bottom: 1px solid #68ddbd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #68ddbd;
+            margin-top: 30px;
+            border-bottom: 1px solid #68ddbd;
+            padding-bottom: 10px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+    {% load static %}
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'img/logo_eheraritours.png' %}" alt="Logo de EchérariTours"> 
+            <h1>EchérariTours</h1>
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">Inicio</a>
+            <a href="{% url 'sobre_nosotros' %}" >Sobre Nosotros</a>
+            <a href="#">Explora la Página</a>
+            <a href="{% url 'terminos_legales' %}">Términos legales y privacidad</a>
+            <a href="{% url 'necesitas_ayuda' %}"class="active">¿Necesitas Ayuda?</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Preguntas Frecuentes</h2>
+        
+        <P>1. ¿Cómo puedo realizar una reserva?</P>
+        <p>Para realizar una reserva, selecciona el tour de tu interés, elige la fecha y completa la información solicitada. Luego, procede al pago para confirmar tu reserva.</p>
+
+        <P>2. ¿Qué métodos de pago aceptan?</P>
+        <p>Aceptamos pagos con tarjetas de crédito, débito y PayPal.</p>
+
+        <P>3. ¿Puedo modificar o cancelar mi reserva?</P>
+        <p>Las modificaciones o cancelaciones están sujetas a las políticas de la agencia de viajes. Te recomendamos consultar las políticas específicas al momento de realizar tu reserva.</p>
+
+        <P>4. ¿Qué pasa si no hay disponibilidad en el tour que quiero?</P>
+        <p>Si no hay disponibilidad, te informaremos y te ofreceremos opciones alternativas o el reembolso correspondiente.</p>
+        
+        <p>5. ¿Qué sucede si el tour se cancela?</p>
+        <p>Si el tour se cancela por razones de fuerza mayor, te ofreceremos un reembolso completo o la opción de reprogramar tu tour para una fecha futura.</p>
+
+        <p>6. ¿Qué tipo de identificación necesito para reservar?</p>
+        <p>Es necesario presentar una identificación oficia (INE).</p>
+
+        <p>7. ¿Puedo cancelar mi reserva?</p>
+        <p>Sí, puedes cancelar tu reserva. Consulta nuestra política de cancelación para más detalles.</p>
+
+        <p>8. ¿Hay restricciones para menores?</p>
+        <p>Los menores de edad deben estar acompañados por un adulto durante el tour. Consulta nuestras políticas para más detalles sobre restricciones.</p>
+        
+        <p>9. ¿Hay un límite de edad para participar en los tours?</p>
+        <p>No hay un límite de edad específico; sin embargo, algunos tours pueden tener recomendaciones de edad por razones de seguridad. Consulta la descripción del tour para más detalles.        </p>
+
+        <h2>Políticas de Cancelación</h2>
+        <p>1. Cancelaciones realizadas con más de 48 horas de anticipación: Se reembolsará el 100% del costo del tour.</p>
+        
+        <p>2. Cancelaciones realizadas entre 24 y 48 horas de anticipación: Se reembolsará el 50% del costo del tour.</p>
+
+        <p>3. Cancelaciones realizadas con menos de 24 horas de anticipación: No se otorgará reembolso.</p>
+
+        <p>4. Cancelaciones por parte de EchérariTours: En caso de que el tour se cancele por motivos fuera de nuestro control, ofreceremos un reembolso completo o la posibilidad de reprogramar el tour sin costo adicional.</p>
+
+        <p>5. Reembolsos: Los reembolsos se procesarán en un plazo de 7 a 10 días hábiles.</p>
+
+        <p>6. Modificaciones de reserva: Las modificaciones de reservas (como cambios de fecha o número de personas) están permitidas con al menos 48 horas de anticipación, sujeto a disponibilidad.</p>
+
+        <p>7. Cancelaciones debido a condiciones climáticas:Si el tour se ve afectado por condiciones climáticas adversas, te informaremos y te ofreceremos opciones para reprogramar o reembolsar.</p>
+        
+        <p>8. Reembolsos para pagos con PayPal:Los reembolsos a través de PayPal pueden demorar hasta 5 días hábiles en reflejarse en tu cuenta.</p>
+
+        <p>9. Política de no-show:Si no te presentas en el lugar y hora acordados para el tour, no se otorgará reembolso ni se podrá reprogramar.</p>
+
+        <p>10. Cancelaciones por razones personales:Entendemos que pueden surgir imprevistos. Si necesitas cancelar por razones personales, sigue nuestra política de cancelación para determinar el reembolso aplicable.</p>
+        
+        
+        <h2>Aceptación de Políticas</h2>
+        <p>Al utilizar nuestros servicios, confirmas que has leído y aceptado las políticas de cancelación, las preguntas frecuentes y los términos y condiciones aquí descritos.</p>
+    </div>
+
+</body>
+</html>

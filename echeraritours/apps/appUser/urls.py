@@ -21,9 +21,8 @@ urlpatterns = [
 
     # Reglas de negocio
     path('sobre_nosotros/', views.sobre_nosotros, name='sobre_nosotros'),
-    path('terminos_y_condiciones/', views.terminos_y_condiciones,
-         name='terminos_y_condiciones'),
-    path('terminos_y_condiciones2/', views.terminos_y_condiciones2,
-         name='terminos_y_condiciones2'),
+    path('terminos_y_condiciones/', views.terminos_y_condiciones, name='terminos_y_condiciones'),
+    path('terminos_y_condiciones2/', views.terminos_y_condiciones2, name='terminos_y_condiciones2'),
     path('terminos_legales/', views.terminos_legales, name='terminos_legales'),
+    path('necesitas_ayuda', views.necesitas_ayuda, name='necesitas_ayuda'),
 ]
