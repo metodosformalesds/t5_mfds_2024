@@ -11,7 +11,7 @@
 {% block content %}
 
 <div class="container">
-    <div class="registro-box">
+    <div class="registro-box mb-5">
         <h5 class="text-center">Crear cuenta de cliente</h5>
         <div class="d-flex justify-content-center mb-4">
             <div class="step-indicator {% if step == 1 %}active{% endif %}">1</div>
@@ -45,7 +45,7 @@
 
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" id="terminos" required>
-                <label class="form-check-label" for="terminos">Acepto <a href="{% url 'terminos_y_condiciones' %}" class="link-terminos">Términos y Condiciones </a></label>
+                <label class="form-check-label" for="terminos"> Acepto <a href="{% url 'terminos_y_condiciones' %}" class="link-terminos">Términos y Condiciones </a></label>
             </div>
 
             <button type="submit" class="btn btn-custom">Continuar</button>
