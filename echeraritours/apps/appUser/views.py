@@ -99,7 +99,7 @@ def logoutUser(request):
 
 @login_required
 def registerClient(request):
-    """Vista para el registro de un usuario autenticado para ser  Cliente"""
+    """Vista para el registro de un usuario autenticado para ser Cliente"""
 
     if 'form_step' not in request.session:
         request.session['form_step'] = 1

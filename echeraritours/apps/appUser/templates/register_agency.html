@@ -11,7 +11,7 @@
 {% block content %}
 
 <div class="container">
-    <div class="registro-box">
+    <div class="registro-box mt-5">
         <h5 class="text-center">Crear cuenta de cliente</h5>
         <div class="d-flex justify-content-center mb-4">
             <div class="step-indicator {% if step == 1 %}active{% endif %}">1</div>
@@ -54,7 +54,9 @@
             {% elif step == 2 %}
             
             <p class="mb-4">Por favor, sube tu certificado de autenticidad para continuar.</p>
-            <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
+            <div class="d-flex justify-content-center">
+                <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
+            </div>
             <div class="mb-3">
                 <label for="certificado" class="form-label">Certificado de autenticidad</label>
                 <input type="file" id="certificado" name="certificado" class="form-control" accept=".jpg,.jpeg,.png" required>
