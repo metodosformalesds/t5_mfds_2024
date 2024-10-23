@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Restablecer Contraseña - EcherariTours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/login.css" %}"> 
+<link rel="stylesheet" href="{% static "appUser/css/recuperacion.css" %}"> 
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="login-container mt-5 mb-5">
+    <div class="login-box">
+        <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
+
+        <form method="POST">
+            {% csrf_token %}
+            <h3 class="mt-4 mb-3">Restablecer Contraseña</h3>
+            
+            <div class="mb-4">
+                <label for="new_password1">Nueva contraseña:</label>
+                <input type="password" name="new_password1" class="form-control" placeholder="Nueva contraseña" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="new_password2">Confirma tu contraseña:</label>
+                <input type="password" name="new_password2" class="form-control" placeholder="Confirmar contraseña" required>
+            </div>
+
+            <div class="mt-4">
+                <input type="submit" class="btn btn-custom" value="Restablecer Contraseña">
+                <a href="{% url 'login' %}" class="btn btn-custom"></a>
+            </div>
+        
+        </form>
+    </div>
+</div>
+{% endblock content %}

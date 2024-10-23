@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Recuperación de Contraseña - EcherariTours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/login.css" %}"> 
+<link rel="stylesheet" href="{% static "appUser/css/recuperacion.css" %}"> 
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="login-container mt-5 mb-5">
+    <div class="login-box">
+        <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
+
+        <form method="POST" action="{% url 'envio_contra' %}">
+            {% csrf_token %}
+        
+            <h3 class="mt-4 mb-3">Recuperación de Contraseña</h3>
+        
+            <div class="mb-4">
+                <label for="email">Correo electrónico:</label>
+                <input type="email" name="email" class="form-control" placeholder="Correo electrónico" required>
+            </div>
+
+            <div class="mt-4">
+                <input type="submit" class="btn btn-custom" value="Enviar instrucciones">
+            </div>
+        </form>
+        
+        <div class="mt-4">
+            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

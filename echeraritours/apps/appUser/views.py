@@ -15,8 +15,20 @@ from django.contrib.auth.decorators import login_required
 from .models import Client, Agency
 from django.core.files.storage import FileSystemStorage
 
-# Create your views here.
+# Para recuperacion de contraseña
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetConfirmView
 
+# Create your views here.
 
 def index(request):
     """Renderiza la pagina de inicio de la pagina web
@@ -98,7 +110,7 @@ def logoutUser(request):
 
 
 @login_required
-def registerClient(request):
+def registrar_cliente(request):
     """Vista para el registro de un usuario autenticado para ser Cliente"""
 
     if 'form_step' not in request.session:
@@ -176,7 +188,7 @@ def registerClient(request):
 
 
 @login_required
-def registerAgency(request):
+def registrar_agencia(request):
     """Vista para el registro de un usuario autenticado para ser Agencia"""
 
     if 'form_step' not in request.session:
@@ -288,3 +300,32 @@ def terminos_legales(request):
 
 def necesitas_ayuda(request):
     return render(request, 'necesitas_ayuda.html')
+
+def recuperar_contra(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        try:
+            user = User.objects.get(email=email)
+            subject = 'Recuperación de Contraseña'
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = generar_token(user)  
+            link = request.build_absolute_uri(f'/confirmar_contra/{uid}/{token}/')
+            email_template = render_to_string('correo_recuperacion.html', {'link': link})
+            send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
+            messages.success(request, 'Se ha enviado un correo con instrucciones para restablecer la contraseña.')
+            return redirect('envio_contra') 
+        except User.DoesNotExist:
+            messages.error(request, 'El correo ingresado no está asociado a ningún usuario.')
+    return render(request, 'recuperar_contra.html')
+
+def envio_contra(request):
+    return render(request, 'envio_contra.html')
+
+def confirmar_contra(request, uidb64=None, token=None):
+    return PasswordResetConfirmView.as_view(
+        template_name='recuperar_contra.html',
+        success_url=reverse_lazy('confirmar_contra')
+    )(request, uidb64=uidb64, token=token)
+
+def completo_contra(request):
+    return render(request, 'completo_contra.html')

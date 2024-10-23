@@ -8,43 +8,46 @@
 {% endblock extra_styles %}
 
 {% block content %}
-
 <div class="login-container mt-5 mb-5">
     <div class="login-box">
         <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
 
-        <form method="POST" action="">
+        <form method="POST" action="{% url "seleccion_registro" %}">
             {% csrf_token %}
         
             <h3 class="mt-4 mb-3">Registro de usuario</h3>
         
             <div class="mb-4">
-                {{ form.username.label_tag }}
-                {{ form.username }}
+                <label for="username">Nombre de usuario:</label>
+                <input type="text" name="username" class="form-control" placeholder="Nombre de usuario" required>
             </div>
         
             <div class="mb-4">
-                {{ form.email.label_tag }}
-                {{ form.email }}
+                <label for="email">Correo electrónico:</label>
+                <input type="email" name="email" class="form-control" placeholder="Correo electrónico" required>
             </div>
         
             <div class="mb-4">
-                {{ form.password1.label_tag }}
-                {{ form.password1 }}
+                <label for="password1">Contraseña:</label>
+                <input type="password" name="password1" class="form-control" placeholder="Contraseña" required>
             </div>
         
             <div class="mb-4">
-                {{ form.password2.label_tag }}
-                {{ form.password2 }}
+                <label for="password2">Confirmar contraseña:</label>
+                <input type="password" name="password2" class="form-control" placeholder="Confirmar contraseña" required>
             </div>
         
-            <input type="submit" class="btn btn-custom" value="Crear usuario">
-        </form>
-        {{ form.errors }}
-        <div class="mt-4">
-            <p>Ya eres miembro? <a href="{% url "login" %}">Inicia sesion</a></p>
-        </div>
+            
+            <div class="mt-4">
+                <input type="submit" class="btn btn-custom" value="Crear usuario">
+                <a href="{% url 'seleccion_registro' %}">Ir a la selección de registro</a>
+            </div>
 
+        </form>
+        
+        <div class="mt-4">
+            <p>¿Ya eres miembro? <a href="{% url "login" %}">Inicia sesión</a></p>
+        </div>
     </div>
 </div>
 {% endblock content %}
