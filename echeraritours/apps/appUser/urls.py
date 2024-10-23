@@ -26,10 +26,6 @@ urlpatterns = [
     path('confirmar_contra/<uidb64>/<token>/', views.confirmar_contra, name='confirmar_contra'),
     path('completo_contra/', views.completo_contra, name='recuperar_contra_completo'),
 
-     # Registro especifico
-     path('registrar_cliente/', views.registerClient, name='register_client'),
-     path('registrar_agencia/', views.registerAgency, name='register_agency'),
-
      # Reglas de negocio
      path('sobre_nosotros/', views.sobre_nosotros, name='sobre_nosotros'),
      path('terminos_y_condiciones/', views.terminos_y_condiciones,
