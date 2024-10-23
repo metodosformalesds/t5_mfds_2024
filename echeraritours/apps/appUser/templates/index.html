@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Home - EcherariTours{% endblock title %}
+{% block title %}Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appUser/css/style.css" %}"> 
+<link rel="stylesheet" href="{% static "appUser/css/index.css" %}"> 
 {% endblock extra_styles %}
 
 {% block content %}
-<div class="container col-xl-10 col-xxl-8 px-4 py-5">
-    <div class="row align-items-center g-lg-5 py-5"> 
-        <div class="col-md-10 mx-auto col-lg-5">
-            <img src="{% static "img/logo_eheraritours.png" %}" alt="Logo EcherariTours">
-        </div>
-        <div class="col-lg-7 text-center text-lg-start">
-            <h1 class="display-1 titulo">Echerari Tours</h1>
+<div class="container-fluid col-xl-12 col-xxl-8 px-4 py-5 blur-background">
+    <div class="container blur-content">
+        <div class="row align-items-center g-lg-5 py-5"> 
+            <div class="col-md-10 mx-auto col-lg-5 d-flex align-items-center">
+                <img src="{% static 'img/logo_eheraritours.png' %}" alt="Logo EcherariTours">
+            </div>
+            <div class="col-md-10 mx-auto col-lg-5 d-flex align-items-center">
+                <h1 class="ms-3 mb-0 titulo">Echérari Tours</h1>
+            </div>
         </div>
     </div>
-    <hr class="my-4">
-    <h2 class="text-center">De Chihuahua a todo México: Tu aventura te espera</h2>
+    <hr class="my-4" style="border-color: white">
+    <h2 class="text-center text-light">De Chihuahua a todo México: Tu aventura te espera</h2>
 </div> 
 
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
@@ -51,12 +53,10 @@
 <!-- Línea para separar secciones -->
 <div class="w-100 linea-color"></div>
 
-<!-- Espaciado entre la imagen y el carrusel -->
-<div class="spacer"></div>
-
 <!-- Carrusel para los tours -->
-<div class="container mt-5">
-    <div id="tourCarousel" class="carousel slide" data-ride="carousel">
+<div class="container-fluid mt-5 pt-3 pb-5 fondo-verde">
+    <h3 class="text-center mt-3 mb-3 text-light"> Ultimos Tours </h3>
+    <div id="tourCarousel" class="carousel slide mb-3" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
@@ -80,9 +80,23 @@
 </div>
 
 <!-- Sección últimas reseñas -->
-<div class="container mt-5">
+<div class="container-fluid py-5 fondo-verde-claro">
     <h3 class="text-center mb-4">Últimas reseñas</h3>
     <div class="card-columns">  
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
+                <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
+                <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
+                <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
+                <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
+            </div>
+        </div>
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>

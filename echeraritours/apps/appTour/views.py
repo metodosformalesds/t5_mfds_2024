@@ -4,11 +4,11 @@ from django.http import HttpResponse
 from .models import Tour
 
 # Create your views here.
-def tour_list(request):
-    return render(request, 'tour_templates/tour_list.html')
+def tours(request):
+    return render(request, 'tours.html')
 
-def tour_detail(request):
-    return render(request, 'tour_templates/tour_detail.html')
+def agencias(request):
+    return render(request, 'agencias.html')
 
 def filtro_tour(request):
     place_of_origin = request.GET.get('place_of_origin', '')

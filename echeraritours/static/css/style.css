@@ -1,23 +1,73 @@
-/* Fuente Raleway para titulos */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+/* Fuente Raleway para textos */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,500;1,500&display=swap');
 
-/* Fuente Merriweather para texto */
+/* Fuente Merriweather para titulos */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
 body {
-    padding-top: 70px;
+    padding-top: 60px;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Raleway", sans-serif;
+    font-family: "Merriweather", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
 }
 
-p, a, li {
-    font-family: "Merriweather";
+p, a, li, label {
+    font-family: "Raleway";
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
 }
+
+input, textarea, select, button {
+    font-family: "Raleway", sans-serif;
+    font-weight: 200;
+    font-optical-sizing: auto;
+}
+
+/* Todo esto lo puse para la navbar */
+nav h5 {
+    color: #68ddbd;
+}
+
+nav .navbar-nav .nav-item .nav-link {
+    color: aliceblue !important;
+    font-weight: bold;
+}
+
+.registrar {
+    background-color: #68ddbd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #1c3d3a !important;
+    display: inline-block;
+    width: auto;
+    text-align: center;
+}
+
+nav .navbar-nav .nav-item .registrar {
+    color: #1c3d3a !important;
+}
+
+.navbar-brand {
+    color: aliceblue;
+}
+
+/* Esto es para el footer */
+footer h5 {
+    color: #757575;
+}
+
+a {
+    text-decoration: none;
+    color: #12AF81;
+}
+
+footer a:hover {
+    text-decoration: none; 
+    color: #68DDBD;
+}
+

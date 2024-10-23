@@ -1,44 +1,42 @@
 {% load static %}
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;">
-        Echérari Tours   
+<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top mb-5">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+        <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;" class="mr-2">
+        <h5 class="mb-0">Echérari Tours {% if user.is_authenticated %} - Bienvenid@ {{ user.username }} {% endif %} </h5>
+        {% comment %} {% if user.is_authenticated %}
+            <p class="fw-bolder text-light ml-3">Bienvenid@ {{ user.username }}</p>
+        {% endif %}    {% endcomment %}
     </a>
-    {% if user.is_authenticated %}
-    <p>Bienvenido {{ user.username }}</p>
-    {% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse text-right" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Inicio</a>
-            </li>
 
-            <!-- En la barra de navegacion se actualiza si ya se inicio sesion -->
+        {% if not user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link fw-bolder" href="{% url 'login' %}">Iniciar sesión</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link registrar fw-bolder" href="{% url 'register' %}">Registrarse</a>
+            </li>
+        {% endif %}
 
-            {% if user.is_authenticated %}
-            <li>
-                <a class="nav-link" href="{% url "logout" %}">Cerrar sesión</a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
-            </li>
-            {% endif %}
+        <li class="nav-item">
+            <a class="nav-link fw-bolder" href="{% url 'tours' %}">Tours</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link fw-bolder" href="{% url 'agencias' %}">Agencias</a>
+        </li>
 
-
+        {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="#">Tours</a>
+                <a class="nav-link fw-bolder" href="#">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Agencias</a>
+                <a class="nav-link fw-bolder" href="{% url "logout" %}">Cerrar sesión</a>
             </li>
+        {% endif %}
         </ul>
     </div>
 </nav>

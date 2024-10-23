@@ -14,9 +14,9 @@
     <div class="registro-box mb-5">
         <h5 class="text-center">Crear cuenta de cliente</h5>
         <div class="d-flex justify-content-center mb-4">
-            <div class="step-indicator {% if step == 1 %}active{% endif %}">1</div>
-            <div class="step-line"></div>
-            <div class="step-indicator {% if step == 2 %}active{% endif %}">2</div>
+            <div class="step-indicator {% if step >= 1 %}active{% endif %}">1</div>
+            <div class="step-line {% if step >= 2 %}active{% endif %}"></div>
+            <div class="step-indicator {% if step >= 2 %}active{% endif %}">2</div>
         </div>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -25,22 +25,22 @@
             {% if step == 1 %}
             <div class="mb-3">
                 <label for="nombre-agencia" class="form-label">Nombre de la agencia</label>
-                <input type="text" id="nombre-agencia" name="nombre-agencia" class="form-control" required>
+                <input type="text" id="nombre-agencia" name="nombre-agencia" class="form-control" placeholder="Ingrese su nombre de agencia" required>
             </div>
 
             <div class="mb-3">
                 <label for="direccion" class="form-label">Dirección</label>
-                <input type="text" id="direccion" name="direccion" class="form-control" required>
+                <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese su dirección" required>
             </div>
 
             <div class="mb-3">
                 <label for="telefono" class="form-label">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ej. 123-456-7890" required>
+                <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ingrese su teléfono" required>
             </div>
 
             <div class="mb-3">
                 <label for="codigo-postal" class="form-label">Código postal</label>
-                <input type="text" id="codigo-postal" name="codigo-postal" class="form-control" required>
+                <input type="text" id="codigo-postal" name="codigo-postal" class="form-control" placeholder="Ingrese su código postal" required>
             </div>
 
             <div class="form-check mb-3">
@@ -54,18 +54,23 @@
             {% elif step == 2 %}
             
             <p class="mb-4">Por favor, sube tu certificado de autenticidad para continuar.</p>
-            <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
+            <div class="d-flex justify-content-center">
+                <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
+            </div>
             <div class="mb-3">
                 <label for="certificado" class="form-label">Certificado de autenticidad</label>
                 <input type="file" id="certificado" name="certificado" class="form-control" accept=".jpg,.jpeg,.png" required>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-custom">Finalizar Registro</button>
+                <button type="submit" id="previousButton" name="previous" value="previous" class="btn btn-secondary btn-custom-previous">Regresar</button>
+                <button type="submit" class="btn btn-custom btn-custom-next">Finalizar Registro</button>
             </div>
             {% endif %}
 
         </form>
     </div>
 </div>
+
+<script src="{% static 'appUser/js/boton_regresar.js' %}"></script> 
 
 {% endblock content %}
