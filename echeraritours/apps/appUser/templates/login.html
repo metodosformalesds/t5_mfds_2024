@@ -3,16 +3,15 @@
 {% block title %}Login - EcherariTours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appUser/css/login.css" %}">
+<link rel="stylesheet" href="{% static 'appUser/css/login.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 {% endblock extra_styles %}
 
 {% block content %}
-<div class="login-container my-5">
+<div class="login-container">
     <div class="login-box">
         <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
 
-        <!-- Formulario -->
         {% for message in messages %}
             <div class="alert alert-success" role="alert">
                 {{ message }}
@@ -21,7 +20,6 @@
 
         <form method="POST" action="">
             {% csrf_token %}
-
             <h3 class="mt-4 mb-3">Iniciar sesión</h3>
 
             <div class="mb-4">
@@ -42,34 +40,21 @@
             <input type="submit" class="btn btn-custom" value="Iniciar sesión">
         </form>
 
-        <!-- Fin de formulario -->
-
         <div class="mt-4">
             <a href="#">¿Olvidaste tu contraseña?</a>
         </div>
 
-        <!-- Línea divisora -->
         <div class="divider"><span>o</span></div>
 
-        <!-- Botones para inicio de sesión social con imágenes -->
         <div class="social-btn">
-            <a href="#">
-                <img src="{% static 'appUser/img/google.png' %}" alt="Iniciar con Google">
-            </a>
-            <a href="#">
-                <img src="{% static 'appUser/img/facebook.png' %}" alt="Iniciar con Facebook">
-            </a>
-            <a href="#">
-                <img src="{% static 'appUser/img/apple.png' %}" alt="Iniciar con Apple">
-            </a>
+            <a href="#"><img src="{% static 'appUser/img/google.png' %}" alt="Iniciar con Google"></a>
+            <a href="#"><img src="{% static 'appUser/img/facebook.png' %}" alt="Iniciar con Facebook"></a>
+            <a href="#"><img src="{% static 'appUser/img/apple.png' %}" alt="Iniciar con Apple"></a>
         </div>
 
         <div class="mt-4">
-            <p>¿No eres miembro? <a href="{% url "register" %}">Regístrate</a></p>
+            <p>¿No eres miembro? <a href="{% url 'register' %}">Regístrate</a></p>
         </div>
     </div>
 </div>
-
-<script src="{% static 'appUser/js/contrasena.js' %}"></script> 
-
 {% endblock content %}
