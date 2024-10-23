@@ -118,6 +118,11 @@ def registrar_cliente(request):
 
     if request.method == 'POST':
 
+        if 'previous' in request.POST:
+            if request.session['form_step'] > 1:
+                request.session['form_step'] -= 1
+            return redirect('register_client')
+
         if request.session['form_step'] == 1:
             first_name = request.POST.get('nombre')
             paternal_surname = request.POST.get('apellido_paterno')
@@ -140,7 +145,7 @@ def registrar_cliente(request):
             zip_code = request.POST.get('codigo-postal')
             city = request.POST.get('ciudad')
 
-            if phone and zip_code:
+            if phone and zip_code and city:
                 request.session['phone'] = phone
                 request.session['zip_code'] = zip_code
                 request.session['city'] = city
@@ -195,6 +200,12 @@ def registrar_agencia(request):
         request.session['form_step'] = 1
 
     if request.method == 'POST':
+
+        if 'previous' in request.POST:
+            if request.session['form_step'] > 1:
+                request.session['form_step'] -= 1
+            return redirect('register_agency')
+
         if request.session['form_step'] == 1:
             agency_name = request.POST.get('nombre-agencia')
             address = request.POST.get('direccion')
@@ -300,6 +311,7 @@ def terminos_legales(request):
 
 def necesitas_ayuda(request):
     return render(request, 'necesitas_ayuda.html')
+
 
 def recuperar_contra(request):
     if request.method == 'POST':

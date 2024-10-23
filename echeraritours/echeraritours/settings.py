@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
+else:
+    ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'apps.appTour',
     'apps.appPayment',
     'apps.appDashboard',
+    'widget_tweaks',
     # 'social_django',
 ]
 
