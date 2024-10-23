@@ -22,4 +22,6 @@ urlpatterns = [
          name='terminos_y_condiciones2'),
     path('terminos_legales/', views.terminos_legales, name='terminos_legales'),
     path('necesitas_ayuda', views.necesitas_ayuda, name='necesitas_ayuda'),
+    
+
 ]

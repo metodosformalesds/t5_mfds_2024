@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Resultados de la búsqueda{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Resultados de la búsqueda</h2>
+    {% if tours %}
+        <ul class="list-group">
+            {% for tour in tours %}
+                <li class="list-group-item">
+                    <h3>{{ tour.title }}</h3>
+                    <p>{{ tour.description }}</p>
+                    <p><strong>Precio por persona:</strong> {{ tour.price_per_person }}</p>
+                    <p><strong>Origen:</strong> {{ tour.place_of_origin }}</p>
+                    <p><strong>Destino:</strong> {{ tour.destination_place }}</p>
+                    <p><strong>Fecha de inicio:</strong> {{ tour.start_date }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center">No se encontraron tours que coincidan con los criterios de búsqueda.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'index' %}" class="btn btn-primary">Volver al Inicio</a>
+    </div>
+</div>
+{% endblock content %}

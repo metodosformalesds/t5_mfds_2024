@@ -23,15 +23,21 @@
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
     <div class="row d-flex g-lg-5 py-5">
         <div class="col-md-10 mx-auto col-lg-5">
-            <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" style="background-color: #68DDBD"> 
+            <form method="get" action="{% url 'filtro_tour' %}" class="p-4 p-md-5 border rounded-3 bg-body-tertiary" style="background-color: #68DDBD">
+
                 <h4 class="text-center">Planifica con precisión, explora sin límites.</h4>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Elige tu punta de partida" name="punto-partida">
+                    <input type="text" class="form-control" placeholder="Elige tu punto de partida" name="place_of_origin" value="{{ request.GET.place_of_origin }}">
+                    <label for="place_of_origin">Elige tu punto de partida</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Elige tu destino" name="punto-salida">
+                    <input type="text" class="form-control" placeholder="Elige tu destino" name="destination_place" value="{{ request.GET.destination_place }}">
+                    <label for="destination_place">Elige tu destino</label>
                 </div>
-                <input type="text" class="form-control" placeholder="Elige tu fecha" name="fecha-partida">
+                <div class="form-floating mb-3">
+                    <input type="date" class="form-control" placeholder="Elige tu fecha" name="start_date" value="{{ request.GET.start_date }}">
+                    <label for="start_date">Elige tu fecha</label>
+                </div>
                 <hr class="my-4">
                 <button class="w-100 btn btn-lg btn-secondary" type="submit">Buscar</button>
             </form>

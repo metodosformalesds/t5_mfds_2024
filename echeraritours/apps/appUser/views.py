@@ -288,3 +288,4 @@ def terminos_legales(request):
 
 def necesitas_ayuda(request):
     return render(request, 'necesitas_ayuda.html')
+
