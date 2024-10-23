@@ -16,37 +16,3 @@
     height: auto;
     object-fit: contain;
 }
-
-.step-indicator {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #68ddbd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 5px;
-    color: #fff;
-    font-weight: bold;
-}
-.step-indicator.active {
-    background-color: #34b9a0;
-}
-.step-line {
-    width: 50px;
-    height: 4px;
-    background-color: #68ddbd;
-    align-self: center;
-}
-.step-indicator.inactive {
-    background-color: #68ddbd;
-    color: #fff;
-}
-.btn-custom {
-    background-color: #68ddbd;
-    color: white;
-    width: 100%;
-}
-.btn-custom:hover {
-    background-color: #57c0a8;
-}

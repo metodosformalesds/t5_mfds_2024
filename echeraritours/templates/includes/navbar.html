@@ -1,20 +1,17 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top mb-5">
     <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
         <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;" class="mr-2">
-        <h5 class="mb-0">Echérari Tours</h5>   
+        <h5 class="mb-0">Echérari Tours {% if user.is_authenticated %} - Bienvenid@ {{ user.username }} {% endif %} </h5>
+        {% comment %} {% if user.is_authenticated %}
+            <p class="fw-bolder text-light ml-3">Bienvenid@ {{ user.username }}</p>
+        {% endif %}    {% endcomment %}
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse text-right" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-        
-        {% if user.is_authenticated %}
-            <li class="nav-item">
-                <p class="text-center fw-bolder">Bienvenido {{ user.username }}</p>
-            </li>
-        {% endif %}
 
         {% if not user.is_authenticated %}
             <li class="nav-item">

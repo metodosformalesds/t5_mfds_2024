@@ -15,11 +15,17 @@ h1, h2, h3, h4, h5, h6 {
     font-style: normal;
 }
 
-p, a, li { 
+p, a, li, label {
     font-family: "Raleway";
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
+}
+
+input, textarea, select, button {
+    font-family: "Raleway", sans-serif;
+    font-weight: 200;
+    font-optical-sizing: auto;
 }
 
 /* Todo esto lo puse para la navbar */
@@ -64,3 +70,4 @@ footer a:hover {
     text-decoration: none; 
     color: #68DDBD;
 }
+

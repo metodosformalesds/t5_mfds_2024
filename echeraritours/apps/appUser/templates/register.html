@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %} {% comment %} Esto es para darle estilos al form {% endcomment %}
 {% block title %}Registro - EcherariTours{% endblock title %}
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static "appUser/css/login.css" %}"> 
-<link rel="stylesheet" href="{% static "appUser/css/registro.css" %}"> 
+<link rel="stylesheet" href="{% static "appUser/css/registro.css" %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 {% endblock extra_styles %}
 
 {% block content %}
 
-<div class="login-container mt-5 mb-5">
-    <div class="login-box">
+<div class="login-container my-5">
+    <div class="login-box my-5">
         <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
 
         <form method="POST" action="">
@@ -19,32 +21,45 @@
             <h3 class="mt-4 mb-3">Registro de usuario</h3>
         
             <div class="mb-4">
-                {{ form.username.label_tag }}
-                {{ form.username }}
+                <label class="form-label">Nombre de usuario</label>
+                {% render_field form.username type="text" placeholder="Ingrese su nombre de usuario" class="form-control"%}
             </div>
         
             <div class="mb-4">
-                {{ form.email.label_tag }}
-                {{ form.email }}
+                <label class="form-label">Correo electrónico</label>
+                {% render_field form.email type="email" placeholder="Ingrese su correo electrónico" class="form-control"%}
             </div>
         
             <div class="mb-4">
-                {{ form.password1.label_tag }}
-                {{ form.password1 }}
+                <label class="form-label">Contraseña</label>
+                <div class="input-group">
+                    {% render_field form.password1 type="password" placeholder="Ingrese su contraseña" class="form-control" %}
+                    <span class="input-group-text">
+                        <i class="bi bi-eye-slash" id="togglePassword1" style="cursor: pointer;"></i>
+                    </span>
+                </div>
             </div>
-        
+            
             <div class="mb-4">
-                {{ form.password2.label_tag }}
-                {{ form.password2 }}
+                <label class="form-label">Repita constraseña</label>
+                <div class="input-group">
+                    {% render_field form.password2 type="password" placeholder="Repita su contraseña" class="form-control" %}
+                    <span class="input-group-text">
+                        <i class="bi bi-eye-slash" id="togglePassword2" style="cursor: pointer;"></i>
+                    </span>
+                </div>
             </div>
         
             <input type="submit" class="btn btn-custom" value="Crear usuario">
         </form>
         {{ form.errors }}
         <div class="mt-4">
-            <p>Ya eres miembro? <a href="{% url "login" %}">Inicia sesion</a></p>
+            <p>¿Ya eres miembro? <a href="{% url "login" %}">Inicia sesion</a></p>
         </div>
 
     </div>
 </div>
+
+<script src="{% static 'appUser/js/contrasena.js' %}"></script> 
+
 {% endblock content %}

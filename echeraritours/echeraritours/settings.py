@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.appTour',
     'apps.appPayment',
     'apps.appDashboard',
+    'widget_tweaks',
     # 'social_django',
 ]
 
