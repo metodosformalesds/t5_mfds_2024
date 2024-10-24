@@ -100,10 +100,3 @@ body::before {
     height: 40px;
     object-fit: contain;
 }
-
-footer {
-    text-align: center;
-    padding: 40px 0;
-    background-color: #f8f8f8;
-    width: 100%;
-}
