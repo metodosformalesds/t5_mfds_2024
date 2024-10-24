@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+import logging
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent 
@@ -157,11 +161,18 @@ AUTHENTICATION_BACKENDS = (
 #     print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
 #     SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+load_dotenv()
+
+env = environ.Env()
+env_file = os.path.join(os.path.dirname(__file__), '.env')
+environ.Env.read_env(env_file)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com' 
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'help@echeraritours.com'
-EMAIL_HOST_PASSWORD = 'jedhjtiapfvampal'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS') == 'bool'  
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

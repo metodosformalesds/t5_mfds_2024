@@ -1,13 +1,9 @@
+
 body {
     background: url("../img/montanas.jpg") no-repeat center center fixed;
     background-size: cover;
     background-position: center;
     position: relative;
-    min-height: 100vh; 
-    display: flex;
-    flex-direction: column;
-    padding-top: 100px;
-    padding-bottom: 0; 
 }
 
 body::before {
@@ -21,65 +17,47 @@ body::before {
     z-index: -1;
 }
 
+
 .register-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-grow: 1; 
-    padding: 50px 20px; 
+    padding: 20px; 
+    position: relative;
+    z-index: -1; 
+    width: 20px;
+    max-width: 350px
 }
 
-.register-box {
+.register-box{
     background-color: white;
-    width: 100%;
-    max-width: 600px; 
     border-radius: 10px;
-    padding: 30px;
+    padding: 20px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-<<<<<<< HEAD
-    margin-bottom: 50px; 
-=======
+    width: 5%; 
+    max-width: 450px;
+    margin: 0 auto;
 }
 
-.step-indicator {
-    width: 30px;
-    height: 30px;
-    background-color: lightgray;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: bold;
-}
-
-.step-indicator.active {
-    background-color: #68ddbd;
-}
-
-.step-line {
-    width: 30px;
-    height: 5px;
-    background-color: lightgray;
-    margin: 10px 10px;
-}
-
-.step-line.active {
-    background-color: #68ddbd;
->>>>>>> 973596c594974ca6d0f45ae82430015b5e5d7182
+.register-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
 }
 
 .btn-custom {
     background-color: #68ddbd;
     color: white;
     width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
 }
 
 .btn-custom:hover {
     background-color: #57c0a8;
 }
 
-<<<<<<< HEAD
 .divider {
     margin: 20px 0;
     text-align: center;
@@ -104,10 +82,10 @@ body::before {
 }
 
 .social-btn {
-    margin-top: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 10px;
 }
 
 .social-btn a {
@@ -122,46 +100,3 @@ body::before {
     height: 40px;
     object-fit: contain;
 }
-
-
-footer {
-    text-align: center;
-    padding: 20px 0;
-    background-color: #f8f8f8;
-    width: 100%;
-}
-=======
-input::placeholder {
-    color: #000;
-}
-
-.btn-custom-previous {
-    width: 48%;
-    font-size: 1rem;
-    padding: 10px 20px;
-}
-
-.btn-custom-next {
-    width: 48%;
-    font-size: 1rem;
-    padding: 10px 20px;
-}
-
-.d-flex.justify-content-between {
-    gap: 4%;
-}
-
-
-/* Para registro viajeros */
-.info-box {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-.certificado-img {
-    width: 300px;
-    height: auto;
-}
->>>>>>> 973596c594974ca6d0f45ae82430015b5e5d7182

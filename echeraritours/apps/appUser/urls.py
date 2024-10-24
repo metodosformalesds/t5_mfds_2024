@@ -6,6 +6,7 @@ from .views import (recuperar_contra,
                     completo_contra,
                     confirmar_contra,
                     )
+from .views import send_mail_view  
 
 urlpatterns = [
      # Vistas generales
@@ -21,11 +22,12 @@ urlpatterns = [
     path('registrar_agencia/', views.registrar_agencia, name='registrar_agencia'),
 
    # Recuperación de contraseña
-    path('recuperar_contra/', views.recuperar_contra, name='recuperar_contra'),
+    path('recuperar_contra/', recuperar_contra, name='recuperar_contra'),
     path('envio_contra/', views.envio_contra, name='envio_contra'), 
     path('confirmar_contra/<uidb64>/<token>/', views.confirmar_contra, name='confirmar_contra'),
     path('completo_contra/', views.completo_contra, name='recuperar_contra_completo'),
-
+     path('send_mail/<int:user_id>/', send_mail_view, name='send_mail'),  # Agrega el parámetro user_id
+   
      # Reglas de negocio
      path('sobre_nosotros/', views.sobre_nosotros, name='sobre_nosotros'),
      path('terminos_y_condiciones/', views.terminos_y_condiciones,

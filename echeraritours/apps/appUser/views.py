@@ -16,17 +16,19 @@ from .models import Client, Agency
 from django.core.files.storage import FileSystemStorage
 
 # Para recuperacion de contraseña
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.contrib.auth.views import PasswordResetConfirmView
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+import threading
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from .models import User
+
 
 # Create your views here.
 
@@ -84,7 +86,7 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=email, password=password)
 
         if user is not None:
             login(request, user)
@@ -313,17 +315,40 @@ def necesitas_ayuda(request):
     return render(request, 'necesitas_ayuda.html')
 
 
+def send_mail_view(request, user_id):
+    user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
+    link = 'http://tusitio.com/recovery-link'  # Aquí deberías generar el link de recuperación
+
+    # Renderiza el HTML del correo utilizando el template
+    template = render_to_string('correo_recuperacion.html', {'link': link})
+
+    subject = 'Recuperación de Contraseña'
+
+    message = EmailMultiAlternatives(
+        subject,
+        '',  # El cuerpo de texto plano (puedes dejarlo vacío si solo usas HTML)
+        settings.EMAIL_HOST_USER,
+        [user.email]
+    )
+    
+    message.attach_alternative(template, "text/html")  # Adjunta el HTML como alternativa
+    message.send(fail_silently=False)
+
+    return HttpResponse("Correo enviado")
+
 def recuperar_contra(request):
     if request.method == 'POST':
-        email = request.POST['email']
+        email = request.POST.get['email']
         try:
             user = User.objects.get(email=email)
-            subject = 'Recuperación de Contraseña'
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = generar_token(user)  
+            token = default_token_generator.make_token(user)
             link = request.build_absolute_uri(f'/confirmar_contra/{uid}/{token}/')
-            email_template = render_to_string('correo_recuperacion.html', {'link': link})
-            send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
+
+        
+            thread = threading.Thread(target=send_user_mail, args=(user, link))
+            thread.start()
+
             messages.success(request, 'Se ha enviado un correo con instrucciones para restablecer la contraseña.')
             return redirect('envio_contra') 
         except User.DoesNotExist:
@@ -336,7 +361,7 @@ def envio_contra(request):
 def confirmar_contra(request, uidb64=None, token=None):
     return PasswordResetConfirmView.as_view(
         template_name='recuperar_contra.html',
-        success_url=reverse_lazy('confirmar_contra')
+        success_url=reverse_lazy('completo_contra')  
     )(request, uidb64=uidb64, token=token)
 
 def completo_contra(request):
