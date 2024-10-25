@@ -34,23 +34,25 @@ from django.urls import reverse_lazy
 
 
 def index(request):
-    """Renderiza la pagina de inicio de la pagina web
+    """Renderiza la pagina de inicio de la pagina web.
 
     Args:
-        request (HttpRequest): Objeto HttpRequest que contiene los datos de la solicitud
+        request (HttpRequest): Objeto HttpRequest que contiene los datos de la solicitud.
 
     Returns:
-        HttpResponse: Respuesta que renderiza la plantilla 'index.html'
+        HttpResponse: Respuesta que renderiza la plantilla 'index.html'.
     """
 
     user = request.user
-    is_client_registered = Client.objects.filter(user=user).exists()
-    is_agency_registered = Agency.objects.filter(user=user).exists()
+    context = {}
 
-    context = {
-        'is_client_registered': is_client_registered,
-        'is_agency_registered': is_agency_registered,
-    }
+    # Verifica si el usuario está autenticado antes de realizar consultas
+    if user.is_authenticated:
+        is_client_registered = Client.objects.filter(user=user).exists()
+        context['is_client_registered'] = is_client_registered
+
+        is_agency_registered = Agency.objects.filter(user=user).exists()
+        context['is_agency_registered'] = is_agency_registered
 
     return render(request, 'index.html', context)
 
