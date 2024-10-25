@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from echeraritours import settings
 
 # Para los formularios
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+
 
 # Para los decoradores que validan ciertas vistas
 from .decorators import unauthenticated_user
@@ -18,19 +20,18 @@ from django.core.files.storage import FileSystemStorage
 # Para recuperacion de contraseña
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.contrib import messages
-from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
 import threading
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from .models import User
-
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.urls import reverse_lazy
 
 # Create your views here.
+
 
 def index(request):
     """Renderiza la pagina de inicio de la pagina web
@@ -42,7 +43,16 @@ def index(request):
         HttpResponse: Respuesta que renderiza la plantilla 'index.html'
     """
 
-    return render(request, 'index.html')
+    user = request.user
+    is_client_registered = Client.objects.filter(user=user).exists()
+    is_agency_registered = Agency.objects.filter(user=user).exists()
+
+    context = {
+        'is_client_registered': is_client_registered,
+        'is_agency_registered': is_agency_registered,
+    }
+
+    return render(request, 'index.html', context)
 
 
 def registerPage(request):
@@ -86,7 +96,7 @@ def loginPage(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
@@ -123,7 +133,7 @@ def registrar_cliente(request):
         if 'previous' in request.POST:
             if request.session['form_step'] > 1:
                 request.session['form_step'] -= 1
-            return redirect('register_client')
+            return redirect('registrar_cliente')
 
         if request.session['form_step'] == 1:
             first_name = request.POST.get('nombre')
@@ -138,7 +148,7 @@ def registrar_cliente(request):
                 request.session['birth_date'] = birth_date
 
                 request.session['form_step'] = 2
-                return redirect('register_client')
+                return redirect('registrar_cliente')
             else:
                 return HttpResponse('Por favor completa todos los campos.')
 
@@ -153,7 +163,7 @@ def registrar_cliente(request):
                 request.session['city'] = city
 
                 request.session['form_step'] = 3
-                return redirect('register_client')
+                return redirect('registrar_cliente')
             else:
                 return HttpResponse('Por favor completa todos los campos.')
 
@@ -191,7 +201,7 @@ def registrar_cliente(request):
 
     step = request.session['form_step']
 
-    return render(request, 'register_client.html', {'step': step})
+    return render(request, 'registrar_cliente.html', {'step': step})
 
 
 @login_required
@@ -206,7 +216,7 @@ def registrar_agencia(request):
         if 'previous' in request.POST:
             if request.session['form_step'] > 1:
                 request.session['form_step'] -= 1
-            return redirect('register_agency')
+            return redirect('registrar_agencia')
 
         if request.session['form_step'] == 1:
             agency_name = request.POST.get('nombre-agencia')
@@ -221,7 +231,7 @@ def registrar_agencia(request):
                 request.session['zip_code'] = zip_code
 
                 request.session['form_step'] = 2
-                return redirect('register_agency')
+                return redirect('registrar_agencia')
             else:
                 return HttpResponse('Por favor completa todos los campos.')
 
@@ -255,9 +265,10 @@ def registrar_agencia(request):
                 return HttpResponse('Por favor, sube un certificado valido.')
 
     step = request.session['form_step']
-    return render(request, 'register_agency.html', {'step': step})
+    return render(request, 'registrar_agencia.html', {'step': step})
 
 
+@login_required(login_url='login')
 def seleccion_registro(request):
     """ Renderiza la pagina de seleccion. En caso de ya ser parte de un tipo de usuario, manda al main """
     if Client.objects.filter(user=request.user).exists() or Agency.objects.filter(user=request.user).exists():
@@ -317,7 +328,8 @@ def necesitas_ayuda(request):
 
 def send_mail_view(request, user_id):
     user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
-    link = 'http://tusitio.com/recovery-link'  # Aquí deberías generar el link de recuperación
+    # Aquí deberías generar el link de recuperación
+    link = 'http://tusitio.com/recovery-link'
 
     # Renderiza el HTML del correo utilizando el template
     template = render_to_string('correo_recuperacion.html', {'link': link})
@@ -326,15 +338,18 @@ def send_mail_view(request, user_id):
 
     message = EmailMultiAlternatives(
         subject,
-        '',  # El cuerpo de texto plano (puedes dejarlo vacío si solo usas HTML)
+        # El cuerpo de texto plano (puedes dejarlo vacío si solo usas HTML)
+        '',
         settings.EMAIL_HOST_USER,
         [user.email]
     )
-    
-    message.attach_alternative(template, "text/html")  # Adjunta el HTML como alternativa
+
+    # Adjunta el HTML como alternativa
+    message.attach_alternative(template, "text/html")
     message.send(fail_silently=False)
 
     return HttpResponse("Correo enviado")
+
 
 def recuperar_contra(request):
     if request.method == 'POST':
@@ -343,26 +358,31 @@ def recuperar_contra(request):
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
-            link = request.build_absolute_uri(f'/confirmar_contra/{uid}/{token}/')
+            link = request.build_absolute_uri(
+                f'/confirmar_contra/{uid}/{token}/')
 
-        
-            thread = threading.Thread(target=send_user_mail, args=(user, link))
+            thread = threading.Thread(target=send_mail_view, args=(user, link))
             thread.start()
 
-            messages.success(request, 'Se ha enviado un correo con instrucciones para restablecer la contraseña.')
-            return redirect('envio_contra') 
+            messages.success(
+                request, 'Se ha enviado un correo con instrucciones para restablecer la contraseña.')
+            return redirect('envio_contra')
         except User.DoesNotExist:
-            messages.error(request, 'El correo ingresado no está asociado a ningún usuario.')
+            messages.error(
+                request, 'El correo ingresado no está asociado a ningún usuario.')
     return render(request, 'recuperar_contra.html')
+
 
 def envio_contra(request):
     return render(request, 'envio_contra.html')
 
+
 def confirmar_contra(request, uidb64=None, token=None):
     return PasswordResetConfirmView.as_view(
         template_name='recuperar_contra.html',
-        success_url=reverse_lazy('completo_contra')  
+        success_url=reverse_lazy('completo_contra')
     )(request, uidb64=uidb64, token=token)
+
 
 def completo_contra(request):
     return render(request, 'completo_contra.html')
