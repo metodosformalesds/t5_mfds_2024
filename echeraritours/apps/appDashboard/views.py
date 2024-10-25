@@ -9,15 +9,17 @@ from apps.appUser.models import Client, Agency
 
 @login_required(login_url='login')
 def dashboard(request):
+    user = request.user
+
     try:
-        Client.objects.get(user=request.user)
+        Client.objects.get(user=user)
         return redirect('client_dashboard')
     except Client.DoesNotExist:
         try:
-            Agency.objects.get(user=request.user)
+            Agency.objects.get(user=user)
             return redirect('agency_dashboard')
         except Agency.DoesNotExist:
-            return redirect('register')
+            return redirect('seleccion_registro')
 
 
 @login_required(login_url='login')
