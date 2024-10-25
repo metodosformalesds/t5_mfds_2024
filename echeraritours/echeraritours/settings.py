@@ -29,10 +29,11 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if 'PYTHONANYWHERE_DOMAIN' in os.environ:
-    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
-else:
-    ALLOWED_HOSTS = []
+#if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+#    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
+#else:
+#    ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 
 # Application definition
 
