@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 
 # Para modelos
 from .models import Client, Agency
+from apps.appTour.models import Reviews
 from django.core.files.storage import FileSystemStorage
 
 # Para recuperacion de contraseña
@@ -42,7 +43,9 @@ def index(request):
     Returns:
         HttpResponse: Respuesta que renderiza la plantilla 'index.html'.
     """
-    return render(request, 'index.html')
+    reviews = Reviews.objects.order_by('-review_date')[:5]
+
+    return render(request, 'index.html', {'reviews': reviews})
 
 
 def registerPage(request):
