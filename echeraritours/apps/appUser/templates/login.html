@@ -8,25 +8,23 @@
 {% endblock extra_styles %}
 
 {% block content %}
-<div class="login-container">
+<div class="login-container my-5">
     <div class="login-box">
         <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
 
-        {% for message in messages %}
-            <div class="alert alert-success" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
 
         <form method="POST" action="">
             {% csrf_token %}
             <h3 class="mt-4 mb-3">Iniciar sesión</h3>
-
+            
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
             <div class="mb-4">
-                <label class="form-label">Nombre de usuario</label>
+                <label class="form-label" for="email">Email</label>
                 <input type="email" name="email" class="form-control" placeholder="Ingrese su correo electrónico" required>
             </div>
-
+        
             <div class="mb-4">
                 <label class="form-label">Contraseña</label>
                 <div class="input-group">
@@ -36,10 +34,10 @@
                     </span>
                 </div>
             </div>
-
+        
             <input type="submit" class="btn btn-custom" value="Iniciar sesión">
-        </form>
-
+        </form>              
+        
         <div class="mt-4">
             <a href="#">¿Olvidaste tu contraseña?</a>
         </div>
@@ -57,4 +55,7 @@
         </div>
     </div>
 </div>
+
+<script src="{% static 'appUser/js/contrasena.js' %}"></script> 
+
 {% endblock content %}
