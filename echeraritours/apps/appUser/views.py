@@ -42,19 +42,7 @@ def index(request):
     Returns:
         HttpResponse: Respuesta que renderiza la plantilla 'index.html'.
     """
-
-    user = request.user
-    context = {}
-
-    # Verifica si el usuario está autenticado antes de realizar consultas
-    if user.is_authenticated:
-        is_client_registered = Client.objects.filter(user=user).exists()
-        context['is_client_registered'] = is_client_registered
-
-        is_agency_registered = Agency.objects.filter(user=user).exists()
-        context['is_agency_registered'] = is_agency_registered
-
-    return render(request, 'index.html', context)
+    return render(request, 'index.html')
 
 
 def registerPage(request):
