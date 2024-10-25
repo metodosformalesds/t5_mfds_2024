@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Tours - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appTour/css/Tour.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+
+<section class="about-section">
+    <div class="about-container">
+        <div class="about-image">
+            <img src="{% static 'appTour/img/Mazatlan_Mexico.jpg' %}" alt="SovTravel Tour Operador Receptivo">
+        </div>
+        <div class="about-info">
+            <h1>Echerari Tour Viajes por todo México.</h1>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Acerca de nosotros:</h3>
+                    <ul>
+                        <li>1. Servicio de traslados compartidos y privados.</li>
+                        <li>2. Los destinos donde tenemos presencia con Acapulco, Cancún, Vallarta, CDMX, Taxco Guerrero, Cholula, Puebla, Cuernavaca Morelos, Querétaro, Guanajuato, Guadalajara, Pátzcuaro y Morelia.</li>
+                        <li>3. Tenemos hoteles 3⭐, 4⭐ y 5⭐.</li>
+                    </ul>
+                </div>
+                <div class="about-contact">
+                    <h3>Contacto</h3>
+                    <p><strong>Universidad Autonoma Ciudad Juarez, México</strong></p>
+                    <p><strong>+656 000 00 00</strong></p>
+                    <p><strong>EcherariTours@gmail.mx</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="tours-section">
+    <div class="container">
+        <h2 class="section-title">Tours</h2>
+        <div class="tours-grid">
+            <div class="tour-card">
+                <div class="tour-image">
+                    <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" alt="Cancun El Paraiso del Caribe Mexicano">
+                </div>
+                <div class="tour-info">
+                    <h3>Cancun El Paraiso del Caribe Mexicano</h3>
+                    <p>Conoce las playas mas hermosas de Mexico. Disfruta de un tour inolvidable por Cancun y sus alrededores.</p>
+                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                </div>
+            </div>
+            
+            <div class="tour-card">
+                <div class="tour-image">
+                    <img src="{% static 'appTour/img/Mazatlan_Mexico.jpg' %}" alt="Vive la Tradicional Fiesta como si fueras Mexicano">
+                </div>
+                <div class="tour-info">
+                    <h3>Vive la Tradicional Fiesta como si fueras Mexicano</h3>
+                    <p>Disfruta de la playa en Mazatlan.</p>
+                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                </div>
+            </div>
+
+            <div class="tour-card">
+                <div class="tour-image">
+                    <img src="{% static 'appTour/img/Creel.jpg' %}" alt="Explora la belleza de Creel">
+                </div>
+                <div class="tour-info">
+                    <h3>Explora la belleza de Creel</h3>
+                    <p>Sumérgete en el corazón de la Sierra Tarahumara, disfruta de paisajes montañosos, cascadas majestuosas y la rica cultura indígena de Creel. Un destino perfecto para los amantes de la naturaleza y la aventura.</p>
+                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                </div>
+            </div>
+
+            <div class="tour-card">
+                <div class="tour-image">
+                    <img src="{% static 'appTour/img/CDMX.jpg' %}" alt="Ciudad de Mexico">
+                </div>
+                <div class="tour-info">
+                    <h3>Descubre la Ciudad de Mexico</h3>
+                    <p>Explora una de las ciudades más vibrantes del mundo, llena de historia, cultura y modernidad. Desde el imponente Zócalo hasta museos de renombre mundial, CDMX ofrece una experiencia única para todos los visitantes.</p>
+                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                </div>
+            </div>
+
+            <div class="tour-card">
+                <div class="tour-image">
+                    <img src="{% static 'appTour/img/Puebla.jpg' %}" alt="Descubre Puebla">
+                </div>
+                <div class="tour-info">
+                    <h3>Descubre Puebla</h3>
+                    <p>Conocida por su impresionante arquitectura colonial y su deliciosa gastronomía, Puebla es un destino lleno de historia y cultura. Visita la famosa Catedral, la pirámide de Cholula y degusta los tradicionales chiles en nogada.</p>
+                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                </div>
+            </div>
+
+            <div class="tour-card">
+                <div class="tour-image">
+                    <img src="{% static 'appTour/img/Puerto_Vallarta.jpg' %}" alt="Puerto Vallarta">
+                </div>
+                <div class="tour-info">
+                    <h3>Explora Puerto Vallarta</h3>
+                    <p>Disfruta de las hermosas playas del Pacífico, una vibrante vida nocturna y el encanto del malecón de Puerto Vallarta. Un destino perfecto para relajarte y disfrutar de actividades acuáticas, paseos en barco y deliciosa gastronomía local.</p>
+                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="reviews-section">
+    <div class="container">
+        <h2 class="section-title">4.7 <span class="star">⭐</span> - Reseñas por usuarios</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">El tour a Chichen Itza fue muy bueno, pero la fila para entrar fue larga.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user1.jpg' %}" alt="Marta Sanchez" class="review-avatar">
+                    <div>
+                        <p class="review-author">Marta Sanchez</p>
+                        <p class="review-date">5 de enero de 2024</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">La playa de Cancun es hermosa 😍.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user2.jpg' %}" alt="Carlos Lopez" class="review-avatar">
+                    <div>
+                        <p class="review-author">Carlos Lopez</p>
+                        <p class="review-date">19 de febrero de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">Nadar en los cenotes fue lo mejor de mi viaje, el agua es refrescante 🏊‍♀️.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user3.jpg' %}" alt="Ana Torres" class="review-avatar">
+                    <div>
+                        <p class="review-author">Ana Torres</p>
+                        <p class="review-date">8 de agosto de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">La vida nocturna en la Zona Hotelera es increible 🎉.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user4.jpg' %}" alt="Valeria Ortiz" class="review-avatar">
+                    <div>
+                        <p class="review-author">Valeria Ortiz</p>
+                        <p class="review-date">22 de julio de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">El tour al atardecer fue muy divertido, pero un poco caro.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user5.jpg' %}" alt="Jorge Mena" class="review-avatar">
+                    <div>
+                        <p class="review-author">Jorge Mena</p>
+                        <p class="review-date">15 de noviembre de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">El tour a Tulum fue hermoso, pero hacia mucho calor caminando.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user6.jpg' %}" alt="Gabriela Herrera" class="review-avatar">
+                    <div>
+                        <p class="review-author">Gabriela Herrera</p>
+                        <p class="review-date">22 de marzo de 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

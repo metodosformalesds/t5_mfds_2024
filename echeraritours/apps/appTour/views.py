@@ -5,7 +5,7 @@ from .models import Tour
 
 # Create your views here.
 def tours(request):
-    return render(request, 'tours.html')
+    return render(request, 'tour_templates/tours.html')
 
 def agencias(request):
     return render(request, 'agencias.html')
