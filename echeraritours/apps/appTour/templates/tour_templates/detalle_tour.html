@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>{{ tour.title }}</h1>
+<p>{{ tour.description }}</p>
+<a href="{% url 'tours' %}" class="btn btn-secondary">Volver a la lista de tours</a>
+
+{% endblock content %}
+
+

@@ -35,75 +35,38 @@
     </div>
 </section>
 
+<form method="get" class="container mt-4">
+    <h1>Encuentra el viaje que quieres</h1>
+    <div class="form-row mb-3">
+        <div class="col">
+            <label for="precio">Precio máximo:</label>
+            <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" required>
+        </div>
+        <div class="col">
+            <label for="lugar">Lugar:</label>
+            <input type="text" name="lugar" id="lugar" placeholder="Lugar" class="form-control" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
+
 <section class="tours-section">
     <div class="container">
         <h2 class="section-title">Tours</h2>
         <div class="tours-grid">
+
+            {% for tour in tours %}
             <div class="tour-card">
                 <div class="tour-image">
                     <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" alt="Cancun El Paraiso del Caribe Mexicano">
                 </div>
                 <div class="tour-info">
-                    <h3>Cancun El Paraiso del Caribe Mexicano</h3>
-                    <p>Conoce las playas mas hermosas de Mexico. Disfruta de un tour inolvidable por Cancun y sus alrededores.</p>
-                    <a href="#" class="btn btn-primary">Mas informacion</a>
+                    <h3>{{ tour.title }}</h3>
+                    <p>{{ tour.description }}</p>
+                    <a href="{% url 'detalle_tour'  tour.id %}" class="btn btn-primary">Mas informacion</a>
                 </div>
             </div>
-            
-            <div class="tour-card">
-                <div class="tour-image">
-                    <img src="{% static 'appTour/img/Mazatlan_Mexico.jpg' %}" alt="Vive la Tradicional Fiesta como si fueras Mexicano">
-                </div>
-                <div class="tour-info">
-                    <h3>Vive la Tradicional Fiesta como si fueras Mexicano</h3>
-                    <p>Disfruta de la playa en Mazatlan.</p>
-                    <a href="#" class="btn btn-primary">Mas informacion</a>
-                </div>
-            </div>
-
-            <div class="tour-card">
-                <div class="tour-image">
-                    <img src="{% static 'appTour/img/Creel.jpg' %}" alt="Explora la belleza de Creel">
-                </div>
-                <div class="tour-info">
-                    <h3>Explora la belleza de Creel</h3>
-                    <p>Sumérgete en el corazón de la Sierra Tarahumara, disfruta de paisajes montañosos, cascadas majestuosas y la rica cultura indígena de Creel. Un destino perfecto para los amantes de la naturaleza y la aventura.</p>
-                    <a href="#" class="btn btn-primary">Mas informacion</a>
-                </div>
-            </div>
-
-            <div class="tour-card">
-                <div class="tour-image">
-                    <img src="{% static 'appTour/img/CDMX.jpg' %}" alt="Ciudad de Mexico">
-                </div>
-                <div class="tour-info">
-                    <h3>Descubre la Ciudad de Mexico</h3>
-                    <p>Explora una de las ciudades más vibrantes del mundo, llena de historia, cultura y modernidad. Desde el imponente Zócalo hasta museos de renombre mundial, CDMX ofrece una experiencia única para todos los visitantes.</p>
-                    <a href="#" class="btn btn-primary">Mas informacion</a>
-                </div>
-            </div>
-
-            <div class="tour-card">
-                <div class="tour-image">
-                    <img src="{% static 'appTour/img/Puebla.jpg' %}" alt="Descubre Puebla">
-                </div>
-                <div class="tour-info">
-                    <h3>Descubre Puebla</h3>
-                    <p>Conocida por su impresionante arquitectura colonial y su deliciosa gastronomía, Puebla es un destino lleno de historia y cultura. Visita la famosa Catedral, la pirámide de Cholula y degusta los tradicionales chiles en nogada.</p>
-                    <a href="#" class="btn btn-primary">Mas informacion</a>
-                </div>
-            </div>
-
-            <div class="tour-card">
-                <div class="tour-image">
-                    <img src="{% static 'appTour/img/Puerto_Vallarta.jpg' %}" alt="Puerto Vallarta">
-                </div>
-                <div class="tour-info">
-                    <h3>Explora Puerto Vallarta</h3>
-                    <p>Disfruta de las hermosas playas del Pacífico, una vibrante vida nocturna y el encanto del malecón de Puerto Vallarta. Un destino perfecto para relajarte y disfrutar de actividades acuáticas, paseos en barco y deliciosa gastronomía local.</p>
-                    <a href="#" class="btn btn-primary">Mas informacion</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
