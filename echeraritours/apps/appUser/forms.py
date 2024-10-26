@@ -2,6 +2,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.core.exceptions import ValidationError
 
 
 class CreateUserForm(UserCreationForm):
@@ -19,3 +20,10 @@ class CreateUserForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['password1'].label = 'Contraseña'
         self.fields['password2'].label = 'Confirmar contraseña'
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(
+                "Este correo electrónico ya está registrado.")
+        return email

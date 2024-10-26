@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -29,10 +29,11 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if 'PYTHONANYWHERE_DOMAIN' in os.environ:
-    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
-else:
-    ALLOWED_HOSTS = []
+#if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+#    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
+#else:
+#    ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'echeraritours.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.common.context_processors.registration_status',
             ],
         },
     },
@@ -161,18 +163,32 @@ AUTHENTICATION_BACKENDS = (
 #     print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
 #     SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
 
+
+# Esta seccion la modifique por mientras para que cualquiera
+# pueda abrir el repo sin necesidad de tener que hacer el archivo .env
+# load_dotenv()
+
+# env = environ.Env()
+# env_file = os.path.join(os.path.dirname(__file__), '.env')
+# environ.Env.read_env(env_file)
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = env('EMAIL_HOST')
+# EMAIL_PORT = env('EMAIL_PORT')
+# EMAIL_USE_TLS = env('EMAIL_USE_TLS') == 'bool'
+# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Lo que hace aqui es que agarra valores predeterminados del repositorio personal
 load_dotenv()
 
-env = environ.Env()
-env_file = os.path.join(os.path.dirname(__file__), '.env')
-environ.Env.read_env(env_file)
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_USE_TLS = env('EMAIL_USE_TLS') == 'bool'  
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.tu-servidor.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'correo@ejemplo.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'contraseña')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

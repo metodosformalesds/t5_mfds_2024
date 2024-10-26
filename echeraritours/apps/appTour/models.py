@@ -55,7 +55,7 @@ class Reservation(models.Model):
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return f"Reservación de {self.client.full_name} en {self.tour.title}"
+        return f"Reservación de {self.client.first_name} {self.client.paternal_surname} en {self.tour.title}"
 
 
 class Reviews(models.Model):
@@ -72,4 +72,4 @@ class Reviews(models.Model):
         ordering = ['review_date']
 
     def __str__(self):
-        return f"Reseña de {self.reservation.client.full_name} para {self.reservation.tour.title}"
+        return f"Reseña de {self.reservation.client.first_name} {self.reservation.client.paternal_surname} para {self.reservation.tour.title}"

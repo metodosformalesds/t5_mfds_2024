@@ -3,7 +3,7 @@
 {% block title %}Registro - EcherariTours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appUser/css/seleccion_registro.css" %}"> 
+<link rel="stylesheet" href="{% static 'appUser/css/seleccion_registro.css' %}"> 
 {% endblock extra_styles %}
 
 {% block content %}
@@ -12,12 +12,12 @@
         <div class="options-container">
             <div class="option">
                 <img src="{% static 'appUser/img/viajero_icon.png' %}" alt="Icono de Viajero">
-                <a href="{% url 'register_client' %}"><button class="btn btn-custom">Soy un Viajero</button></a>
+                <a href="{% url 'registrar_cliente' %}"><button class="btn btn-custom">Soy un Viajero</button></a>
             </div>
             <div class="divider"></div>
             <div class="option">
                 <img src="{% static 'appUser/img/empresa_icon.png' %}" alt="Icono de Empresa">
-                <a href="{% url 'register_agency' %}"><button class="btn btn-custom">Soy una Empresa</button></a>
+                <a href="{% url 'registrar_agencia' %}"><button class="btn btn-custom">Soy una Empresa</button></a>
             </div>
         </div>
     </div>

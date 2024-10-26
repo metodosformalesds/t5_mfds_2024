@@ -13,12 +13,15 @@
         <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
 
 
-        <form method="POST" action="{% url 'login' %}">
+        <form method="POST" action="">
             {% csrf_token %}
             <h3 class="mt-4 mb-3">Iniciar sesión</h3>
-        
+            
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
             <div class="mb-4">
-                <label class="form-label" for="email">Nombre de usuario</label>
+                <label class="form-label" for="email">Email</label>
                 <input type="email" name="email" class="form-control" placeholder="Ingrese su correo electrónico" required>
             </div>
         
