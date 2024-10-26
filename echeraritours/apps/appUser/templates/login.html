@@ -27,7 +27,7 @@
                 <div class="input-group">
                     <input type="password" name="password" class="form-control" placeholder="Ingrese su contraseña" required>
                     <span class="input-group-text">
-                        <i class="bi bi-eye-slash" id="togglePassword1" style="cursor: pointer;"></i>
+                        <i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
                     </span>
                 </div>
             </div>
@@ -44,7 +44,6 @@
         <div class="social-btn">
             <a href="#"><img src="{% static 'appUser/img/google.png' %}" alt="Iniciar con Google"></a>
             <a href="#"><img src="{% static 'appUser/img/facebook.png' %}" alt="Iniciar con Facebook"></a>
-            <a href="#"><img src="{% static 'appUser/img/apple.png' %}" alt="Iniciar con Apple"></a>
         </div>
 
         <div class="mt-4">
@@ -53,6 +52,6 @@
     </div>
 </div>
 
-<script src="{% static 'appUser/js/contrasena.js' %}"></script> 
+<script src="{% static 'appUser/js/contrasena_login.js' %}"></script> 
 
 {% endblock content %}

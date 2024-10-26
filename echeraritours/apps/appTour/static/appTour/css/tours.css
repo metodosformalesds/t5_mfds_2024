@@ -1,3 +1,168 @@
-body {
-    background-color: rgb(124, 74, 0);
+.about-section {
+    background-color: #e0f7f4;
+    padding: 40px 0;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-info {
+    padding: 20px;
+    max-width: 600px;
+    color: #333;
+}
+
+.about-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.about-text h3,
+.about-contact h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.about-text ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-text ul li {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.about-contact p {
+    font-size: 1rem;
+    color: #333;
+}
+
+.about-contact p strong {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Seccion de tour */
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.price-section {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.precio {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.card-body p {
+    margin-bottom: 0.5rem;
+}
+
+/* Sección de reseñas */
+.reviews-section {
+    padding: 50px 0;
+    background-color: #fff;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    text-align: left;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.star {
+    color: #f1c40f;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.review-card {
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.review-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.review-text {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.review-footer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.review-author {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.review-date {
+    font-size: 0.875rem;
+    color: #999;
 }
