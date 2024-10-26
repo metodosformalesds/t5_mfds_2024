@@ -3,12 +3,12 @@
 {% block title %}Tours - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'appTour/css/Tour.css' %}">
+<link rel="stylesheet" href="{% static 'appTour/css/tours.css' %}">
 {% endblock extra_styles %}
 
 {% block content %}
 
-<section class="about-section">
+{% comment %} <section class="about-section">
     <div class="about-container">
         <div class="about-image">
             <img src="{% static 'appTour/img/Mazatlan_Mexico.jpg' %}" alt="SovTravel Tour Operador Receptivo">
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> {% endcomment %}
 
 <form method="get" class="container mt-4">
     <h1>Encuentra el viaje que quieres</h1>
@@ -51,24 +51,27 @@
 </form>
 
 <section class="tours-section">
-    <div class="container">
-        <h2 class="section-title">Tours</h2>
-        <div class="tours-grid">
-
+    <div class="container my-4">
+        <div class="row">
             {% for tour in tours %}
-            <div class="tour-card">
-                <div class="tour-image">
-                    <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" alt="Cancun El Paraiso del Caribe Mexicano">
-                </div>
-                <div class="tour-info">
-                    <h3>{{ tour.title }}</h3>
-                    <p>{{ tour.description }}</p>
-                    <a href="{% url 'detalle_tour'  tour.id %}" class="btn btn-primary">Mas informacion</a>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ tour.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tour.title }}</h5>
+                        <p class="text-muted">Desde {{ tour.start_date }} hasta {{ tour.end_date }} </p>
+                        <p><i class="fas fa-plane"></i> De <span class="text-success">{{ tour.place_of_origin }}</span> a <span class="text-primary">{{ tour.destination_place }}</span></p>
+                        <p><i class="fas fa-users"></i> Para <span class="text-info"> {{ tour.capacity }} personas</span></p>
+                        <div class="price-section">
+                            <p class="precio">MXN ${{ tour.price_per_person }} por persona</p>
+                            <a href="{% url 'detalle_tour'  tour.id %}" class="btn btn-primary">Mas informacion</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-    </div>
+    </div>    
 </section>
 
 <section class="reviews-section">

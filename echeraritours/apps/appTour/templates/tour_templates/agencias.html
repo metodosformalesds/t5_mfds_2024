@@ -3,10 +3,33 @@
 {% block title %}Tours - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appTour/css/Tour.css" %}"> 
+<link rel="stylesheet" href="{% static "appTour/css/agencias.css" %}"> 
 {% endblock extra_styles %}
 
 {% block content %}
-    <h2 class="text-center text-light"> Esto nomas es para ver que si jala</h2>
-    <h2 class="text-center text-light"> Hola yo soy la vista de agencias jijijijijijij</h2>
+
+<h2 class="text-center my-5">Agencias registradas en Echerari Tours </h2>
+
+<div class="container my-4">
+    <div class="row">
+        {% for agencia in agencias %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none">
+                <div class="card h-100">
+                    <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
+                    <div class="card-body text-center">
+                        <img src="{% static 'appTour/img/user_icon.jpg' %}" class="profile-img rounded-circle mb-3" alt="{{ agencia.agency_name }} perfil">
+                        <h5 class="card-title">{{ agencia.agency_name }}</h5>
+                        <hr class="divider">
+                        <p class="card-text mt-3"> PAPUS NO TENEMOS DESCRIPCIONES XDDXDXDXDD </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
 {% endblock %}
