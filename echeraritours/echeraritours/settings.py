@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'echeraritours.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Database-1',  # Nombre de la base de datos en MySQL
+        'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
         'USER': 'Leonardo',  # Nombre de usuario de la base de datos
         'PASSWORD': 'echeraritours',  # La contraseña que creaste
         'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',  # El endpoint de la base de datos
