@@ -15,6 +15,7 @@ import os
 import environ
 import logging
 from dotenv import load_dotenv
+import pymysql
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -85,6 +86,9 @@ WSGI_APPLICATION = 'echeraritours.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+
+pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
