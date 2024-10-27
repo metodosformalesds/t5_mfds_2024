@@ -3,66 +3,75 @@
 {% block title %}{{ agencia.agency_name }}- Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appTour/css/detalle_agencia.css" %}"> 
+<link rel="stylesheet" href="{% static "appTour/css/detalle_agencia.css" %}">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 {% endblock extra_styles %}
 
 {% block content %}
 
-<div class="container my-5">
+
+<div class="container-fluid p-0">
+    <div>
+        <img src="{% static 'appTour/img/Puebla.jpg' %}" class="full-width-image" alt="{{ agencia.agency_name }}">
+    </div>
     <!-- Banner con información de la agencia -->
-    <div class="row">
-        <div class="col-lg-8">
-            <img src="{% static 'appTour/img/Puebla.jpg' %}" class="img-fluid" alt="{{ agencia.agency_name }}"> 
-        </div>
-        <div class="col-lg-4 d-flex align-items-center">
-            <div class="text-center">
-                <img src="{% static 'appTour/img/user_icon.jpg' %}" class="rounded-circle mb-3" alt="{{ agencia.agency_name }} logo" style="width: 100px; height: 100px;">
+    <div class="container my-3">
+        <div class="row justify-content-center">
+            <!-- Bloque 1: Imagen -->
+            <div class="col-lg-5 d-flex align-items-center justify-content-center mb-4 px-5">
+                <img src="{% static 'appTour/img/user_icon.jpg' %}" class="rounded-circle logo" alt="{{ agencia.agency_name }} logo">
+            </div>
+    
+            <!-- Bloque 2: Nombre de la agencia -->
+            <div class="col-lg-7 text-center mt-3 mb-3 px-5">
                 <h2 class="font-weight-bold">{{ agencia.agency_name }}</h2>
                 <hr class="divider">
-                <div class="d-flex justify-content-around">
-                    <div>
-                        <h5>Acerca de nosotros:</h5>
-                        <ul class="text-left">
-                            <li>Servicio de traslados compartidos y privados.</li>
-                            <li>Presencia en Acapulco, Cancún, CDMX y más.</li>
-                            <li>Ofrecemos tours y paquetes en destinos importantes.</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h5>Contacto</h5>
-                        <p>{{ agencia.address }}</p>
-                        <p>{{ agencia.phone }}</p>
-                        <p><a href="mailto:hola@sovtravel.com.mx">hola@sovtravel.com.mx</a></p>
-                    </div>
-                </div>
+            </div>
+    
+            <!-- Bloque 3: Acerca de nosotros -->
+            <div class="col-lg-5 text-center mb-3 px-5">
+                <h5 class="font-weight-bold">Acerca de nosotros:</h5>
+                <p>Aquí iría la descripción de las agencias pero pos no hay juas juas al rato la meto denme chancita.</p>
+            </div>
+    
+            <!-- Bloque 4: Contacto -->
+            <div class="col-lg-7 text-center mb-3 px-5">
+                <h5 class="font-weight-bold">Contacto</h5>
+                <p>{{ agencia.address }}</p>
+                <p>{{ agencia.phone }}</p>
+                <p><a href="mailto:hola@sovtravel.com.mx"> correo@generico.com </a></p>
             </div>
         </div>
-    </div>
+    </div>    
+    
+</div>
 
-    <!-- Sección de Tours -->
-    <section class="tours-section">
-        <div class="container my-4">
-            <div class="row">
-                {% for tour in tours %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card">
-                        <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ tour.title }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ tour.title }}</h5>
-                            <p class="text-muted">Desde {{ tour.start_date }} hasta {{ tour.end_date }} </p>
-                            <p><i class="fas fa-plane"></i> De <span class="text-success">{{ tour.place_of_origin }}</span> a <span class="text-primary">{{ tour.destination_place }}</span></p>
-                            <p><i class="fas fa-users"></i> Para <span class="text-info"> {{ tour.capacity }} personas</span></p>
-                            <div class="price-section">
-                                <p class="precio">MXN ${{ tour.price_per_person }} por persona</p>
-                                <a href="{% url 'detalle_tour'  tour.id %}" class="btn btn-primary">Mas informacion</a>
+
+<!-- Sección de Tours -->
+<section class="tours-section my-5">
+    <h3 class="text-center font-weight-bold"> Tours de {{ agencia.agency_name }}</h3>
+    <div class="container my-4">
+        <div class="row">
+            {% for tour in tours %}
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <a href="{% url 'detalle_tour' tour.id %}" class="card-link" style="text-decoration: none;">
+                        <div class="card">
+                            <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ tour.title }}">
+                            <div class="card-body">
+                                <h5 class="font-weight-bold text-center">{{ tour.title }}</h5>
+                                <p class="text-muted">Desde <span class="span-echerari">{{ tour.start_date }}</span> hasta <span class="span-echerari">{{ tour.end_date }}</span></p>
+                                <p><i class="fas fa-plane"></i> De <span class="span-echerari">{{ tour.place_of_origin }}</span> a <span class="span-echerari">{{ tour.destination_place }}</span></p>
+                                <p><i class="fas fa-users"></i> Para <span class="span-echerari"> {{ tour.capacity }} personas</span></p>
+                                <div class="price-section">
+                                    <p class="precio"><span class="span-echerari">MXN ${{ tour.price_per_person }}</span> por persona</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                {% endfor %}
-            </div>
-        </div>    
-    </section>
-</div>
+            {% endfor %}
+        </div>
+    </div>    
+</section>
 
 {% endblock %}
