@@ -33,7 +33,7 @@ DEBUG = True
 #    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
 #else:
 #    ALLOWED_HOSTS = []
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["35.95.38.255"]
 
 # Application definition
 
@@ -88,8 +88,12 @@ WSGI_APPLICATION = 'echeraritours.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
+        'USER': 'Leonardo',  # Nombre de usuario de la base de datos
+        'PASSWORD': 'echeraritours',  # La contraseña que creaste
+        'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',  # El endpoint de la base de datos
+        'PORT': '3306',  # Puerto por defecto de MySQL
     }
 }
 
