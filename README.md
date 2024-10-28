@@ -25,3 +25,7 @@
 - **Deploy in PythonAnywhere**
   The system was deployed in PythonAnywhere in this link:
   [🤓 Deploy](https://echeraritours.pythonanywhere.com/)
+
+- **Deploy in AWS Lighsail**
+The systen=m was deployer in Aws Lighsail in this link:
+[🤠 http://35.95.38.255:8000/]
