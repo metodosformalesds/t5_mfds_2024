@@ -29,11 +29,11 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+# if 'PYTHONANYWHERE_DOMAIN' in os.environ:
 #    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
-#else:
+# else:
 ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ["35.95.38.255"]
+# ALLOWED_HOSTS = ["35.95.38.255"]
 
 # Application definition
 
@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.mysql',
 #        'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
@@ -100,7 +100,7 @@ DATABASES = {
 #        'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',  # El endpoint de la base de datos
 #        'PORT': '3306',  # Puerto por defecto de MySQL
 #    }
-#}
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -139,6 +139,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Ajustado
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -199,5 +202,12 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'correo@ejemplo.com')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'contraseña')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Configuracion para ID Analyzer
+env = environ.Env()
+environ.Env.read_env()
+ID_ANALYZER_API_KEY = env('ID_ANALYZER_API_KEY')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

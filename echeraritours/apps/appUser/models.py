@@ -12,7 +12,9 @@ class Client(models.Model):
     phone = models.CharField(max_length=15)
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
-    identification = models.ImageField(upload_to='static/identifications/')
+    identification = models.ImageField(upload_to='media/identifications/')
+    identification_verified = models.BooleanField(default=False)
+    biometric_data = models.JSONField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Cliente'
@@ -29,7 +31,9 @@ class Agency(models.Model):
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
-    certificate = models.ImageField(upload_to='static/certificates/')
+    certificate = models.ImageField(upload_to='media/certificates/')
+    certificate_verified = models.BooleanField(default=False)
+    certificate_data = models.JSONField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Agencia'

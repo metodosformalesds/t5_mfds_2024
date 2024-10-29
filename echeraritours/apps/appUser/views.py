@@ -31,6 +31,10 @@ from .models import User
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.urls import reverse_lazy
 
+# Para verificacion de documentos
+from .utils.id_analyzer import verify_document
+from django.http import JsonResponse
+
 # Create your views here.
 
 
@@ -160,11 +164,32 @@ def registrar_cliente(request):
             else:
                 return HttpResponse('Por favor completa todos los campos.')
 
-        elif request.session['form_step'] == 3 and 'identificacion_oficial' in request.FILES:
+        elif request.session['form_step'] == 3 and 'identificacion_oficial' in request.FILES and 'identificacion_biometrica' in request.FILES:
             identification = request.FILES['identificacion_oficial']
-            fs = FileSystemStorage(location='static/identifications/')
+            photo = request.FILES['identificacion_biometrica']
+
+            fs = FileSystemStorage(location='media/identifications/')
+
             filename = fs.save(identification.name, identification)
-            uploaded_file_url = fs.url(filename)
+            biometric_filename = fs.save(photo.name, photo)
+
+            document_url = request.build_absolute_uri(
+                fs.url('identifications/' + filename))
+            biometric_url = request.build_absolute_uri(
+                fs.url('identifications/' + biometric_filename))
+
+            print(document_url)
+            print(biometric_url)
+            verification_result = verify_document(
+                "https://drive.google.com/file/d/1SQLljBJoJXCTgVMxrgkm2qDKMvW_rYKY/view?usp=sharing", "https://drive.google.com/file/d/1wWx_3-ipIGZtkSJEnyus0lz_aroaBEuy/view?usp=sharing")
+
+            if verification_result and verification_result.get("status") == "success":
+                verification_status = 'Verificado'
+                biometric_verification = True
+            else:
+                verification_status = 'Rechazado'
+                biometric_verification = False
+                return HttpResponse('Verificación de INE fallida.')
 
             client, created = Client.objects.update_or_create(
                 user=request.user,
@@ -176,7 +201,9 @@ def registrar_cliente(request):
                     'phone': request.session['phone'],
                     'zip_code': request.session['zip_code'],
                     'city': request.session['city'],
-                    'identification': uploaded_file_url,
+                    'identification': filename,
+                    'biometric_verification': biometric_verification,
+                    'verification_status': verification_status,
                 }
             )
 
@@ -184,16 +211,14 @@ def registrar_cliente(request):
                 for key in ['first_name', 'paternal_surname', 'maternal_surname', 'birth_date', 'phone', 'zip_code', 'city', 'form_step']:
                     if key in request.session:
                         del request.session[key]
-
                 return redirect('index')
             else:
-                return HttpResponse('El cliente ya esta registrado o ocurrio un error al ser guardado')
+                return HttpResponse('El cliente ya está registrado o ocurrió un error al guardar.')
 
         else:
-            return HttpResponse('Debe dar una identificacion valida.')
+            return HttpResponse('Por favor sube una identificación válida.')
 
     step = request.session['form_step']
-
     return render(request, 'registrar_cliente.html', {'step': step})
 
 
@@ -231,10 +256,23 @@ def registrar_agencia(request):
         elif request.session['form_step'] == 2:
             if 'certificado' in request.FILES:
                 certificate = request.FILES['certificado']
-                fs = FileSystemStorage(location='static/certificates/')
+                fs = FileSystemStorage(location='media/certificates/')
                 filename = fs.save(certificate.name, certificate)
                 uploaded_file_url = fs.url(filename)
 
+                # Verificar el certificado con ID Analyzer
+                verification_result = verify_document(
+                    settings.ID_ANALYZER_API_KEY, certificate)
+
+                if verification_result.get("success"):
+                    verification_status = 'Verificado'
+                    # Suponiendo que la verificación biométrica fue exitosa
+                    certificate_verified = True
+                else:
+                    verification_status = 'Rechazado'
+                    certificate_verified = False
+
+                # Crear o actualizar la agencia con los resultados de verificación
                 agency, created = Agency.objects.update_or_create(
                     user=request.user,
                     defaults={
@@ -243,19 +281,21 @@ def registrar_agencia(request):
                         'phone': request.session['phone'],
                         'zip_code': request.session['zip_code'],
                         'certificate': uploaded_file_url,
+                        'certificate_verified': certificate_verified,
+                        'verification_status': verification_status,
                     }
                 )
 
                 if created:
                     for key in ['agency_name', 'address', 'phone', 'zip_code', 'form_step']:
-                        del request.session[key]
-
+                        if key in request.session:
+                            del request.session[key]
                     return redirect('index')
                 else:
-                    return HttpResponse('La agencia ya esta registrada u ocurrio un error al ser guardado.')
+                    return HttpResponse('La agencia ya está registrada o ocurrió un error al guardarse.')
 
             else:
-                return HttpResponse('Por favor, sube un certificado valido.')
+                return HttpResponse('Por favor, sube un certificado válido.')
 
     step = request.session['form_step']
     return render(request, 'registrar_agencia.html', {'step': step})
@@ -321,7 +361,6 @@ def necesitas_ayuda(request):
 
 def send_mail_view(request, user_id):
     user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
-    # Aquí deberías generar el link de recuperación
     link = 'http://tusitio.com/recovery-link'
 
     # Renderiza el HTML del correo utilizando el template
@@ -331,7 +370,6 @@ def send_mail_view(request, user_id):
 
     message = EmailMultiAlternatives(
         subject,
-        # El cuerpo de texto plano (puedes dejarlo vacío si solo usas HTML)
         '',
         settings.EMAIL_HOST_USER,
         [user.email]
