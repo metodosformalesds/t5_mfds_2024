@@ -31,7 +31,7 @@
             <!-- Bloque 3: Acerca de nosotros -->
             <div class="col-lg-5 text-center mb-3 px-5">
                 <h5 class="font-weight-bold">Acerca de nosotros:</h5>
-                <p>Aquí iría la descripción de las agencias pero pos no hay juas juas al rato la meto denme chancita.</p>
+                <p> {% if agencia.agency_description %} {{ agencia.agency_description }} {% else %} Sin descripcion {% endif %}  </p>
             </div>
     
             <!-- Bloque 4: Contacto -->

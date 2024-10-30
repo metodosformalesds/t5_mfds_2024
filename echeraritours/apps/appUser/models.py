@@ -26,6 +26,8 @@ class Client(models.Model):
 class Agency(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     agency_name = models.CharField(max_length=255)
+    agency_description = models.TextField(
+        max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)

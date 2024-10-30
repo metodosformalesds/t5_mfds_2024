@@ -21,7 +21,7 @@
                         <img src="{% static 'appTour/img/user_icon.jpg' %}" class="profile-img rounded-circle mb-3" alt="{{ agencia.agency_name }} perfil">
                         <h5 class="card-title">{{ agencia.agency_name }}</h5>
                         <hr class="divider">
-                        <p class="card-text mt-3"> PAPUS NO TENEMOS DESCRIPCIONES XDDXDXDXDD </p>
+                        <p class="card-text mt-3"> {% if agency.agency_description %} {{ agency.agency_description }}{% else %} Sin descripcion  {% endif %} </p>
                     </div>
                 </div>
             </a>
