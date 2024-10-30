@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import DetailView
 
-from .models import Tour, Agency
+from .models import Tour, Agency, Reviews
 from django.db.models import Q
 
 # Create your views here.
@@ -37,16 +37,19 @@ def agencias(request):
     agencias = Agency.objects.all()
     return render(request, 'tour_templates/agencias.html', {'agencias': agencias})
 
+
 class AgencyDetailView(DetailView):
     model = Agency
 
-    template_name = 'tour_templates/detalle_agencia.html' 
+    template_name = 'tour_templates/detalle_agencia.html'
     context_object_name = 'agencia'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Aqui hace que solo los tours relacionados con la agencia se vayan a mostrar
         context['tours'] = Tour.objects.filter(agency=self.object)
+        context['reviews'] = Reviews.objects.filter(
+            reservation__tour__agency=self.object)
         return context
 
 
