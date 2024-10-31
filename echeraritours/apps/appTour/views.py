@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import DetailView
 
 from .models import Tour, Agency, Reviews
+from echeraritours import settings
 from django.db.models import Q
 
 # Create your views here.
@@ -32,6 +33,11 @@ class TourDetailView(DetailView):
     template_name = 'tour_templates/detalle_tour.html'
     context_object_name = 'tour'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['google_api'] = settings.GOOGLE_MAPS_API_KEY
+        return context
+
 
 def agencias(request):
     agencias = Agency.objects.all()
@@ -46,7 +52,6 @@ class AgencyDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Aqui hace que solo los tours relacionados con la agencia se vayan a mostrar
         context['tours'] = Tour.objects.filter(agency=self.object)
         context['reviews'] = Reviews.objects.filter(
             reservation__tour__agency=self.object)

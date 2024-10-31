@@ -31,13 +31,19 @@
             <p>{{ tour.description }}</p>
         </div>
         <div class="col-lg-6">
-            <h5>Incluye:</h5>
-            <ul>
-                <li>Nada porque nunca dijimos que pedo con esto jiji</li>
-                <li>Nada porque nunca dijimos que pedo con esto jiji</li>
-                <li>Nada porque nunca dijimos que pedo con esto jiji</li>
-                <li>Nada porque nunca dijimos que pedo con esto jiji</li>
-            </ul>
+            <h5>Visita el lugar de destino desde el mapa:</h5>
+            <div class="container my-5">
+                <iframe
+              width="600"
+              height="450"
+              style="border:0"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed/v1/place?key={{google_api}}
+                &q={{tour.destination_place}},{{tour.lodging_place}}">
+            </iframe>
+            </div>
         </div>
         <div class="col-lg-6 d-flex align-items-center">
             <div class="col-lg-6">
@@ -55,6 +61,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 {% endblock content %}
