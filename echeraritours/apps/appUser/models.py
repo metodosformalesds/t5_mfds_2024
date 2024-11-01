@@ -16,6 +16,7 @@ class Client(models.Model):
         birth_date (DateField): The birth date of the client.
         zip_code (CharField): The zip code of the client's address.
         identification (ImageField): An image of the client's identification document.
+        profile_image (ImageField): An image of the client's profile picture.
     Meta:
         verbose_name (str): The singular name for the model in the admin interface.
         verbose_name_plural (str): The plural name for the model in the admin interface.
@@ -32,6 +33,8 @@ class Client(models.Model):
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
     identification = models.ImageField(upload_to='static/identifications/')
+    profile_image = models.ImageField(
+        upload_to='media/profile_images/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Cliente'
@@ -68,6 +71,8 @@ class Agency(models.Model):
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
     certificate = models.ImageField(upload_to='static/certificates/')
+    profile_image = models.ImageField(
+        upload_to='media/agency_profile_images/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Agencia'

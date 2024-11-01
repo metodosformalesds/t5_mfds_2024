@@ -20,6 +20,7 @@ class Tour(models.Model):
             end_date (DateTimeField): Fecha y hora de finalización del tour.
             place_of_origin (CharField): Lugar de origen del tour (opcional).
             destination_place (CharField): Lugar de destino del tour (opcional).
+            image (ImageField): Imagen representativa del tour.
         Meta:
             verbose_name (str): Nombre singular del modelo.
             verbose_name_plural (str): Nombre plural del modelo.
@@ -39,6 +40,8 @@ class Tour(models.Model):
     end_date = models.DateTimeField()
     place_of_origin = models.CharField(max_length=100, null=True, blank=True)
     destination_place = models.CharField(max_length=100, null=True, blank=True)
+    tour_image = models.ImageField(
+        upload_to='media/tours/', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Tour'
