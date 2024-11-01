@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from allauth.socialaccount.models import SocialAccount
 
 
 # Para los decoradores que validan ciertas vistas
@@ -58,8 +59,14 @@ def registerPage(request):
         HttpResponse: Creacion de usuario en caso de validar el formulario y redireccion a seleccion
         de registro de tipo de usuario.
     """
-
-    form = CreateUserForm()
+email = ''
+    if request.user.is_authenticated:
+        try:
+            google_account = SocialAccount.objects.get(provider='google', user=request.user)
+            email = google_account.extra_data.get('email', '')
+        except SocialAccount.DoesNotExist:
+            pass  
+    form = CreateUserForm(initial={'email': email})
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
