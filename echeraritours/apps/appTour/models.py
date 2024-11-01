@@ -6,6 +6,27 @@ from apps.appUser.models import Client, Agency
 
 
 class Tour(models.Model):
+    """
+    Modelo que representa un tour ofrecido por una agencia.
+        Atributos:
+            title (CharField): Título del tour.
+            agency (ForeignKey): Agencia que ofrece el tour.
+            description (TextField): Descripción del tour.
+            lodging_place (CharField): Lugar de alojamiento durante el tour.
+            price_per_person (DecimalField): Precio por persona para el tour.
+            capacity (IntegerField): Capacidad máxima de personas para el tour.
+            total_bookings (PositiveIntegerField): Número total de reservas realizadas para el tour.
+            start_date (DateTimeField): Fecha y hora de inicio del tour.
+            end_date (DateTimeField): Fecha y hora de finalización del tour.
+            place_of_origin (CharField): Lugar de origen del tour (opcional).
+            destination_place (CharField): Lugar de destino del tour (opcional).
+        Meta:
+            verbose_name (str): Nombre singular del modelo.
+            verbose_name_plural (str): Nombre plural del modelo.
+            ordering (list): Ordenamiento predeterminado de los tours por fecha de inicio.
+        Métodos:
+        __str__(): Retorna el título del tour.
+    """
     title = models.CharField(max_length=100)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     description = models.TextField(max_length=500)
@@ -29,6 +50,24 @@ class Tour(models.Model):
 
 
 class Reservation(models.Model):
+    """
+    Modelo que representa una reservación para un tour.
+        Atributos:
+            tour (ForeignKey): Referencia al tour reservado.
+            client (ForeignKey): Referencia al cliente que realiza la reservación.
+            number_people (PositiveIntegerField): Número de personas en la reservación.
+            total_price (DecimalField): Precio total de la reservación, calculado automáticamente.
+            reservation_date (DateTimeField): Fecha y hora en que se realizó la reservación.
+        Meta:
+            verbose_name (str): Nombre singular del modelo en español.
+            verbose_name_plural (str): Nombre plural del modelo en español.
+            ordering (list): Ordenamiento por fecha de reservación.
+        Métodos:
+            calculate_total_price(): Calcula el precio total de la reservación.
+            save(*args, **kwargs): Guarda la reservación y actualiza el total de reservas del tour.
+            delete(*args, **kwargs): Elimina la reservación y actualiza el total de reservas del tour.
+            __str__(): Representación en cadena de la reservación.
+    """
     tour = models.ForeignKey(
         Tour, on_delete=models.CASCADE, related_name='reservations')
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -65,6 +104,20 @@ class Reservation(models.Model):
 
 
 class Reviews(models.Model):
+    """
+    Modelo que representa una reseña de un tour.
+        Atributos:
+            reservation (ForeignKey): Referencia a la reserva asociada a la reseña.
+            rating (PositiveIntegerField): Calificación del tour, debe estar entre 1 y 5.
+            review_text (TextField): Texto de la reseña, opcional y con un máximo de 500 caracteres.
+            review_date (DateTimeField): Fecha y hora en que se creó la reseña, se establece automáticamente al crearla.
+        Meta:
+            verbose_name (str): Nombre singular del modelo en español.
+            verbose_name_plural (str): Nombre plural del modelo en español.
+            ordering (list): Ordenamiento de las reseñas por fecha de creación.
+        Métodos:
+            __str__: Devuelve una representación en cadena de la reseña, incluyendo el nombre del cliente y el título del tour.
+    """
     reservation = models.ForeignKey(
         Reservation, on_delete=models.CASCADE, related_name='reviews')
     rating = models.PositiveIntegerField(

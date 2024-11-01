@@ -36,13 +36,16 @@ from django.urls import reverse_lazy
 
 
 def index(request):
-    """Renderiza la pagina de inicio de la pagina web.
-
+    """
+    View function for the index page of the appUser application.
+    This function retrieves the latest 5 reviews from the Reviews model,
+    ordered by the review date in descending order, and renders the 'index.html'
+    template with the retrieved reviews.
     Args:
-        request (HttpRequest): Objeto HttpRequest que contiene los datos de la solicitud.
-
+        request (HttpRequest): The HTTP request object.
     Returns:
-        HttpResponse: Respuesta que renderiza la plantilla 'index.html'.
+        HttpResponse: The rendered 'index.html' template with the context containing
+                      the latest 5 reviews.
     """
     reviews = Reviews.objects.order_by('-review_date')[:5]
 
@@ -50,14 +53,14 @@ def index(request):
 
 
 def registerPage(request):
-    """Renderiza la pagina de registro de usuario y procesa el formulario de registro.
-
+    """
+    Handles the user registration process.
+    If the user is authenticated and has a linked Google account, pre-fills the registration form with the user's Google email.
+    If the request method is POST, validates and saves the registration form, creates a new user, and redirects to the login page.
     Args:
-        request (HttpRequest): Objeto HttpRequest que contiene la informacion del usuario a registrar
-
+        request (HttpRequest): The HTTP request object.
     Returns:
-        HttpResponse: Creacion de usuario en caso de validar el formulario y redireccion a seleccion
-        de registro de tipo de usuario.
+        HttpResponse: The rendered registration page with the registration form.
     """
     email = ''
     if request.user.is_authenticated:
@@ -84,14 +87,18 @@ def registerPage(request):
 
 
 def loginPage(request):
-    """Renderiza la pagina de inicio de sesion y procesa el formulario para iniciar sesion con su usuario
-        y contraseña
-
+    """
+    Handles the user login functionality.
+    This view processes the login form submission. If the request method is POST,
+    it retrieves the email and password from the request, authenticates the user,
+    and logs them in if the credentials are correct. If the credentials are incorrect,
+    it displays an error message. If the request method is not POST, it simply renders
+    the login page.
     Args:
-        request (HttpRequest): Objeto HttpRequest que tiene las credenciales del usuario para iniciar sesion
-
+        request (HttpRequest): The HTTP request object containing metadata about the request.
     Returns:
-        HttpResponse: Inicio de sesion validado con la informacion recibida.
+        HttpResponse: Redirects to 'seleccion_registro' if login is successful, otherwise
+                      renders the login page with an error message.
     """
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -110,13 +117,14 @@ def loginPage(request):
 
 
 def logoutUser(request):
-    """Procesa el hecho de cerrar sesion de forma directa del usuario logeado.
+    """
+    Logs out the current user and redirects them to the login page.
 
     Args:
-        request (HttpRequest): Recibe un objeto HttpRequest con la informacion del usuario logeado
+        request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: Se cierra la sesion del usuario con la funcion logout de django.contrib.auth
+        HttpResponseRedirect: A redirect to the login page.
     """
     logout(request)
     return redirect('login')
@@ -124,8 +132,22 @@ def logoutUser(request):
 
 @login_required
 def registrar_cliente(request):
-    """Vista para el registro de un usuario autenticado para ser Cliente"""
-
+    """
+    Handles the multi-step client registration process.
+    This view manages a three-step form submission process for registering a client.
+    The steps are managed using the session to keep track of the current step.
+    Steps:
+    1. Collects first name, paternal surname, maternal surname, and birth date.
+    2. Collects phone number, zip code, and city.
+    3. Uploads and saves an official identification file.
+    Parameters:
+    request (HttpRequest): The HTTP request object.
+    Returns:
+    HttpResponse: Renders the 'registrar_cliente.html' template with the current step.
+    HttpResponse: Redirects to 'registrar_cliente' to proceed to the next step.
+    HttpResponse: Redirects to 'index' upon successful registration.
+    HttpResponse: Returns an error message if required fields are missing or an error occurs.
+    """
     if 'form_step' not in request.session:
         request.session['form_step'] = 1
 
