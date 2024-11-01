@@ -59,13 +59,14 @@ def registerPage(request):
         HttpResponse: Creacion de usuario en caso de validar el formulario y redireccion a seleccion
         de registro de tipo de usuario.
     """
-email = ''
+    email = ''
     if request.user.is_authenticated:
         try:
-            google_account = SocialAccount.objects.get(provider='google', user=request.user)
+            google_account = SocialAccount.objects.get(
+                provider='google', user=request.user)
             email = google_account.extra_data.get('email', '')
         except SocialAccount.DoesNotExist:
-            pass  
+            pass
     form = CreateUserForm(initial={'email': email})
 
     if request.method == 'POST':
