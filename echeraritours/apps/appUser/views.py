@@ -137,16 +137,16 @@ def registrar_cliente(request):
     This view manages a three-step form submission process for registering a client.
     The steps are managed using the session to keep track of the current step.
     Steps:
-    1. Collects first name, paternal surname, maternal surname, and birth date.
-    2. Collects phone number, zip code, and city.
-    3. Uploads and saves an official identification file.
-    Parameters:
-    request (HttpRequest): The HTTP request object.
+        1. Collects first name, paternal surname, maternal surname, and birth date.
+        2. Collects phone number, zip code, and city.
+        3. Uploads and saves an official identification file.
+    Args:
+        request (HttpRequest): The HTTP request object.
     Returns:
-    HttpResponse: Renders the 'registrar_cliente.html' template with the current step.
-    HttpResponse: Redirects to 'registrar_cliente' to proceed to the next step.
-    HttpResponse: Redirects to 'index' upon successful registration.
-    HttpResponse: Returns an error message if required fields are missing or an error occurs.
+        HttpResponse: Renders the 'registrar_cliente.html' template with the current step.
+        HttpResponse: Redirects to 'registrar_cliente' to proceed to the next step.
+        HttpResponse: Redirects to 'index' upon successful registration.
+        HttpResponse: Returns an error message if required fields are missing or an error occurs.
     """
     if 'form_step' not in request.session:
         request.session['form_step'] = 1
@@ -229,7 +229,18 @@ def registrar_cliente(request):
 
 @login_required
 def registrar_agencia(request):
-    """Vista para el registro de un usuario autenticado para ser Agencia"""
+    """
+    View for registering an authenticated user as an Agency.
+    This view handles a multi-step form for agency registration. The form has two steps:
+    1. Collecting basic agency information (name, address, phone, zip code).
+    2. Uploading a certificate file.
+    The form step is tracked using the session variable 'form_step'.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: Redirects to the same view to handle form steps or to the index page upon successful registration.
+        Renders the 'registrar_agencia.html' template with the current form step.
+    """
 
     if 'form_step' not in request.session:
         request.session['form_step'] = 1
@@ -293,63 +304,101 @@ def registrar_agencia(request):
 
 @login_required(login_url='login')
 def seleccion_registro(request):
-    """ Renderiza la pagina de seleccion. En caso de ya ser parte de un tipo de usuario, manda al main """
+    """
+    Renders the selection page. If the user is already part of a user type (Client or Agency), redirects to the main page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered selection page or a redirect to the main page if the user is already a Client or Agency.
+    """
     if Client.objects.filter(user=request.user).exists() or Agency.objects.filter(user=request.user).exists():
         return redirect('index')
 
     return render(request, 'seleccion_registro.html')
 
 
-def agencia_registro(request):
-    return render(request, 'agencia_registro.html')
-
-
-def viajero_registro(request):
-    return render(request, 'viajero_registro.html')
-
-
-def viajero_registro2(request):
-    return render(request, 'viajero_registro2.html')
-
-
-def validar_viajero(request):
-    if request.method == 'POST':
-        INE = request.FILES.get('INE')
-        if INE:
-            return HttpResponse('Certificado recibido.')
-        else:
-            return HttpResponse('No se recibió el certificado.', status=400)
-    return render(request, 'validar_viajero.html')
-
-
-def validar_agencia(request):
-    if request.method == 'POST':
-        certificado = request.FILES.get('certificado')
-        return HttpResponse('Certificado recibido.')
-    return render(request, 'validar_agencia.html')
-
-
 def sobre_nosotros(request):
+    """
+    Handles the HTTP request for the 'Sobre Nosotros' (About Us) page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'sobre_nosotros.html' template.
+    """
     return render(request, 'sobre_nosotros.html')
 
 
 def terminos_y_condiciones(request):
+    """
+    Handles the request to display the terms and conditions page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered terms and conditions HTML page.
+    """
     return render(request, 'terminos_y_condiciones.html')
 
 
 def terminos_y_condiciones2(request):
+    """
+    Renders the 'terminos_y_condiciones2.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'terminos_y_condiciones2.html' template.
+    """
     return render(request, 'terminos_y_condiciones2.html')
 
 
 def terminos_legales(request):
+    """
+    Handles the HTTP request for the 'terminos_legales' page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'terminos_legales.html' template.
+    """
     return render(request, 'terminos_legales.html')
 
 
 def necesitas_ayuda(request):
+    """
+    Handles the request to render the 'necesitas_ayuda.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'necesitas_ayuda.html' template.
+    """
     return render(request, 'necesitas_ayuda.html')
 
 
 def send_mail_view(request, user_id):
+    """
+    Sends a password recovery email to the specified user.
+    Args:
+        request (HttpRequest): The HTTP request object.
+        user_id (int): The ID of the user to send the email to.
+    Returns:
+        HttpResponse: An HTTP response indicating that the email was sent.
+    Raises:
+        Http404: If the user with the specified ID does not exist.
+    This view function performs the following steps:
+    1. Retrieves the user by their ID.
+    2. Generates a password recovery link.
+    3. Renders the HTML content of the email using a template.
+    4. Creates an email message with the rendered HTML content.
+    5. Sends the email to the user's email address.
+    """
     user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
     # Aquí deberías generar el link de recuperación
     link = 'http://tusitio.com/recovery-link'
@@ -375,6 +424,23 @@ def send_mail_view(request, user_id):
 
 
 def recuperar_contra(request):
+    """
+    Handle password recovery process.
+    This view handles the password recovery process by sending an email with a password reset link to the user.
+    If the request method is POST, it retrieves the email from the request, checks if a user with that email exists,
+    generates a password reset link, and sends it to the user's email in a separate thread.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: Renders the password recovery page or redirects to the password reset email sent confirmation page.
+    Raises:
+        User.DoesNotExist: If no user with the provided email exists.
+    Templates:
+        recuperar_contra.html: The template for the password recovery page.
+    Messages:
+        success: If the email with the password reset link is sent successfully.
+        error: If no user with the provided email exists.
+    """
     if request.method == 'POST':
         email = request.POST.get['email']
         try:
@@ -397,10 +463,33 @@ def recuperar_contra(request):
 
 
 def envio_contra(request):
+    """
+    Handles the request to render the 'envio_contra.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'envio_contra.html' template.
+    """
     return render(request, 'envio_contra.html')
 
 
 def confirmar_contra(request, uidb64=None, token=None):
+    """
+    Handles the password reset confirmation process.
+
+    This view function wraps around the PasswordResetConfirmView to provide
+    a custom template and success URL for the password reset confirmation.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        uidb64 (str, optional): The base64 encoded user ID. Defaults to None.
+        token (str, optional): The password reset token. Defaults to None.
+
+    Returns:
+        HttpResponse: The HTTP response object generated by the PasswordResetConfirmView.
+    """
     return PasswordResetConfirmView.as_view(
         template_name='recuperar_contra.html',
         success_url=reverse_lazy('completo_contra')
@@ -408,4 +497,13 @@ def confirmar_contra(request, uidb64=None, token=None):
 
 
 def completo_contra(request):
+    """
+    Handles the HTTP request to render the 'completo_contra.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'completo_contra.html' template.
+    """
     return render(request, 'completo_contra.html')
