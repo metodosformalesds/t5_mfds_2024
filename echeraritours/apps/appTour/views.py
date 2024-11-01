@@ -12,12 +12,10 @@ from django.db.models import Q
 def tours(request):
     tours = Tour.objects.all()
 
-    # Filtrar por precio máximo
     precio_max = request.GET.get('precio')
     if precio_max:
         tours = tours.filter(price_per_person__lte=precio_max)
 
-    # Filtrar por lugar (en destino o lugar de origen)
     lugar = request.GET.get('lugar')
     if lugar:
         tours = tours.filter(
@@ -46,7 +44,6 @@ def agencias(request):
 
 class AgencyDetailView(DetailView):
     model = Agency
-
     template_name = 'tour_templates/detalle_agencia.html'
     context_object_name = 'agencia'
 

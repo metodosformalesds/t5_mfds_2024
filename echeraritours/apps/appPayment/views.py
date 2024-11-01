@@ -1,27 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from datetime import datetime 
+from django.utils import timezone
+from apps.appTour.models import Tour
+
 
 def payment(request):
     return render(request, 'payment.html')
 
-def detalles_reservacion(request):
-    context = {
-        'reservation_date': datetime.now(),  # or actual reservation data
-        'tour': {
-            'start_date': '2024-12-01',  # Replace with actual data
-            'end_date': '2024-12-07',  # Replace with actual data
-            'available_capacity': 10,  # Replace with dynamic data
-            'price_per_person': 200,  # Replace with actual price
-            'image_url': '/path/to/image',  # Replace with dynamic image URL
-            'title': 'Amazing Tour'  # Replace with actual title
-        },
-        'reservation': {
-            'number_people': 2  # Replace with actual reservation details
-        },
-        'total_price': 400  # Replace with calculated total price
-    }
-    return render(request, 'detalles_reservacion.html')
+
+def detalles_reservacion(request, id):
+    tour = get_object_or_404(Tour, id=id)
+    current_date = timezone.now()
+    return render(request, 'detalles_reservacion.html', {'tour': tour, 'current_date': current_date})
 
 
 def pago_reservacion(request):
@@ -32,7 +22,7 @@ def pago_reservacion(request):
         'image_url': 'path_to_image.jpg'
     }
 
-    total_price = 4800  
+    total_price = 4800
 
     context = {
         'tour': tour,

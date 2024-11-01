@@ -34,6 +34,8 @@ class Reservation(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     number_people = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
+    total_price = models.DecimalField(
+        max_digits=10, decimal_places=2, editable=False, blank=True, null=True)
     reservation_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -41,10 +43,14 @@ class Reservation(models.Model):
         verbose_name_plural = 'Reservaciones'
         ordering = ['reservation_date']
 
+    def calculate_total_price(self):
+        return self.tour.price_per_person * self.number_people
+
     def save(self, *args, **kwargs):
         if self.tour.total_bookings + self.number_people > self.tour.capacity:
             raise ValueError(
                 "No se puede reservar más personas que la capacidad del tour.")
+        self.total_price = self.calculate_total_price
         self.tour.total_bookings += self.number_people
         self.tour.save()
         super().save(*args, **kwargs)

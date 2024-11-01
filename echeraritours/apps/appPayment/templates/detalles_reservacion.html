@@ -24,35 +24,33 @@
             </li>
         </ul>
     </div>
-
+    
     <div class="row">
         <div class="col-md-6">
             <h5>Fecha de reservación</h5>
-            <input type="text" class="form-control mb-3" value="2024-10-20" disabled>
+            <input type="text" class="form-control mb-3" value="{{current_date}}" disabled>
 
             <h5>Fecha que inicia</h5>
-            <input type="text" class="form-control mb-3" value="2024-12-01" disabled>
+            <input type="text" class="form-control mb-3" value="{{tour.start_date}}" disabled>
 
             <h5>Fecha que termina</h5>
-            <input type="text" class="form-control mb-3" value="2024-12-07" disabled>
+            <input type="text" class="form-control mb-3" value="{{tour.end_date}}" disabled>
 
             <h5>Capacidad disponible</h5>
             <div class="input-group mb-3">
                 <span class="input-group-text"><img src="{% static 'appPayment/img/user.png' %}" alt="User Icon" width="20"></span>
-                <input type="text" class="form-control" value="20 personas" disabled>
+                <input type="text" class="form-control" value="{{tour.capacity}} personas" disabled>
             </div>
 
             <h5>¿Cuánta gente asistirá al tour?</h5>
             <div class="d-flex align-items-center">
                 <div>
                     <label>Adulto (18+)</label>
-                    <p class="text-success">$4,800.00</p>
+                    <p class="text-success" id="price-per-person">${{ tour.price_per_person }}</p>
                 </div>
                 <div class="ms-auto">
                     <div class="input-group">
-                        <button class="btn btn-outline-secondary" type="button" id="minus">-</button>
-                        <input type="number" class="form-control" value="1" id="cantidad-adultos">
-                        <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
+                        <input type="number" class="form-control" value="1" id="cantidad-adultos" min="1" max="{{ tour.capacity }}" pattern="[1-9]" oninput="validity.valid||(value='');">
                     </div>
                 </div>
             </div>
@@ -62,55 +60,47 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Resumen de tus entradas</h5>
-                    <div class="d-flex">
+                    <div class="d-flex row">
                         <img src="{% static 'appPayment/img/cancun.jpg' %}" class="img-thumbnail me-3" alt="Imagen del Tour en Cancún" width="220" height="auto">
                         <div>
-                            <p class="fw-bold">Tour Cancún</p>
-                            <p><i class="bi bi-calendar"></i> 2024-12-01</p>
+                            <p class="fw-bold">{{ tour.title }}</p>
+                            <p><i class="bi bi-calendar"></i> {{ tour.start_date }}</p>
                         </div>
                     </div>
                     <hr>
-                    <h5 class="fw-bold">Precio Total <span id="total-price" class="text-success">$4,800.00</span></h5>
-                    <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3">Realizar pago</button>
+                    <h5 class="fw-bold">Precio Total <span id="total-price" class="text-success">$0.00</span></h5>
+                    <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3" disabled>Realizar pago</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const cantidadInput = document.getElementById('cantidad-adultos');
-        const pricePerPerson = 4800.00;
-        const totalPriceElement = document.getElementById('total-price');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pricePerPerson = parseFloat(document.getElementById('price-per-person').innerText.replace('$', ''));
+            const cantidadAdultosInput = document.getElementById('cantidad-adultos');
+            const totalPriceElement = document.getElementById('total-price');
+            const realizarPagoBtn = document.getElementById('realizar_pago-btn');
+            const tourCapacity = parseInt(cantidadAdultosInput.max);
 
-        function updateTotalPrice() {
-            const cantidad = parseInt(cantidadInput.value);
-            const totalPrice = pricePerPerson * cantidad;
-            totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
-        }
-
-        document.getElementById('minus').addEventListener('click', function() {
-            let cantidad = parseInt(cantidadInput.value);
-            if (cantidad > 1) {
-                cantidadInput.value = --cantidad;
-                updateTotalPrice();
+            function updateTotalPrice() {
+                const cantidadAdultos = parseInt(cantidadAdultosInput.value);
+                if (cantidadAdultos >= 1 && cantidadAdultos <= tourCapacity) {
+                    const totalPrice = pricePerPerson * cantidadAdultos;
+                    totalPriceElement.innerText = `$${totalPrice.toFixed(2)}`;
+                    realizarPagoBtn.disabled = false;
+                } else {
+                    totalPriceElement.innerText = '$0.00';
+                    realizarPagoBtn.disabled = true;
+                }
             }
-        });
-        
-        document.getElementById('plus').addEventListener('click', function() {
-            let cantidad = parseInt(cantidadInput.value);
-            cantidadInput.value = ++cantidad;
+
+            cantidadAdultosInput.addEventListener('input', updateTotalPrice);
+
             updateTotalPrice();
         });
-
-        updateTotalPrice();
-
-        document.getElementById('realizar_pago-btn').addEventListener('click', function() {
-            window.location.href = "{% url 'pago_reservacion' %}";
-        });
-    });
-</script>
+    </script>
 {% endblock content %}
