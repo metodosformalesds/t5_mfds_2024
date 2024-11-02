@@ -7,6 +7,26 @@ from apps.appTour.models import Reservation
 
 
 class PaymentMethod(models.Model):
+    """
+    Modelo que representa un método de pago en el sistema.
+    Atributos:
+        PAYMENT_CHOICES (list): Opciones de tipos de métodos de pago disponibles.
+        client (ForeignKey): Referencia al cliente asociado con el método de pago.
+        agency (ForeignKey): Referencia a la agencia asociada con el método de pago.
+        method_type (CharField): Tipo de método de pago (tarjeta de crédito/débito o PayPal).
+        stripe_payment_id (CharField): ID de Stripe para la tarjeta de crédito/débito.
+        paypal_email (EmailField): Correo electrónico asociado con la cuenta de PayPal.
+        created_at (DateTimeField): Fecha y hora en que se creó el método de pago.
+    Meta:
+        verbose_name (str): Nombre singular del modelo en la interfaz de administración.
+        verbose_name_plural (str): Nombre plural del modelo en la interfaz de administración.
+        ordering (list): Orden predeterminado de los métodos de pago.
+    Métodos:
+        save(*args, **kwargs): Guarda el método de pago después de validar los datos.
+        validate_client_and_agency(): Valida que el método de pago pertenezca a un cliente o una agencia, pero no a ambos.
+        validate_payment_methods(): Valida que solo se ingrese un método de pago (Stripe o PayPal).
+        __str__(): Devuelve una representación en cadena del método de pago, incluyendo el tipo y el propietario.
+    """
     PAYMENT_CHOICES = [
         ('credit_card', 'Tarjeta de Crédito/Débito'),
         ('paypal', 'PayPal'),
@@ -28,26 +48,51 @@ class PaymentMethod(models.Model):
         ordering = ['created_at', 'method_type']
 
     def save(self, *args, **kwargs):
+        self.validate_client_and_agency()
+        self.validate_payment_methods()
+        super().save(*args, **kwargs)
+
+    def validate_client_and_agency(self):
         if self.client and self.agency:
             raise ValueError(
                 "Un método de pago solo puede pertenecer a un cliente o una agencia, no ambos.")
         if not self.client and not self.agency:
             raise ValueError(
                 "Debe especificarse un cliente o una agencia para el método de pago.")
+
+    def validate_payment_methods(self):
         if self.stripe_payment_id and self.paypal_email:
             raise ValueError(
                 "Solo se puede ingresar un metodo de pago a la vez")
         if not self.stripe_payment_id and not self.paypal_email:
             raise ValueError("Se debe especificar al menos un metodo de pago")
 
-        super().save(*args, **kwargs)
-
     def __str__(self):
-        owner = self.client.full_name if self.client else self.agency.agency_name
+        owner = self.client.full_name if self.client else (
+            self.agency.agency_name if self.agency else "Unknown")
         return f"{self.method_type} - {owner}"
 
 
 class Payments(models.Model):
+    """
+    Payments model represents a payment transaction in the Echerari Tours system.
+    Attributes:
+        STATUS_CHOICES (list): A list of tuples representing the possible statuses of a payment.
+        client (ForeignKey): A foreign key to the Client model, representing the client making the payment.
+        agency (ForeignKey): A foreign key to the Agency model, representing the agency receiving the payment.
+        reservation (ForeignKey): A foreign key to the Reservation model, representing the reservation associated with the payment.
+        payment_date (DateTimeField): The date and time when the payment was made, automatically set to the current date and time.
+        payment_method (ForeignKey): A foreign key to the PaymentMethod model, representing the method used for the payment.
+        amount (FloatField): The amount of money paid, validated to be a non-negative value.
+        status (CharField): The status of the payment, with choices defined in STATUS_CHOICES and a default value of 'pendiente'.
+    Meta:
+        verbose_name (str): The singular name for the model in the admin interface.
+        verbose_name_plural (str): The plural name for the model in the admin interface.
+        ordering (list): The default ordering for the model, set to order by payment_date.
+    Methods:
+        save(self, *args, **kwargs): Custom save method to validate the payment details before saving.
+        __str__(self): Returns a string representation of the payment, including the client's full name, agency's name, and the amount paid.
+    """
     STATUS_CHOICES = [
         ('pendiente', 'Pendiente'),
         ('completado', 'Completado'),

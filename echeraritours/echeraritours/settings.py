@@ -30,11 +30,11 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+# if 'PYTHONANYWHERE_DOMAIN' in os.environ:
 #    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
-#else:
+# else:
 ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ["35.95.38.255"]
+# ALLOWED_HOSTS = ["35.95.38.255"]
 
 # Application definition
 
@@ -50,6 +50,10 @@ INSTALLED_APPS = [
     'apps.appPayment',
     'apps.appDashboard',
     'widget_tweaks',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     # 'social_django',
 ]
 
@@ -61,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'echeraritours.urls'
@@ -92,7 +97,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.mysql',
 #        'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
@@ -101,7 +106,7 @@ DATABASES = {
 #        'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',  # El endpoint de la base de datos
 #        'PORT': '3306',  # Puerto por defecto de MySQL
 #    }
-#}
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -145,34 +150,35 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 
-# AL RATO LE MOVEMOS A ESTO JIJI
 
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.google.GoogleOAuth2',
-#     'social_core.backends.facebook.FacebookOAuth2',
-#     'social_core.backends.apple.AppleIdAuth',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
 
 AUTHENTICATION_BACKENDS = (
     'apps.appUser.authentication_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'tu-google-client-id'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'tu-google-client-secret'
+SITE_ID = 1
 
-# SOCIAL_AUTH_FACEBOOK_KEY = 'tu-facebook-app-id'
-# SOCIAL_AUTH_FACEBOOK_SECRET = 'tu-facebook-app-secret'
-
-# SOCIAL_AUTH_APPLE_ID_CLIENT = 'tu-apple-client-id'
-# SOCIAL_AUTH_APPLE_ID_TEAM = 'tu-apple-team-id'
-# try:
-#     SOCIAL_AUTH_APPLE_ID_KEY = open(BASE_DIR / 'tu_clave_privada.pem').read()
-# except FileNotFoundError:
-#     print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
-#     SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
-
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': {
+            'profile',
+            'email'},
+        'OAUTH_PARAMS': {'access_type': 'online'},
+        'AUTH_PKCE_ENABLED': True,
+        'METHOD': 'oauth2',
+        'VERIFIED_EMAIL': True,
+        'CLIENT_ID': '559389935285-t66a8qq573pafiud56jntmfia2igu3bs.apps.googleusercontent.com',  
+        'SECRET': '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',  
+    }
+}
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+LOGIN_REDIRECT_URL = 'index'
 
 # Esta seccion la modifique por mientras para que cualquiera
 # pueda abrir el repo sin necesidad de tener que hacer el archivo .env
@@ -200,5 +206,10 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'correo@ejemplo.com')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'contraseña')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Llamadas a APIs desde el archivo .env
+env = environ.Env()
+environ.Env.read_env()
+GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

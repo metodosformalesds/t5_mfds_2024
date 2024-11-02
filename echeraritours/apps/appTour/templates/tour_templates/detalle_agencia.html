@@ -31,7 +31,7 @@
             <!-- Bloque 3: Acerca de nosotros -->
             <div class="col-lg-5 text-center mb-3 px-5">
                 <h5 class="font-weight-bold">Acerca de nosotros:</h5>
-                <p>Aquí iría la descripción de las agencias pero pos no hay juas juas al rato la meto denme chancita.</p>
+                <p> {% if agencia.agency_description %} {{ agencia.agency_description }} {% else %} Sin descripcion {% endif %}  </p>
             </div>
     
             <!-- Bloque 4: Contacto -->
@@ -73,5 +73,25 @@
         </div>
     </div>    
 </section>
+
+
+
+<div class="container-fluid py-5 fondo-verde-claro">
+    <h3 class="text-center mb-4">Últimas reseñas de {{ agencia.agency_name }}</h3>
+    <div class="card-columns">  
+        {% for review in reviews %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ review.reservation.tour.title }}</h5>
+                <p class="card-text"> {{ review.review_text }}</p>
+                <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
+            </div>
+        </div>
+        {% empty %}
+        <h4> <!-- Hol a--></h4>
+        <h4 class="text-center">No hay reseñas disponibles</h4> 
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

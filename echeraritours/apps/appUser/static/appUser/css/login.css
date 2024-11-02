@@ -78,7 +78,7 @@ body::before {
 .social-btn {
     margin-top: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center; 
 }
 
