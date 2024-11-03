@@ -1,5 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+#Para la implementación de Stripe
+import stripe
+from django.conf import settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 # Create your models here.
 
 
@@ -35,6 +41,16 @@ class Client(models.Model):
     identification = models.ImageField(upload_to='static/identifications/')
     profile_image = models.ImageField(
         upload_to='media/profile_images/', blank=True, null=True)
+    stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.stripe_customer_id:
+            customer = stripe.Customer.create(
+                email=self.user.email,
+                name=f"{self.first_name} {self.paternal_surname}",
+            )
+            self.stripe_customer_id = customer.id
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Cliente'
@@ -73,6 +89,12 @@ class Agency(models.Model):
     certificate = models.ImageField(upload_to='static/certificates/')
     profile_image = models.ImageField(
         upload_to='media/agency_profile_images/', blank=True, null=True)
+    stripe_agency_id = models.CharField(max_length=255, blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.stripe_agency_id:
+            self.create_stripe_account_for_agency()
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Agencia'

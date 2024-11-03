@@ -69,7 +69,14 @@
                     </div>
                     <hr>
                     <h5 class="fw-bold">Precio Total <span id="total-price" class="text-success">$0.00</span></h5>
-                    <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3" disabled>Realizar pago</button>
+                    {% comment %} Lo hice formulario para poder mandar la información {% endcomment %}
+                        <form action="{% url 'realizar_pago_stripe' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="tour_id" value="{{ tour.id }}">
+                            <input type="hidden" name="number_people" id="number_people_input" value="1">
+                            <!-- El botón de pago -->
+                            <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3" disabled>Realizar pago</button>
+                        </form>
                 </div>
             </div>
         </div>
@@ -92,9 +99,12 @@
                     const totalPrice = pricePerPerson * cantidadAdultos;
                     totalPriceElement.innerText = `$${totalPrice.toFixed(2)}`;
                     realizarPagoBtn.disabled = false;
+                    // Actualiza el valor del la cantidad de gente que es esta en oculto
+                    document.getElementById('number_people_input').value = cantidadAdultos;
                 } else {
                     totalPriceElement.innerText = '$0.00';
                     realizarPagoBtn.disabled = true;
+                    document.getElementById('number_people_input').value = '';
                 }
             }
 

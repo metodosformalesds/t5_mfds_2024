@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appPayment/css/detalles_reservacion.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="container">
+    <form id="payment-form" class="my-4">
+        <div id="card-element" class="mb-3"><!-- Stripe.js injectará el elemento de la tarjeta aquí --></div>
+        <button id="submit" class="btn btn-primary">Pagar</button>
+        <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    var stripe = Stripe('{{ stripe_public_key }}');
+    var elements = stripe.elements();
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    var form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        stripe.createPaymentMethod({
+            type: 'card',
+            card: card,
+        }).then(function(result) {
+            if (result.error) {
+                // Mostrar errores en el formulario
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Enviar el PaymentMethod al servidor
+                fetch("{% url 'process_payment' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                    body: JSON.stringify({
+                        'payment_method_id': result.paymentMethod.id,
+                        'tour_id': {{ tour.id }},
+                        'number_people': {{ number_people }},
+                        'total_price': {{ total_price|floatformat:2 }},
+                    })
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(responseJson) {
+                    if (responseJson.status == 'success') {
+                        window.location.href = "{% url 'pago_completado' %}";
+                    } else {
+                        var errorElement = document.getElementById('card-errors');
+                        errorElement.textContent = responseJson.error;
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock extra_scripts %}

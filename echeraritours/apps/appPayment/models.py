@@ -37,8 +37,8 @@ class PaymentMethod(models.Model):
     agency = models.ForeignKey(
         Agency, null=True, blank=True, on_delete=models.CASCADE, related_name='payment_methods')
     method_type = models.CharField(max_length=20, choices=PAYMENT_CHOICES)
-    stripe_payment_id = models.CharField(
-        max_length=255, null=True, blank=True)  # ID de Stripe para la tarjeta
+    stripe_payment_method_id = models.CharField(
+        max_length=255, null=True, blank=True)  # ID de Stripe
     paypal_email = models.EmailField(null=True, blank=True)  # Correo de PayPal
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -66,6 +66,9 @@ class PaymentMethod(models.Model):
                 "Solo se puede ingresar un metodo de pago a la vez")
         if not self.stripe_payment_id and not self.paypal_email:
             raise ValueError("Se debe especificar al menos un metodo de pago")
+        
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
     def __str__(self):
         owner = self.client.full_name if self.client else (
@@ -115,6 +118,7 @@ class Payments(models.Model):
     amount = models.FloatField(validators=[MinValueValidator(0)])
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='pendiente')
+    payment_intent_id = models.CharField(max_length=255, blank=True, null=True) # Hola soy nuevo
 
     class Meta:
         verbose_name = 'Pago'

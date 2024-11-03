@@ -13,17 +13,14 @@
     <link rel="stylesheet" href="{% static "css/style.css" %}"> 
     
     {% comment %} Esto es para poder cargar estilos segun la vista con la que esten trabjando {% endcomment %}
-    {% block extra_styles %}
-    {% endblock extra_styles %}
+    {% block extra_styles %} {% endblock extra_styles %}
     
 </head>
 <body>
 
     {% include "includes/navbar.html" %}
 
-    {% block content %}
-    
-    {% endblock content %}
+    {% block content %} {% endblock content %}
 
     {% include "includes/footer.html" %}
 
@@ -31,6 +28,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+
+    {% comment %} Esto es para poder cargar js nuevos {% endcomment %}
+    {% block extra_scriptts %} {% endblock extra_scriptts %}
+
 </body>
 </html>

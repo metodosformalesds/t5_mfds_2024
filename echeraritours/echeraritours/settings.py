@@ -212,4 +212,9 @@ env = environ.Env()
 environ.Env.read_env()
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
+#Stripe jiji
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
