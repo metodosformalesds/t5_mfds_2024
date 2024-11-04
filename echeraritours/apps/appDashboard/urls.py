@@ -7,5 +7,9 @@ urlpatterns = [
     path('cliente/dashboard/planes_activos/',
          views.client_active_plans, name='client_active_plans'),
     path('cliente/dashboard/perfil/', views.client_profile, name='client_profile'),
+    path('cliente/dashboard/metodos_pago/',
+         views.payment_methods_client, name='payment_methods_client'),
+    path('cliente/dashboard/agregar_metodo_pago/',
+         views.add_payment_method, name='add_payment_method'),
     path('agencia/dashboard/', views.agency_dashboard, name='agency_dashboard'),
 ]

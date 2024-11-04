@@ -25,6 +25,7 @@
 
 <section class="tours-section">
     <div class="container my-4">
+        {% if tours %}
         <div class="row">
             {% for tour in tours %}
                 <div class="col-lg-6 col-md-6 mb-4">
@@ -45,12 +46,18 @@
                 </div>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            No hay tours disponibles.
+        </div>
+        {% endif %}
     </div>    
 </section>
 
 <section class="reviews-section">
     <div class="container-fluid py-5 fondo-verde-claro">
         <h3 class="text-center mb-4">Últimas reseñas</h3>
+        {% if reviews %}
         <div class="card-columns">  
             {% for review in reviews %}
             <div class="card">
@@ -60,11 +67,13 @@
                     <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
                 </div>
             </div>
-            {% empty %}
-            <h4> <!-- Hol a--></h4>
-            <h4 class="text-center">No hay reseñas disponibles</h4> 
             {% endfor %}
         </div>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            No hay reseñas disponibles.    
+        </div>
+        {% endif %}
     </div>
 </section>
 {% endblock content %}

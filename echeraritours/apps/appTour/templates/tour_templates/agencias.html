@@ -11,6 +11,7 @@
 <h2 class="text-center my-5">Agencias registradas en Echerari Tours </h2>
 
 <div class="container my-4">
+    {% if agencias %}
     <div class="row">
         {% for agencia in agencias %}
         <div class="col-lg-4 col-md-6 mb-4">
@@ -28,6 +29,11 @@
         </div>
         {% endfor %}
     </div>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+        No hay agencias registradas.
+    </div>
+    {% endif %} 
 </div>
 
 
