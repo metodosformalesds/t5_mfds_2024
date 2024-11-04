@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard Cliente - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/perfil.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        
+        <div class="container mt-4">
+            <h2>Información de la Cuenta</h2>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <div class="d-flex">
+                    <p id="nombre" class="form-control-plaintext">{{ cliente.first_name }} {{ cliente.paternal_surname }} {{ cliente.maternal_surname }}</p>
+                    <button class="btn editar edit-btn ms-2" data-field="nombre">Editar</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                <div class="d-flex">
+                    <p id="fecha_nacimiento" class="form-control-plaintext">{{ cliente.birth_date }}</p>
+                    <button class="btn editar edit-btn ms-2" data-field="fecha_nacimiento">Editar</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="codigo_postal" class="form-label">Código Postal</label>
+                <div class="d-flex">
+                    <p id="codigo_postal" class="form-control-plaintext">{{ cliente.zip_code }}</p>
+                    <button class="btn editar edit-btn ms-2" data-field="codigo_postal">Editar</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <div class="d-flex">
+                    <p id="telefono" class="form-control-plaintext">{{ cliente.phone }}</p>
+                    <button class="btn editar edit-btn ms-2" data-field="telefono">Editar</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <div class="d-flex">
+                    <p id="email" class="form-control-plaintext">{{ user.email }}</p>
+                    <button class="btn editar edit-btn ms-2" data-field="email">Editar</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="d-flex">
+                    <p id="password" class="form-control-plaintext">*******</p>
+                    <button class="btn editar edit-btn ms-2" data-field="password">Editar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Información</h5>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="" id="editForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="editField" class="form-label">Nuevo Valor</label>
+                        <input type="text" class="form-control" id="editField">
+                    </div>
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editButtons = document.querySelectorAll('.edit-btn');
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        const editField = document.getElementById('editField');
+        const editForm = document.getElementById('editForm');
+        let currentField;
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                currentField = this.dataset.field;
+                editField.value = document.getElementById(currentField).textContent;
+                editModal.show();
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

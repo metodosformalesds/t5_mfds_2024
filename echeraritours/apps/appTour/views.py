@@ -21,6 +21,7 @@ def tours(request):
         - lugar (str, optional): The place to filter tours by destination or place of origin.
     """
     tours = Tour.objects.all()
+    reviews = Reviews.objects.order_by('-review_date')[:5]
 
     precio_max = request.GET.get('precio')
     if precio_max:
@@ -33,7 +34,7 @@ def tours(request):
             Q(place_of_origin__icontains=lugar)
         )
 
-    return render(request, 'tour_templates/tours.html', {'tours': tours})
+    return render(request, 'tour_templates/tours.html', {'tours': tours, 'reviews': reviews})
 
 
 class TourDetailView(DetailView):

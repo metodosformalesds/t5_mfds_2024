@@ -47,6 +47,16 @@ def client_dashboard(request):
     return render(request, 'client_dashboard.html')
 
 
+def client_active_plans(request):
+    return render(request, 'cliente/planes_activos.html')
+
+
+def client_profile(request):
+    cliente = Client.objects.get(user=request.user)
+
+    return render(request, 'cliente/perfil.html', {'cliente': cliente})
+
+
 @login_required(login_url='login')
 def agency_dashboard(request):
     """

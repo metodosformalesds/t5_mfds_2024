@@ -15,6 +15,7 @@ import os
 import environ
 import logging
 from dotenv import load_dotenv
+# import pymysql
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -149,8 +150,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 
-
-
 AUTHENTICATION_BACKENDS = (
     'apps.appUser.authentication_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -167,8 +166,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PKCE_ENABLED': True,
         'METHOD': 'oauth2',
         'VERIFIED_EMAIL': True,
-        'CLIENT_ID': '559389935285-t66a8qq573pafiud56jntmfia2igu3bs.apps.googleusercontent.com',  
-        'SECRET': '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',  
+        'CLIENT_ID': '559389935285-t66a8qq573pafiud56jntmfia2igu3bs.apps.googleusercontent.com',
+        'SECRET': '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',
     }
 }
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -211,7 +210,7 @@ env = environ.Env()
 environ.Env.read_env()
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
-#Stripe jiji
+# Stripe jiji
 STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
