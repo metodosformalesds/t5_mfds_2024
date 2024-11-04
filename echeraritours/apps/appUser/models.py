@@ -118,37 +118,15 @@ class Agency(models.Model):
                     "mcc": "4722",
                     "product_description": self.agency_description or "Servicios de Agencia",
                 },
-                company={
-                    "name": self.agency_name,
-                    "address": {
-                        "line1": self.address,
-                        "postal_code": self.zip_code,  # Código postal de prueba válido
-                        "country": "MX",
-                    },
-                    "phone": self.phone,
-                },
-                tos_acceptance={
-                    "date": int(time.time()),
-                    "ip": "127.0.0.1",  # Esto es para el localhost, no se como cambiarlo para cuando ya sea en produccion pipipi
-                }
-            )
-
-            # Guarda el ID de la cuenta de Stripe
-            self.stripe_agency_id = account.id
-
-            # Añadir representante para la agencia con datos de prueba
-            stripe.Account.modify(
-                self.stripe_agency_id,
                 individual={
                     "first_name": "Testing",
                     "last_name": "TestRamirez",
                     "email": "test@outlook.com",
-                    # "rfc": "AAA010101AAA",
                     "address": {
-                        "line1": "Calle para Testing",
+                        "line1": self.address,
                         "postal_code": self.zip_code,
                         "country": "MX",
-                        "city": "Ciudad de prueba",
+                        "city": "Mexico City",
                         "state": "CDMX",
                     },
                     "dob": {
@@ -157,37 +135,35 @@ class Agency(models.Model):
                         "year": 1990,
                     },
                     "phone": self.phone,
-                    "relationship": {
-                        "representative": True,
-                        "owner": True,
-                        "director": True,
-                        "executive": True,
-                    }
+                    "id_number": "000000000",
                 },
-                business_type="individual"
+                tos_acceptance={
+                    "date": int(time.time()),
+                    "ip": "127.0.0.1",  # ESTO TIENE QUE CAMBIAR DESPUES AHHHHHHHHHHHHHHH
+                }
             )
 
             # Guarda el ID de la cuenta de Stripe
             self.stripe_agency_id = account.id
 
+            # Añadir cuenta bancaria
+            stripe.Account.create_external_account(
+                self.stripe_agency_id,
+                external_account={
+                    "object": "bank_account",
+                    "country": "MX",
+                    "currency": "mxn",
+                    "account_holder_name": "Testing TestRamirez",
+                    "account_holder_type": "individual",
+                    "account_number": "000000001234567897"  # Número de cuenta para pruebas
+                }
+            )
 
         except stripe.error.StripeError as e:
             # Manejar errores de Stripe
             print(f"Error al crear la cuenta de Stripe: {e}")
             raise
 
-
-        stripe.Account.create_external_account(
-            self.stripe_agency_id,
-            external_account={
-                "object": "bank_account",
-                "country": "MX",
-                "currency": "mxn",
-                "account_holder_name": "Testing TestRamirez",
-                "account_holder_type": "individual",
-                "account_number": "000123456789"  # Número de cuenta para pruebas
-            }
-        )
 
 
     def save(self, *args, **kwargs):

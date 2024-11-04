@@ -55,7 +55,12 @@ class TourDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['google_api'] = settings.GOOGLE_MAPS_API_KEY
+        
+        # Calcular los lugares restantes
+        context['available_bookings'] = self.object.capacity - self.object.total_bookings
+        
         return context
+
 
 
 def agencias(request):

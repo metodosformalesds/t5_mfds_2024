@@ -15,7 +15,6 @@ import stripe
 from django.conf import settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
 def detalles_reservacion(request, id):
     """
     Handles the request to display the details of a specific tour reservation.
@@ -65,36 +64,42 @@ def create_payment(request, reservation_id):
     payment_method = PaymentMethod.objects.get(client=client)
 
     # Crear un PaymentIntent
-    payment_intent = stripe.PaymentIntent.create(
-        amount=int(reservation.total_price * 100),  # Monto en centavos (Asi lo ocupa Stripe xdd)
-        currency='mxn',
-        customer=client.stripe_customer_id,
-        payment_method=payment_method.stripe_payment_method_id,
-        off_session=True,
-        confirm=True,
-        application_fee_amount=int(reservation.total_price * 0.1 * 100),  # Comisión del 10%
-        transfer_data={
-            'destination': agency.stripe_agency_id,
-        },
-        automatic_payment_methods={
-            'enabled': True,
-            'allow_redirects': 'never',
-        },
-        return_url='http://127.0.0.1:8000/payment/pago_completado',
-    )
+    try:
+        payment_intent = stripe.PaymentIntent.create(
+            amount=int(reservation.total_price * 100),  # Monto en centavos
+            currency='mxn',
+            customer=client.stripe_customer_id,
+            payment_method=payment_method.stripe_payment_method_id,
+            off_session=True,
+            confirm=True,
+            application_fee_amount=int(reservation.total_price * 0.1 * 100),  # Comisión del 10%
+            transfer_data={
+                'destination': agency.stripe_agency_id,
+            },
+            automatic_payment_methods={
+                'enabled': True  # Configuración de métodos automáticos
+            },
+            # return_url solo si es necesario
+            return_url='http://127.0.0.1:8000/payment/pago_completado',
+        )
 
-    # Crear un registro de pago 
-    Payments.objects.create(
-        client=client,
-        agency=agency,
-        reservation=reservation,
-        payment_method=payment_method,
-        amount=reservation.total_price,
-        status='completado' if payment_intent.status == 'succeeded' else 'fallado',
-    )
+        # Crear un registro de pago
+        Payments.objects.create(
+            client=client,
+            agency=agency,
+            reservation=reservation,
+            payment_method=payment_method,
+            amount=reservation.total_price,
+            status='completado' if payment_intent.status == 'succeeded' else 'fallado',
+        )
 
-    # Redirigir o renderizar una plantilla
-    return redirect('index')
+        # Redirigir o renderizar una plantilla
+        return redirect('index')
+
+    except stripe.error.InvalidRequestError as e:
+        # Manejar errores de solicitud
+        return JsonResponse({'error': f'Error en la solicitud: {e.user_message}'}, status=400)
+
 
 
 @csrf_exempt
@@ -166,7 +171,16 @@ def process_payment(request):
     tour = get_object_or_404(Tour, id=tour_id)
     agency = tour.agency
 
-    # Crear el PaymentIntent
+    # Obtener o crear el método de pago del cliente en tu base de datos
+    try:
+        payment_method = PaymentMethod.objects.get(stripe_payment_method_id=payment_method_id)
+    except PaymentMethod.DoesNotExist:
+        payment_method = PaymentMethod.objects.create(
+            client=client,
+            stripe_payment_method_id=payment_method_id
+        )
+
+    # Crear el PaymentIntent con `automatic_payment_methods` configurado
     try:
         payment_intent = stripe.PaymentIntent.create(
             amount=int(float(total_price) * 100),  # Convertir a centavos
@@ -178,6 +192,11 @@ def process_payment(request):
             transfer_data={
                 'destination': agency.stripe_agency_id,
             },
+            automatic_payment_methods={
+                'enabled': True  # Habilitar métodos de pago automáticos
+            },
+            # Agrega el return_url solo si es realmente necesario
+            return_url='http://127.0.0.1:8000/payment/pago_completado',  # URL accesible para redireccionar al usuario
         )
 
         # Crea la reservación
@@ -193,6 +212,7 @@ def process_payment(request):
             client=client,
             agency=agency,
             reservation=reservation,
+            payment_method=payment_method,  # Asegúrate de asignar el payment_method aquí
             amount=total_price,
             status='pendiente',
             payment_intent_id=payment_intent.id,
@@ -201,6 +221,10 @@ def process_payment(request):
         return JsonResponse({'status': 'success'})
     except stripe.error.CardError as e:
         return JsonResponse({'error': str(e)}, status=400)
+    except stripe.error.InvalidRequestError as e:
+        # Manejo detallado de errores de `InvalidRequestError`
+        return JsonResponse({'error': f'Invalid request: {e.user_message}'}, status=400)
+
 
 def pago_completado(request):
     return render(request, 'pago_completado.html')
