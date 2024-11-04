@@ -83,27 +83,18 @@
 <div class="container-fluid py-5 fondo-verde-claro">
     <h3 class="text-center mb-4">Últimas reseñas</h3>
     <div class="card-columns">  
+        {% for review in reviews %}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
-                <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
-                <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
+                <h5 class="card-title">{{ review.reservation.tour.title }}</h5>
+                <p class="card-text"> {{ review.review_text }}</p>
+                <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
-                <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
-                <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title"> Tour a Cancún - 4 ⭐ </h5>
-                <p class="card-text"> Esta es la descripción del tour a Cancún. Hola mundo. </p>
-                <p class="card-text"><small class="text-muted"> Rodrigo - 10/17/2024 </small></p>
-            </div>
-        </div>
+        {% empty %}
+        <h4> <!-- Hol a--></h4>
+        <h4 class="text-center">No hay reseñas disponibles</h4> 
+        {% endfor %}
     </div>
 </div>
 

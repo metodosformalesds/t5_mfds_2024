@@ -103,3 +103,24 @@ input::placeholder {
     width: 300px;
     height: auto;
 }
+
+
+/* Para registrar agencias */
+.info-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.certificado-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.certificado-img {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}

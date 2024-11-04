@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Tours - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appTour/css/tours.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+
+<form method="get" class="container mt-4">
+    <h1>Encuentra el viaje que quieres</h1>
+    <div class="form-row mb-3">
+        <div class="col">
+            <label for="precio">Precio máximo:</label>
+            <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" required>
+        </div>
+        <div class="col">
+            <label for="lugar">Lugar:</label>
+            <input type="text" name="lugar" id="lugar" placeholder="Lugar" class="form-control" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
+
+<section class="tours-section">
+    <div class="container my-4">
+        <div class="row">
+            {% for tour in tours %}
+                <div class="col-lg-6 col-md-6 mb-4">
+                    <a href="{% url 'detalle_tour' tour.id %}" class="card-link" style="text-decoration: none;">
+                        <div class="card">
+                            <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ tour.title }}">
+                            <div class="card-body">
+                                <h5 class="font-weight-bold text-center">{{ tour.title }}</h5>
+                                <p class="text-muted">Desde <span class="span-echerari">{{ tour.start_date }}</span> hasta <span class="span-echerari">{{ tour.end_date }}</span></p>
+                                <p><i class="fas fa-plane"></i> De <span class="span-echerari">{{ tour.place_of_origin }}</span> a <span class="span-echerari">{{ tour.destination_place }}</span></p>
+                                <p><i class="fas fa-users"></i> Para <span class="span-echerari"> {{ tour.capacity }} personas</span></p>
+                                <div class="price-section">
+                                    <p class="precio"><span class="span-echerari">MXN ${{ tour.price_per_person }}</span> por persona</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>    
+</section>
+
+<section class="reviews-section">
+    <div class="container">
+        <h2 class="section-title">4.7 <span class="star">⭐</span> - Reseñas por usuarios</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">El tour a Chichen Itza fue muy bueno, pero la fila para entrar fue larga.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user1.jpg' %}" alt="Marta Sanchez" class="review-avatar">
+                    <div>
+                        <p class="review-author">Marta Sanchez</p>
+                        <p class="review-date">5 de enero de 2024</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">La playa de Cancun es hermosa 😍.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user2.jpg' %}" alt="Carlos Lopez" class="review-avatar">
+                    <div>
+                        <p class="review-author">Carlos Lopez</p>
+                        <p class="review-date">19 de febrero de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">Nadar en los cenotes fue lo mejor de mi viaje, el agua es refrescante 🏊‍♀️.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user3.jpg' %}" alt="Ana Torres" class="review-avatar">
+                    <div>
+                        <p class="review-author">Ana Torres</p>
+                        <p class="review-date">8 de agosto de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">La vida nocturna en la Zona Hotelera es increible 🎉.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user4.jpg' %}" alt="Valeria Ortiz" class="review-avatar">
+                    <div>
+                        <p class="review-author">Valeria Ortiz</p>
+                        <p class="review-date">22 de julio de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">El tour al atardecer fue muy divertido, pero un poco caro.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user5.jpg' %}" alt="Jorge Mena" class="review-avatar">
+                    <div>
+                        <p class="review-author">Jorge Mena</p>
+                        <p class="review-date">15 de noviembre de 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p class="review-title">Tour Cancun</p>
+                <p class="review-text">El tour a Tulum fue hermoso, pero hacia mucho calor caminando.</p>
+                <div class="review-footer">
+                    <img src="{% static 'appTour/img/user6.jpg' %}" alt="Gabriela Herrera" class="review-avatar">
+                    <div>
+                        <p class="review-author">Gabriela Herrera</p>
+                        <p class="review-date">22 de marzo de 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

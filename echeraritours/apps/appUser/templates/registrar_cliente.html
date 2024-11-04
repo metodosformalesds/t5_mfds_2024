@@ -78,6 +78,11 @@
             <!-- Paso 3 -->
             {% elif step == 3 %}
 
+            <p class="mb-4">Por favor, sube tu identificación para terminar el registro.</p>
+            <div class="d-flex justify-content-center">
+                <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
+            </div>
+
             <div class="mb-3">
                 <label for="identificacion" class="form-label">Selecciona tu identificación</label>
                 <input type="file" id="identificacion_oficial" name="identificacion_oficial" class="form-control" accept=".jpg,.jpeg,.png" required>

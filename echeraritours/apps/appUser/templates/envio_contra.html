@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Correo Enviado - EcherariTours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static "appUser/css/login.css" %}"> 
+<link rel="stylesheet" href="{% static "appUser/css/recuperacion.css" %}"> 
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="login-container mt-5 mb-5">
+    <div class="login-box">
+        <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
+
+        <h3 class="mt-4 mb-3">Correo enviado</h3>
+        <p>Se ha enviado un correo con las instrucciones para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o correo no deseado.</p>
+        
+    </div>
+</div>
+{% endblock content %}
