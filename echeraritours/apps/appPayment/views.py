@@ -66,7 +66,7 @@ def create_payment(request, reservation_id):
 
     # Crear un PaymentIntent
     payment_intent = stripe.PaymentIntent.create(
-        amount=int(reservation.total_price * 100),  # Monto en centavos
+        amount=int(reservation.total_price * 100),  # Monto en centavos (Asi lo ocupa Stripe xdd)
         currency='mxn',
         customer=client.stripe_customer_id,
         payment_method=payment_method.stripe_payment_method_id,
@@ -74,11 +74,16 @@ def create_payment(request, reservation_id):
         confirm=True,
         application_fee_amount=int(reservation.total_price * 0.1 * 100),  # Comisión del 10%
         transfer_data={
-            'destination': agency.stripe_account_id,
+            'destination': agency.stripe_agency_id,
         },
+        automatic_payment_methods={
+            'enabled': True,
+            'allow_redirects': 'never',
+        },
+        return_url='http://127.0.0.1:8000/payment/pago_completado',
     )
 
-    # Crear un registro de pago en tu modelo
+    # Crear un registro de pago 
     Payments.objects.create(
         client=client,
         agency=agency,
@@ -114,7 +119,7 @@ def stripe_webhook(request):
     if event['type'] == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
 
-        # Aquí, actualiza el estado del pago en tu base de datos
+        # Actualiza el estado del pago en tu base de datos
         payment_intent_id = payment_intent['id']
         try:
             payment = Payments.objects.get(payment_intent_id=payment_intent_id)
@@ -171,11 +176,11 @@ def process_payment(request):
             confirm=True,
             application_fee_amount=int(float(total_price) * 0.1 * 100),  # Comisión del 10%
             transfer_data={
-                'destination': agency.stripe_account_id,
+                'destination': agency.stripe_agency_id,
             },
         )
 
-        # Crear la reservación
+        # Crea la reservación
         reservation = Reservation.objects.create(
             tour=tour,
             client=client,
@@ -183,7 +188,7 @@ def process_payment(request):
             total_price=total_price,
         )
 
-        # Crear el pago
+        # Crea el pago
         Payments.objects.create(
             client=client,
             agency=agency,

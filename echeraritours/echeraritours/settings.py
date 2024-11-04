@@ -15,7 +15,6 @@ import os
 import environ
 import logging
 from dotenv import load_dotenv
-import pymysql
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
