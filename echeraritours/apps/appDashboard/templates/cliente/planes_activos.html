@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard Cliente - Echérari Tours{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Dashboard</h1>
+          </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ plan.imagen.url }}" class="card-img-top" alt="{{ plan.titulo }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plan.titulo }}</h5>
+                        <p class="card-text">{{ plan.descripcion }}</p>
+                        <p class="card-text"><strong>Agencia:</strong> {{ plan.agencia }}</p>
+                        <p class="card-text"><strong>Total Pagado:</strong> {{ plan.total_pagado }}</p>
+                        <p class="card-text"><strong>Fecha del Tour:</strong> {{ plan.fecha_tour }}</p>
+                        <p class="card-text"><strong>Duración del Tour:</strong> {{ plan.duracion_tour }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock content %}
