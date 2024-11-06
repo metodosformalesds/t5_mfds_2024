@@ -30,91 +30,128 @@
         <div class="col-md-6">
             <h5>Selección de método de pago</h5>
 
+            <!-- Opciones de metodo de pago -->
             <div class="form-check mb-3">
-                <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal">
+                <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
                 <label class="form-check-label" for="paypal">
                     PayPal &nbsp; 
                     <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
                 </label>
             </div>
 
-            <div class="form-check mb-3 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card" checked>
-                    <label class="form-check-label" for="credit_card">
-                        <span class="payment-label">Pago con tarjeta</span>
-                    </label>
-                </div>
-                <div class="d-flex payment-icons">
-                    <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
-                    <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
-                    <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
-                    <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
-                </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
+                <label class="form-check-label" for="credit_card">
+                    Pago con tarjeta
+                    <div class="d-flex payment-icons mt-1">
+                        <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
+                        <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
+                        <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
+                        <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
+                    </div>
+                </label>
             </div>
 
-            <div class="row bg-light p-3 rounded-3">
-                <div class="col-12 mb-3">
-                    <label for="cardholder_name">Nombre completo del dueño de la tarjeta</label>
-                    <input type="text" class="form-control" id="cardholder_name" placeholder="Rodrigo Fierro" value="Rodrigo Fierro">
-                </div>
+            <!-- Contenedores de formularios que se alternan -->
+            <div id="paypal-info" class="payment-info">
+                <p class="text-muted">Serás redirigido al sitio de PayPal al hacer clic en "Realizar pago".</p>
+            </div>
 
-                <div class="col-12 mb-3">
-                    <label for="card_number">Número de tarjeta</label>
-                    <input type="text" class="form-control" id="card_number" placeholder="1234 5678 9012 3456" value="1234 5678 9012 3456">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="expiration_date">Fecha de expiración</label>
-                    <input type="text" class="form-control" id="expiration_date" placeholder="12/30" value="12/30">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="cvv">CVV</label>
-                    <input type="text" class="form-control" id="cvv" placeholder="123" value="123">
-                </div>
-
-                <div class="col-12 mb-3">
-                    <label for="billing_address">Dirección</label>
-                    <input type="text" class="form-control" id="billing_address" placeholder="Calle Falsa, Colonia No Real No 12" value="Calle Falsa, Colonia No Real No 12">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="billing_postal_code">Código postal</label>
-                    <input type="text" class="form-control" id="billing_postal_code" placeholder="12345" value="12345">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="billing_city">Ciudad</label>
-                    <input type="text" class="form-control" id="billing_city" placeholder="Ciudad Juárez" value="Ciudad Juárez">
-                </div>
-
-                <div class="col-md-12 mb-3">
-                    <label for="billing_country">País</label>
-                    <input type="text" class="form-control" id="billing_country" placeholder="México" value="México">
+            <div id="credit-card-form" class="payment-info" style="display: none;">
+                <div class="row bg-light p-3 rounded-3">
+                    <div class="col-12 mb-3">
+                        <label for="cardholder_name">Nombre completo del dueño de la tarjeta</label>
+                        <input type="text" class="form-control" id="cardholder_name" placeholder="Rodrigo Fierro">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="card_number">Número de tarjeta</label>
+                        <input type="text" class="form-control" id="card_number" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="expiration_date">Fecha de expiración</label>
+                        <input type="text" class="form-control" id="expiration_date" placeholder="MM/YY">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="cvv">CVV</label>
+                        <input type="text" class="form-control" id="cvv" placeholder="123">
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Resumen de la reservacion -->
         <div class="col-md-5 offset-md-1">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Pago con tarjeta</h5>
+                    <h5 class="card-title">Resumen de la compra</h5>
                     <div class="d-flex">
-                        <img src="{% static 'appPayment/img/cancun.jpg' %}" class="img-thumbnail me-3" alt="Cancún: El Paraíso del Caribe Mexicano" style="width: 100px;">
+                        <img src="{{ tour.image_url }}" class="img-thumbnail me-3" alt="{{ tour.title }}" style="width: 100px;">
                         <div>
-                            <p class="fw-bold">Cancún: El Paraíso del Caribe Mexicano</p>
-                            <p><i class="bi bi-calendar"></i> 23 de Agosto del 2024</p>
+                            <p class="fw-bold">{{ tour.title }}</p>
+                            <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:"d \\d\\e F \\d\\e\\l Y" }}</p>
                         </div>
                     </div>
                     <hr>
-                    <h5 class="fw-bold">Precio Total <span class="text-success">$4,800</span></h5>
+                    <h5 class="fw-bold">Precio Total <span class="text-success">${{ total_price }}</span></h5>
+                    <p>Número de personas: {{ number_people }}</p>
+                    <form action="{% url 'pago_reservacion' tour_id=tour.id %}" method="post">
+<form action="{% url 'pago_reservacion' tour_id=tour.id %}" method="post">
+    {% csrf_token %}
+    
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
+        <label class="form-check-label" for="paypal">
+            PayPal &nbsp; 
+            <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
+        </label>
+    </div>
+
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
+        <label class="form-check-label" for="credit_card">
+            Pago con tarjeta
+            <div class="d-flex payment-icons mt-1">
+                <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
+                <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
+                <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
+                <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
+            </div>
+        </label>
+    </div>
+    
+    <input type="hidden" name="number_people" value="{{ number_people }}">
+    <button type="submit" class="btn btn-success">Procesar pago</button>
+</form>
                     
-                    <button class="btn btn-success w-100 mt-3">Realizar pago</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const paypalOption = document.getElementById('paypal');
+        const creditCardOption = document.getElementById('credit_card');
+        const paypalInfo = document.getElementById('paypal-info');
+        const creditCardForm = document.getElementById('credit-card-form');
+
+        // Funcion para mostrar el formulario 
+        function togglePaymentInfo() {
+            if (paypalOption.checked) {
+                paypalInfo.style.display = 'block';
+                creditCardForm.style.display = 'none';
+            } else if (creditCardOption.checked) {
+                paypalInfo.style.display = 'none';
+                creditCardForm.style.display = 'block';
+            }
+        }
+
+        paypalOption.addEventListener('change', togglePaymentInfo);
+        creditCardOption.addEventListener('change', togglePaymentInfo);
+
+        togglePaymentInfo();
+    });
+</script>
 
 {% endblock content %}
