@@ -21,6 +21,7 @@ def tours(request):
         - lugar (str, optional): The place to filter tours by destination or place of origin.
     """
     tours = Tour.objects.all()
+    reviews = Reviews.objects.order_by('-review_date')[:5]
 
     precio_max = request.GET.get('precio')
     if precio_max:
@@ -33,7 +34,7 @@ def tours(request):
             Q(place_of_origin__icontains=lugar)
         )
 
-    return render(request, 'tour_templates/tours.html', {'tours': tours})
+    return render(request, 'tour_templates/tours.html', {'tours': tours, 'reviews': reviews})
 
 
 class TourDetailView(DetailView):
@@ -54,7 +55,12 @@ class TourDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['google_api'] = settings.GOOGLE_MAPS_API_KEY
+        
+        # Calcular los lugares restantes
+        context['available_bookings'] = self.object.capacity - self.object.total_bookings
+        
         return context
+
 
 
 def agencias(request):

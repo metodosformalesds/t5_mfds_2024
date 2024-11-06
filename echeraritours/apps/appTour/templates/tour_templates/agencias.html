@@ -11,6 +11,7 @@
 <h2 class="text-center my-5">Agencias registradas en Echerari Tours </h2>
 
 <div class="container my-4">
+    {% if agencias %}
     <div class="row">
         {% for agencia in agencias %}
         <div class="col-lg-4 col-md-6 mb-4">
@@ -18,7 +19,7 @@
                 <div class="card h-100">
                     <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
                     <div class="card-body text-center">
-                        <img src="{% static 'appTour/img/user_icon.jpg' %}" class="profile-img rounded-circle mb-3" alt="{{ agencia.agency_name }} perfil">
+                        <img src="{{ agencia.profile_image.url }}" class="profile-img rounded-circle mb-3" alt="{{ agencia.agency_name }} perfil">
                         <h5 class="card-title">{{ agencia.agency_name }}</h5>
                         <hr class="divider">
                         <p class="card-text mt-3"> {% if agencia.agency_description %} {{ agencia.agency_description }}{% else %} Sin descripcion  {% endif %} </p>
@@ -28,6 +29,11 @@
         </div>
         {% endfor %}
     </div>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+        No hay agencias registradas.
+    </div>
+    {% endif %} 
 </div>
 
 

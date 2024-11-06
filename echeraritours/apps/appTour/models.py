@@ -91,11 +91,13 @@ class Reservation(models.Model):
     def save(self, *args, **kwargs):
         if self.tour.total_bookings + self.number_people > self.tour.capacity:
             raise ValueError(
-                "No se puede reservar más personas que la capacidad del tour.")
-        self.total_price = self.calculate_total_price()
+                "No se puede reservar más personas que la capacidad del tour."
+            )
+        self.total_price = self.calculate_total_price() 
         self.tour.total_bookings += self.number_people
         self.tour.save()
         super().save(*args, **kwargs)
+
 
     def delete(self, *args, **kwargs):
         self.tour.total_bookings -= self.number_people

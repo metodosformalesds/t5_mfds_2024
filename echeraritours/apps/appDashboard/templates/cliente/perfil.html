@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard Cliente - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/perfil.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <article class="card">
+            <header class="card-header">
+                <h2 class="card-title">Perfil</h2>
+            </header>
+            <div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <img src="{{ cliente.profile_image.url }}" alt="Foto de perfil" width="100" class="img-fluid">
+                        </div>
+                        <div class="col-md-8">
+                            <form class="" action="{% url "client_profile" %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">Nombre</label>
+                                        {{ user_form.first_name }}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">Apellidos</label>
+                                        {{ user_form.paternal_surname }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">Numero de telefono</label>
+                                        {{ user_form.phone }}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">Ciudad</label>
+                                        {{ user_form.city }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">Codigo postal</label>
+                                        {{ user_form.zip_code }}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">Fecha de nacimiento</label>
+                                        {{ user_form.birth_date }}
+                                    </div>
+                                </div>
+
+                                <input type="submit" class="btn btn-primary" value="Guardar cambios">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                </footer>
+        </article>
+    </main>
+</div>
+
+{% endblock content %}

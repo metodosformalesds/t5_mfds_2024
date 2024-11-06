@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Agregar Método de Pago - Echérari Tours{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="container">
+                <h1>Agregar Método de Pago</h1>
+                <p>Por favor, completa el siguiente formulario para agregar un nuevo método de pago.</p>
+                <hr>
+                <div class="alert alert-warning" role="alert">
+                    <strong>¡Atención!</strong> No guardamos información de tarjetas de crédito en nuestra base de datos. Toda la información de pago es manejada por Stripe.
+                </div>
+
+                <p>Selecciona el método de pago que deseas agregar:</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="method_type" id="credit_card" value="credit_card" checked>
+                    <label class="form-check-label" for="credit_card">Tarjeta de Crédito</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="method_type" id="paypal" value="paypal">
+                    <label class="form-check-label" for="paypal">PayPal</label>
+                </div>
+
+                <form method="post" action="{% url 'add_payment_method' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="card_number">Número de Tarjeta:</label>
+                        <input type="text" id="card_number" name="card_number" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expiry_date">Fecha de Expiración:</label>
+                        <input type="text" id="expiry_date" name="expiry_date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" name="cvv" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardholder_name">Nombre del Titular:</label>
+                        <input type="text" id="cardholder_name" name="cardholder_name" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar Método de Pago</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var methodTypeRadios = document.querySelectorAll('input[type=radio][name=method_type]');
+        methodTypeRadios.forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.value == 'credit_card') {
+                    document.getElementById('card_number').placeholder = 'Número de Tarjeta';
+                    document.getElementById('expiry_date').placeholder = 'Fecha de Expiración';
+                    document.getElementById('cvv').placeholder = 'CVV';
+                    document.getElementById('cardholder_name').placeholder = 'Nombre del Titular';
+                    document.getElementById('expiry_date').disabled = false;
+                    document.getElementById('cvv').disabled = false;
+                    document.getElementById('cardholder_name').disabled = false;
+                } else if (this.value == 'paypal') {
+                    document.getElementById('card_number').placeholder = 'Correo de PayPal';
+                    document.getElementById('expiry_date').placeholder = '';
+                    document.getElementById('cvv').placeholder = '';
+                    document.getElementById('cardholder_name').placeholder = '';
+                    document.getElementById('expiry_date').disabled = true;
+                    document.getElementById('cvv').disabled = true;
+                    document.getElementById('cardholder_name').disabled = true;
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

@@ -33,22 +33,22 @@ def pago_cancelado_view(request):
     
     messages.info(request, "El pago fue cancelado.")
     return redirect("detalle_reservacion", reservation_id=reservation_id)
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, JsonResponse
+import json
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
+# Importación de modelos
+from .models import Payments, PaymentMethod
+from apps.appTour.models import Reservation
+from apps.appUser.models import Agency, Client
+from apps.appTour.models import Tour
 
-def payment(request):
-    """
-    Handles the payment view.
-
-    This view renders the payment page when a request is made.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The rendered payment page.
-    """
-    return render(request, 'payment.html')
-
+# Para la implementación de Stripe
+import stripe
+from django.conf import settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def detalles_reservacion(request, tour_id):
