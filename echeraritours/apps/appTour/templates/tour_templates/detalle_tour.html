@@ -19,7 +19,7 @@
     <div class="row mt-2">
         <!-- Imagen del tour -->
         <div class="col-lg-6 mb-4">
-            <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="img-fluid rounded" alt="{{ tour.title }}">
+            <img src="{{ tour.tour_image.url }}" class="img-fluid rounded" alt="{{ tour.title }}">
         </div>
 
         <!-- Descripción y detalles -->

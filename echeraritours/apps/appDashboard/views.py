@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from apps.appUser.models import Client, Agency
 from apps.appPayment.models import PaymentMethod
 from apps.appTour.models import Reservation
 from django.views.generic.edit import CreateView
+from .forms import UserForm, UserProfileForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -56,9 +58,29 @@ def client_active_plans(request):
 
 
 def client_profile(request):
-    cliente = Client.objects.get(user=request.user)
+    cliente = get_object_or_404(Client, user=request.user)
 
-    return render(request, 'cliente/perfil.html', {'cliente': cliente})
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, request.FILES, instance=cliente)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=cliente)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado.')
+            return redirect('client_profile')
+    else:
+        user_form = UserForm(instance=cliente)
+        profile_form = UserProfileForm(instance=cliente)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'cliente': cliente
+    }
+
+    return render(request, 'cliente/perfil.html', context)
 
 
 def payment_methods_client(request):

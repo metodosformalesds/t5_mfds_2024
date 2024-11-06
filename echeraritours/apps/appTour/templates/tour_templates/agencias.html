@@ -19,7 +19,7 @@
                 <div class="card h-100">
                     <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
                     <div class="card-body text-center">
-                        <img src="{% static 'appTour/img/user_icon.jpg' %}" class="profile-img rounded-circle mb-3" alt="{{ agencia.agency_name }} perfil">
+                        <img src="{{ agencia.profile_image.url }}" class="profile-img rounded-circle mb-3" alt="{{ agencia.agency_name }} perfil">
                         <h5 class="card-title">{{ agencia.agency_name }}</h5>
                         <hr class="divider">
                         <p class="card-text mt-3"> {% if agencia.agency_description %} {{ agencia.agency_description }}{% else %} Sin descripcion  {% endif %} </p>

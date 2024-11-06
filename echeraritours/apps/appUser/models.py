@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import time
 
-#Para la implementación de Stripe
+# Para la implementación de Stripe
 import stripe
 from django.conf import settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -41,9 +41,10 @@ class Client(models.Model):
     zip_code = models.CharField(max_length=10)
     identification = models.ImageField(upload_to='static/identifications/')
     profile_image = models.ImageField(
-        upload_to='media/profile_images/', blank=True, null=True)
-    stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
-    
+        upload_to='profile_images', blank=True, null=True)
+    stripe_customer_id = models.CharField(
+        max_length=255, blank=True, null=True)
+
     def save(self, *args, **kwargs):
         if not self.stripe_customer_id:
             customer = stripe.Customer.create(
@@ -58,10 +59,12 @@ class Client(models.Model):
         if self.stripe_customer_id:
             try:
                 stripe.Customer.delete(self.stripe_customer_id)
-                print(f"Cuenta de cliente {self.stripe_customer_id} eliminada de Stripe.")
+                print(
+                    f"Cuenta de cliente {self.stripe_customer_id} eliminada de Stripe.")
             except stripe.error.StripeError as e:
                 print(f"Error al eliminar la cuenta de Stripe: {e}")
         super().delete(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
@@ -98,9 +101,9 @@ class Agency(models.Model):
     zip_code = models.CharField(max_length=10)
     certificate = models.ImageField(upload_to='static/certificates/')
     profile_image = models.ImageField(
-        upload_to='media/agency_profile_images/', blank=True, null=True)
+        upload_to='agency_profile_images/', blank=True, null=True)
     stripe_agency_id = models.CharField(max_length=255, blank=True, null=True)
-    
+
     def create_stripe_account_for_agency(self):
         try:
             # Crear la cuenta de Stripe para la agencia
@@ -164,8 +167,6 @@ class Agency(models.Model):
             print(f"Error al crear la cuenta de Stripe: {e}")
             raise
 
-
-
     def save(self, *args, **kwargs):
         if not self.stripe_agency_id:
             self.create_stripe_account_for_agency()
@@ -176,7 +177,8 @@ class Agency(models.Model):
         if self.stripe_agency_id:
             try:
                 stripe.Account.delete(self.stripe_agency_id)
-                print(f"Cuenta de agencia {self.stripe_agency_id} eliminada de Stripe.")
+                print(
+                    f"Cuenta de agencia {self.stripe_agency_id} eliminada de Stripe.")
             except stripe.error.StripeError as e:
                 print(f"Error al eliminar la cuenta de Stripe: {e}")
         super().delete(*args, **kwargs)
@@ -186,8 +188,5 @@ class Agency(models.Model):
         verbose_name_plural = 'Agencias'
         ordering = ['-id']
 
-    
-
     def __str__(self):
         return f"Agencia: {self.agency_name}"
-
