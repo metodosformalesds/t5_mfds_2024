@@ -95,34 +95,32 @@
                     <h5 class="fw-bold">Precio Total <span class="text-success">${{ total_price }}</span></h5>
                     <p>Número de personas: {{ number_people }}</p>
                     <form action="{% url 'pago_reservacion' tour_id=tour.id %}" method="post">
-<form action="{% url 'pago_reservacion' tour_id=tour.id %}" method="post">
-    {% csrf_token %}
-    
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
-        <label class="form-check-label" for="paypal">
-            PayPal &nbsp; 
-            <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
-        </label>
-    </div>
+                        {% csrf_token %}
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
+                            <label class="form-check-label" for="paypal">
+                                PayPal &nbsp; 
+                                <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
+                            </label>
+                        </div>
 
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
-        <label class="form-check-label" for="credit_card">
-            Pago con tarjeta
-            <div class="d-flex payment-icons mt-1">
-                <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
-                <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
-                <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
-                <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
-            </div>
-        </label>
-    </div>
-    
-    <input type="hidden" name="number_people" value="{{ number_people }}">
-    <button type="submit" class="btn btn-success">Procesar pago</button>
-</form>
-                    
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
+                            <label class="form-check-label" for="credit_card">
+                                Pago con tarjeta
+                                <div class="d-flex payment-icons mt-1">
+                                    <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
+                                    <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
+                                    <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
+                                    <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <input type="hidden" name="number_people" value="{{ number_people }}">
+                        <button type="submit" class="btn btn-success">Procesar pago</button>
+                    </form>
                 </div>
             </div>
         </div>

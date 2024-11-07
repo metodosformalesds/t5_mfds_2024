@@ -1,4 +1,6 @@
 from django import forms
+
+
 class ReservationForm(forms.Form):
     number_people = forms.IntegerField(
         min_value=1,
