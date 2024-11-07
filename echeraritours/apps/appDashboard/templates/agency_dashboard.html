@@ -3,5 +3,42 @@
 {% block title %}Dashboard Agencia - Echérari Tours{% endblock title %}
 
 {% block content %}
-    
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>        
+      </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">Tours</h5>
+                    <p class="card-text">Administra tus tours</p>
+                    <a href="#" class="btn btn-primary">Ver tours</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">Reportes</h5>
+                    <p class="card-text">Descarga tus reportes</p>
+                    <a href="{% url 'reports' %}" class="btn btn-primary">Ver reportes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">Perfil</h5>
+                    <p class="card-text">Administra tu perfil</p>
+                    <a href="#" class="btn btn-primary">Ver perfil</a>
+                </div>
+        </div>
+    </main>
+</div>
 {% endblock content %}

@@ -14,6 +14,7 @@ urlpatterns = [
     path('cliente/dashboard/agregar_metodo_pago/',
          views.add_payment_method, name='add_payment_method'),
     path('agencia/dashboard/', views.agency_dashboard, name='agency_dashboard'),
+    path('agencia/dashboard/reportes/', views.reports, name='reports'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

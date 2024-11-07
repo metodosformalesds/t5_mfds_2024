@@ -3,12 +3,21 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from apps.appUser.models import Client, Agency
 from apps.appPayment.models import PaymentMethod
-from apps.appTour.models import Reservation
+from apps.appTour.models import Reservation, Tour
 from django.views.generic.edit import CreateView
 from .forms import UserForm, UserProfileForm
 from django.contrib import messages
+from .models import Reports
 
 # Create your views here.
+
+VALID_STATES = [
+    'aguascalientes', 'baja california', 'baja california sur', 'campeche', 'chiapas',
+    'chihuahua', 'coahuila', 'colima', 'ciudad de méxico', 'durango', 'guanajuato',
+    'guerrero', 'hidalgo', 'jalisco', 'méxico', 'michoacán', 'morelos', 'nayarit',
+    'nuevo león', 'oaxaca', 'puebla', 'querétaro', 'quintana roo', 'san luis potosí',
+    'sinaloa', 'sonora', 'tabasco', 'tamaulipas', 'tlaxcala', 'veracruz', 'yucatán', 'zacatecas'
+]
 
 
 @login_required(login_url='login')
@@ -77,7 +86,8 @@ def client_profile(request):
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
-        'cliente': cliente
+        'cliente': cliente,
+        'valid_states': VALID_STATES
     }
 
     return render(request, 'cliente/perfil.html', context)
@@ -115,3 +125,81 @@ def agency_dashboard(request):
         HttpResponse: The rendered agency dashboard HTML page.
     """
     return render(request, 'agency_dashboard.html')
+
+
+def reports(request):
+    agency_tours = Tour.objects.filter(agency=request.user.agency)
+
+    context = {
+        'tours': agency_tours
+    }
+
+    return render(request, 'agencia/reportes.html', context)
+
+
+# import pandas as pd
+# from django.http import HttpResponse
+# from reportlab.lib.pagesizes import letter
+# from reportlab.pdfgen import canvas
+# from .models import Reports
+
+# def export_report(request):
+#     if request.method == 'POST':
+#         tour_id = request.POST.get('tour_id')
+#         agency_id = request.POST.get('agency_id')
+#         export_format = request.POST.get('format')
+#         tour = Tour.objects.get(id=tour_id)
+#         agency = Agency.objects.get(id=agency_id)
+
+#         report = Reports(
+#             agency=agency,
+#             tour=tour
+#         )
+#         report.save()
+
+#         if export_format == 'csv':
+#             return export_report_csv(report)
+#         elif export_format == 'excel':
+#             return export_report_excel(report)
+#         elif export_format == 'pdf':
+#             return export_report_pdf(report)
+
+#     return HttpResponse('Error al generar el reporte.')
+
+# def export_report_csv(report):
+#     data = {
+#         'Tour Title': [report.tour_title],
+#         'Total Clients': [report.total_clients],
+#         'Tour Description': [report.tour_description],
+#         'Earnings': [report.earnings]
+#     }
+#     df = pd.DataFrame(data)
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = f'attachment; filename="reporte_{report.tour_title}.csv"'
+#     df.to_csv(path_or_buf=response, index=False)
+#     return response
+
+# def export_report_excel(report):
+#     data = {
+#         'Tour Title': [report.tour_title],
+#         'Total Clients': [report.total_clients],
+#         'Tour Description': [report.tour_description],
+#         'Earnings': [report.earnings]
+#     }
+#     df = pd.DataFrame(data)
+#     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     response['Content-Disposition'] = f'attachment; filename="reporte_{report.tour_title}.xlsx"'
+#     df.to_excel(response, index=False)
+#     return response
+
+# def export_report_pdf(report):
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="reporte_{report.tour_title}.pdf"'
+#     buffer = canvas.Canvas(response, pagesize=letter)
+#     buffer.drawString(100, 750, f"Tour Title: {report.tour_title}")
+#     buffer.drawString(100, 730, f"Total Clients: {report.total_clients}")
+#     buffer.drawString(100, 710, f"Tour Description: {report.tour_description}")
+#     buffer.drawString(100, 690, f"Earnings: {report.earnings}")
+#     buffer.showPage()
+#     buffer.save()
+#     return response

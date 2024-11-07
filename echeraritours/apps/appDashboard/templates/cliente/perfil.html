@@ -19,9 +19,16 @@
             </header>
             <div>
                 <div class="card-body">
+                    {% if messages %}
+                        <div class="alert alert-success" role="alert">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="row">
-                        <div class="col-md-4 text-right">
-                            <img src="{{ cliente.profile_image.url }}" alt="Foto de perfil" width="100" class="img-fluid">
+                        <div class="col-md-4 text-center">
+                            <img src="{{ cliente.profile_image.url }}" alt="Foto de perfil" width="300" class="img-fluid">
                         </div>
                         <div class="col-md-8">
                             <form class="" action="{% url "client_profile" %}" method="POST" enctype="multipart/form-data">
@@ -38,12 +45,17 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="">Numero de telefono</label>
+                                        <label for="id_phone">Numero de telefono</label>
                                         {{ user_form.phone }}
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="">Ciudad</label>
-                                        {{ user_form.city }}
+                                        <label for="id_city">Estado</label>
+                                        <input type="text" id="id_city" name="city" list="city-datalist" class="form-control" value="{{ user_form.city.value }}">
+                                        <datalist id="city-datalist">
+                                            {% for state in valid_states %}
+                                                <option value="{{ state|title }}"></option>
+                                            {% endfor %}
+                                        </datalist>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -67,5 +79,104 @@
         </article>
     </main>
 </div>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const phoneInput = document.getElementById('id_phone');
+    const submitBtn = document.getElementById('submit-btn');
+    const cityInput = document.getElementById('id_city');
+
+    const validStates = [
+        'aguascalientes', 'baja california', 'baja california sur', 'campeche', 'chiapas',
+        'chihuahua', 'coahuila', 'colima', 'ciudad de méxico', 'durango', 'guanajuato',
+        'guerrero', 'hidalgo', 'jalisco', 'méxico', 'michoacán', 'morelos', 'nayarit',
+        'nuevo león', 'oaxaca', 'puebla', 'querétaro', 'quintana roo', 'san luis potosí',
+        'sinaloa', 'sonora', 'tabasco', 'tamaulipas', 'tlaxcala', 'veracruz', 'yucatán', 'zacatecas'
+    ];
+
+    const stateZipCodeRanges = {
+        'aguascalientes': [20000, 20999],
+        'baja california': [21000, 22999],
+        'baja california sur': [23000, 23999],
+        'campeche': [24000, 24999],
+        'chiapas': [29000, 30999],
+        'chihuahua': [31000, 33999],
+        'coahuila': [25000, 27999],
+        'colima': [28000, 28999],
+        'ciudad de méxico': [1000, 19999],
+        'durango': [34000, 35999],
+        'guanajuato': [36000, 38999],
+        'guerrero': [39000, 41999],
+        'hidalgo': [42000, 43999],
+        'jalisco': [44000, 49999],
+        'méxico': [50000, 57999],
+        'michoacán': [58000, 61999],
+        'morelos': [62000, 62999],
+        'nayarit': [63000, 63999],
+        'nuevo león': [64000, 67999],
+        'oaxaca': [68000, 71999],
+        'puebla': [72000, 75999],
+        'querétaro': [76000, 76999],
+        'quintana roo': [77000, 77999],
+        'san luis potosí': [78000, 79999],
+        'sinaloa': [80000, 82999],
+        'sonora': [83000, 85999],
+        'tabasco': [86000, 86999],
+        'tamaulipas': [87000, 89999],
+        'tlaxcala': [90000, 90999],
+        'veracruz': [91000, 97999],
+        'yucatán': [97000, 97999],
+        'zacatecas': [98000, 99999]
+    };
+
+
+    function validateForm() {
+        let isValid = true;
+
+        // Validate phone
+        if (phoneInput.value.length < 10) {
+            phoneInput.setCustomValidity('El número de teléfono debe tener al menos 10 dígitos.');
+            isValid = false;
+        } else {
+            phoneInput.setCustomValidity('');
+        }
+
+        // Validate city
+        const cityValue = cityInput.value.toLowerCase();
+        if (!validStates.includes(cityValue)) {
+            cityInput.setCustomValidity('Por favor ingrese un estado válido.');
+            isValid = false;
+        } else {
+            cityInput.setCustomValidity('');
+        }
+
+        // Validate zip code
+        const zipCodeValue = parseInt(zipCodeInput.value, 10);
+        if (stateZipCodeRanges[cityValue]) {
+            const [minZip, maxZip] = stateZipCodeRanges[cityValue];
+            if (zipCodeValue < minZip || zipCodeValue > maxZip) {
+                zipCodeInput.setCustomValidity('El código postal no coincide con el estado.');
+                isValid = false;
+            } else {
+                zipCodeInput.setCustomValidity('');
+            }
+        } else {
+            zipCodeInput.setCustomValidity('Por favor ingrese un estado válido primero.');
+            isValid = false;
+        }
+
+        submitBtn.disabled = !isValid;
+    }
+
+    phoneInput.addEventListener('input', validateForm);
+    cityInput.addEventListener('input', validateForm);
+    zipCodeInput.addEventListener('input', validateForm);
+
+    validateForm(); // Initial validation
+});
+</script>
+<datalist id="city-datalist"></datalist>
+{% endblock extra_scripts %}
 
 {% endblock content %}

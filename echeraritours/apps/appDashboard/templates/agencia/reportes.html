@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Reportes - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/reportes.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <article class="card">
+            <header class="card-header">
+                <h2 class="card-title">Reportes</h2>
+            </header>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                                <th>Fecha de inicio</th>
+                                <th>Lugar de hospedaje</th>
+                                <th>Fecha de regreso</th>
+                                <th>Precio</th>
+                                <th>Exportar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tour in tours %}
+                            <tr>
+                                <td>{{ tour.title }}</td>
+                                <td>{{ tour.start_date }}</td>
+                                <td>{{ tour.lodging_place }}</td>
+                                <td>{{ tour.end_date }}</td>
+                                <td>{{ tour.price_per_person }}</td>
+                                <td><a class="btn btn-primary">Exportar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+    </main>
+</div>
+{% endblock content %}
+
+
