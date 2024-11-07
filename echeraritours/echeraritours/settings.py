@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import environ
 import logging
+import paypalrestsdk
 from dotenv import load_dotenv
 # import pymysql
 
@@ -219,3 +220,7 @@ STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYPAL_CLIENT_ID= "AS66c73qt4govPr3tp_ybL1YE5_XPFTnPpezwwlFcbNgHHZYbI6RsnJTNS_7sp1PnoNKn_CoRfKU_Qs4"
+PAYPAL_CLIENT_SECRET= "EMa2PGUUe6oPmWCz2pftqYukv8H7Hb_gS0cBp7hKMWYQzZ5z1qG30VN9lnNlJk8lprPZbZfGPb0OWzEM"
+PAYPAL_MODE = "sandbox"  # Cambia a "live" en producción
