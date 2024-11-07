@@ -507,3 +507,24 @@ def completo_contra(request):
         HttpResponse: The rendered 'completo_contra.html' template.
     """
     return render(request, 'completo_contra.html')
+
+def google_login(request):
+    """
+    Maneja el inicio de sesión con Google.
+    Verifica si el usuario ya tiene una cuenta. Si no, lo redirige a la página de registro
+    con el correo electrónico ya ingresado.
+    """
+    if request.user.is_authenticated:
+        return redirect('index')
+        
+    if request.method == 'POST':
+        email = request.POST.get('email')  
+
+        if User.objects.filter(email=email).exists():
+            user = authenticate(request, email=email)
+            login(request, user)
+            return redirect('index')
+        else:
+            return redirect('register', email=email)
+
+    return render(request, 'index')  
