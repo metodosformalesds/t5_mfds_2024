@@ -124,3 +124,45 @@ input::placeholder {
     height: auto;
     object-fit: contain;
 }
+
+.canvas-ellipse-container {
+    position: relative;
+    width: 200px;
+    height: 260px; 
+    overflow: hidden;
+    border-radius: 50%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 2px solid #68ddbd; 
+}
+
+#video {
+    width: 280px; 
+    height: auto;
+    object-fit: cover;
+    transform: scale(2); 
+    position: relative;
+    top: -15px; 
+    left: -25px;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+}
+
+.canvas-ellipse-container {
+    margin: 0 auto; 
+}
+
+#captureButton {
+    margin-bottom: 20px; 
+}
+
+#retryButton {
+    margin-bottom: 20px; 
+}
