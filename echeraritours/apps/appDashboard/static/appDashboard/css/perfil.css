@@ -1,0 +1,9 @@
+.editar {
+    background-color: #68ddbd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #1c3d3a !important;
+    display: inline-block;
+    width: auto;
+    text-align: center;
+}

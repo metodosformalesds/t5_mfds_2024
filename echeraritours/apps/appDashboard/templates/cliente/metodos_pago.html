@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Agregar Método de Pago - Echérari Tours{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Dashboard</h1>
+        </div>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h2 class="h4">Métodos de Pago</h2>
+            <a href="{% url 'add_payment_method' %}" class="btn btn-primary">Agregar Método de Pago</a>
+        </div>
+        {% if metodos %}
+        {% for metodo in metodos %}
+        <div class="row">
+            <div class="card-body">
+                <h5 class="card-title">{{ metodo.method_type }}</h5>
+                <p class="card-text">
+                    {% if metodo.method_type == 'credit_card' %}
+                        ID de Stripe: {{ metodo.stripe_payment_method_id }}
+                    {% elif metodo.method_type == 'paypal' %}
+                        Correo de PayPal: {{ metodo.paypal_email }}
+                    {% endif %}
+                </p>
+                <p class="card-text"><small class="text-muted">Creado el {{ metodo.created_at }}</small></p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            No tienes métodos de pago registrados.
+        </div>
+        {% endif %}
+    </main>
+</div>
+
+    </main>
+</div>
+{% endblock content %}

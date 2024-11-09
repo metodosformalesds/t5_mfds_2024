@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load socialaccount %}
 {% block title %}Login - EcherariTours{% endblock title %}
 
 {% block extra_styles %}
@@ -44,9 +45,10 @@
 
         <div class="divider"><span>o</span></div>
 
-        <div class="social-btn">
-            <a href="#"><img src="{% static 'appUser/img/google.png' %}" alt="Iniciar con Google"></a>
-            <a href="#"><img src="{% static 'appUser/img/facebook.png' %}" alt="Iniciar con Facebook"></a>
+       <div class="social-btn">
+            <a href="{% provider_login_url 'google' %}">
+                <img src="{% static 'appUser/img/google.png' %}" alt="Iniciar con Google">
+            </a>          
         </div>
 
         <div class="mt-4">

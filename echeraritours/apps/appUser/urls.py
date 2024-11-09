@@ -7,6 +7,8 @@ from .views import (recuperar_contra,
                     confirmar_contra,
                     )
 from .views import send_mail_view
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Vistas generales
@@ -41,3 +43,4 @@ urlpatterns = [
     path('necesitas_ayuda', views.necesitas_ayuda, name='necesitas_ayuda'),
 
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

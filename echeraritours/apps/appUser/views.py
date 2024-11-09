@@ -1,12 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from echeraritours import settings
+from django.core.files.storage import default_storage
+import requests
+import boto3
+import idanalyzer
+import io
+import base64
 
 # Para los formularios
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from allauth.socialaccount.models import SocialAccount
 
 
 # Para los decoradores que validan ciertas vistas
@@ -35,13 +42,16 @@ from django.urls import reverse_lazy
 
 
 def index(request):
-    """Renderiza la pagina de inicio de la pagina web.
-
+    """
+    View function for the index page of the appUser application.
+    This function retrieves the latest 5 reviews from the Reviews model,
+    ordered by the review date in descending order, and renders the 'index.html'
+    template with the retrieved reviews.
     Args:
-        request (HttpRequest): Objeto HttpRequest que contiene los datos de la solicitud.
-
+        request (HttpRequest): The HTTP request object.
     Returns:
-        HttpResponse: Respuesta que renderiza la plantilla 'index.html'.
+        HttpResponse: The rendered 'index.html' template with the context containing
+                      the latest 5 reviews.
     """
     reviews = Reviews.objects.order_by('-review_date')[:5]
 
@@ -49,17 +59,24 @@ def index(request):
 
 
 def registerPage(request):
-    """Renderiza la pagina de registro de usuario y procesa el formulario de registro.
-
-    Args:
-        request (HttpRequest): Objeto HttpRequest que contiene la informacion del usuario a registrar
-
-    Returns:
-        HttpResponse: Creacion de usuario en caso de validar el formulario y redireccion a seleccion
-        de registro de tipo de usuario.
     """
-
-    form = CreateUserForm()
+    Handles the user registration process.
+    If the user is authenticated and has a linked Google account, pre-fills the registration form with the user's Google email.
+    If the request method is POST, validates and saves the registration form, creates a new user, and redirects to the login page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered registration page with the registration form.
+    """
+    email = ''
+    if request.user.is_authenticated:
+        try:
+            google_account = SocialAccount.objects.get(
+                provider='google', user=request.user)
+            email = google_account.extra_data.get('email', '')
+        except SocialAccount.DoesNotExist:
+            pass
+    form = CreateUserForm(initial={'email': email})
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
@@ -76,14 +93,18 @@ def registerPage(request):
 
 
 def loginPage(request):
-    """Renderiza la pagina de inicio de sesion y procesa el formulario para iniciar sesion con su usuario
-        y contraseña
-
+    """
+    Handles the user login functionality.
+    This view processes the login form submission. If the request method is POST,
+    it retrieves the email and password from the request, authenticates the user,
+    and logs them in if the credentials are correct. If the credentials are incorrect,
+    it displays an error message. If the request method is not POST, it simply renders
+    the login page.
     Args:
-        request (HttpRequest): Objeto HttpRequest que tiene las credenciales del usuario para iniciar sesion
-
+        request (HttpRequest): The HTTP request object containing metadata about the request.
     Returns:
-        HttpResponse: Inicio de sesion validado con la informacion recibida.
+        HttpResponse: Redirects to 'seleccion_registro' if login is successful, otherwise
+                      renders the login page with an error message.
     """
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -102,22 +123,45 @@ def loginPage(request):
 
 
 def logoutUser(request):
-    """Procesa el hecho de cerrar sesion de forma directa del usuario logeado.
+    """
+    Logs out the current user and redirects them to the login page.
 
     Args:
-        request (HttpRequest): Recibe un objeto HttpRequest con la informacion del usuario logeado
+        request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: Se cierra la sesion del usuario con la funcion logout de django.contrib.auth
+        HttpResponseRedirect: A redirect to the login page.
     """
     logout(request)
     return redirect('login')
 
 
+# def add_base64_padding(base64_string):
+#     """Agrega el relleno necesario a una cadena base64."""
+#     missing_padding = len(base64_string) % 4
+#     if missing_padding:
+#         base64_string += '=' * (4 - missing_padding)
+#     return base64_string
+
+
 @login_required
 def registrar_cliente(request):
-    """Vista para el registro de un usuario autenticado para ser Cliente"""
-
+    """
+    Handles the multi-step client registration process.
+    This view manages a three-step form submission process for registering a client.
+    The steps are managed using the session to keep track of the current step.
+    Steps:
+        1. Collects first name, paternal surname, maternal surname, and birth date.
+        2. Collects phone number, zip code, and city.
+        3. Uploads and saves an official identification file.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: Renders the 'registrar_cliente.html' template with the current step.
+        HttpResponse: Redirects to 'registrar_cliente' to proceed to the next step.
+        HttpResponse: Redirects to 'index' upon successful registration.
+        HttpResponse: Returns an error message if required fields are missing or an error occurs.
+    """
     if 'form_step' not in request.session:
         request.session['form_step'] = 1
 
@@ -160,37 +204,83 @@ def registrar_cliente(request):
             else:
                 return HttpResponse('Por favor completa todos los campos.')
 
-        elif request.session['form_step'] == 3 and 'identificacion_oficial' in request.FILES:
-            identification = request.FILES['identificacion_oficial']
-            fs = FileSystemStorage(location='static/identifications/')
-            filename = fs.save(identification.name, identification)
-            uploaded_file_url = fs.url(filename)
+        elif request.session['form_step'] == 3 and 'identificacion_oficial' in request.FILES and 'identificacion_biometrica' in request.FILES:
+            id_identificacion_oficial = request.FILES['identificacion_oficial']
+            id_identificacion_biometrica = request.FILES['identificacion_biometrica']
 
-            client, created = Client.objects.update_or_create(
-                user=request.user,
-                defaults={
-                    'first_name': request.session['first_name'],
-                    'paternal_surname': request.session['paternal_surname'],
-                    'maternal_surname': request.session['maternal_surname'],
-                    'birth_date': request.session['birth_date'],
-                    'phone': request.session['phone'],
-                    'zip_code': request.session['zip_code'],
-                    'city': request.session['city'],
-                    'identification': uploaded_file_url,
-                }
-            )
+            s3 = boto3.client('s3',
+                              aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                              region_name=settings.AWS_S3_REGION_NAME)
 
-            if created:
-                for key in ['first_name', 'paternal_surname', 'maternal_surname', 'birth_date', 'phone', 'zip_code', 'city', 'form_step']:
-                    if key in request.session:
-                        del request.session[key]
+            official_id_key = f"uploads/{id_identificacion_oficial.name}"
+            biometric_id_key = f"uploads/{id_identificacion_biometrica}_biometric.jpg"
 
-                return redirect('index')
-            else:
-                return HttpResponse('El cliente ya esta registrado o ocurrio un error al ser guardado')
+            s3.upload_fileobj(id_identificacion_oficial,
+                              settings.AWS_STORAGE_BUCKET_NAME, official_id_key)
+            s3.upload_fileobj(id_identificacion_biometrica,
+                              settings.AWS_STORAGE_BUCKET_NAME, biometric_id_key)
+
+            # URLs completas de los archivos en S3 utilizando el dominio personalizado y las rutas de cada archivo
+            # official_id_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{official_id_key}"
+            # biometric_id_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{biometric_id_key}"
+            official_id_url = s3.generate_presigned_url('get_object',
+                                                        Params={
+                                                            'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': official_id_key},
+                                                        ExpiresIn=3600)
+            biometric_id_url = s3.generate_presigned_url('get_object',
+                                                         Params={
+                                                             'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': biometric_id_key},
+                                                         ExpiresIn=3600)
+
+            try:
+                client = idanalyzer.CoreAPI(
+                    f"{settings.ID_ANALYZER_API_KEY}", 'US')
+
+                client.throw_api_exception(True)
+
+                # Llamada a la API de ID Analyzer
+                response = client.scan(
+                    document_primary=official_id_url,
+                    biometric_photo=biometric_id_url
+                )
+                print(response)
+
+                # Procesa la respuesta de ID Analyzer
+                if response.get('verification', {}).get('passed'):
+                    client, created = Client.objects.update_or_create(
+                        user=request.user,
+                        defaults={
+                            'first_name': request.session['first_name'],
+                            'paternal_surname': request.session['paternal_surname'],
+                            'maternal_surname': request.session['maternal_surname'],
+                            'birth_date': request.session['birth_date'],
+                            'phone': request.session['phone'],
+                            'zip_code': request.session['zip_code'],
+                            'city': request.session['city'],
+                            'id_identificacion_oficial_url': official_id_url,
+                            'id_identificacion_biometrica_url': biometric_id_url,
+                        }
+                    )
+
+                    if created:
+                        for key in ['first_name', 'paternal_surname', 'maternal_surname', 'birth_date', 'phone', 'zip_code', 'city', 'form_step']:
+                            if key in request.session:
+                                del request.session[key]
+
+                        return redirect('index')
+                    else:
+                        return HttpResponse('El cliente ya está registrado o ocurrió un error al ser guardado.')
+                else:
+                    messages.info(
+                        request, 'No pudimos validar las fotos que proporcionaste, intentalo de nuevo')
+            except idanalyzer.APIError as e:
+                details = e.args[0]
+                print(
+                    f"API error code {details['code']}, message: {details['message']}")
 
         else:
-            return HttpResponse('Debe dar una identificacion valida.')
+            return HttpResponse('Debe dar una identificación válida y una imagen biométrica.')
 
     step = request.session['form_step']
 
@@ -199,7 +289,18 @@ def registrar_cliente(request):
 
 @login_required
 def registrar_agencia(request):
-    """Vista para el registro de un usuario autenticado para ser Agencia"""
+    """
+    View for registering an authenticated user as an Agency.
+    This view handles a multi-step form for agency registration. The form has two steps:
+    1. Collecting basic agency information (name, address, phone, zip code).
+    2. Uploading a certificate file.
+    The form step is tracked using the session variable 'form_step'.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: Redirects to the same view to handle form steps or to the index page upon successful registration.
+        Renders the 'registrar_agencia.html' template with the current form step.
+    """
 
     if 'form_step' not in request.session:
         request.session['form_step'] = 1
@@ -263,63 +364,101 @@ def registrar_agencia(request):
 
 @login_required(login_url='login')
 def seleccion_registro(request):
-    """ Renderiza la pagina de seleccion. En caso de ya ser parte de un tipo de usuario, manda al main """
+    """
+    Renders the selection page. If the user is already part of a user type (Client or Agency), redirects to the main page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered selection page or a redirect to the main page if the user is already a Client or Agency.
+    """
     if Client.objects.filter(user=request.user).exists() or Agency.objects.filter(user=request.user).exists():
         return redirect('index')
 
     return render(request, 'seleccion_registro.html')
 
 
-def agencia_registro(request):
-    return render(request, 'agencia_registro.html')
-
-
-def viajero_registro(request):
-    return render(request, 'viajero_registro.html')
-
-
-def viajero_registro2(request):
-    return render(request, 'viajero_registro2.html')
-
-
-def validar_viajero(request):
-    if request.method == 'POST':
-        INE = request.FILES.get('INE')
-        if INE:
-            return HttpResponse('Certificado recibido.')
-        else:
-            return HttpResponse('No se recibió el certificado.', status=400)
-    return render(request, 'validar_viajero.html')
-
-
-def validar_agencia(request):
-    if request.method == 'POST':
-        certificado = request.FILES.get('certificado')
-        return HttpResponse('Certificado recibido.')
-    return render(request, 'validar_agencia.html')
-
-
 def sobre_nosotros(request):
+    """
+    Handles the HTTP request for the 'Sobre Nosotros' (About Us) page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'sobre_nosotros.html' template.
+    """
     return render(request, 'sobre_nosotros.html')
 
 
 def terminos_y_condiciones(request):
+    """
+    Handles the request to display the terms and conditions page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered terms and conditions HTML page.
+    """
     return render(request, 'terminos_y_condiciones.html')
 
 
 def terminos_y_condiciones2(request):
+    """
+    Renders the 'terminos_y_condiciones2.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'terminos_y_condiciones2.html' template.
+    """
     return render(request, 'terminos_y_condiciones2.html')
 
 
 def terminos_legales(request):
+    """
+    Handles the HTTP request for the 'terminos_legales' page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'terminos_legales.html' template.
+    """
     return render(request, 'terminos_legales.html')
 
 
 def necesitas_ayuda(request):
+    """
+    Handles the request to render the 'necesitas_ayuda.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'necesitas_ayuda.html' template.
+    """
     return render(request, 'necesitas_ayuda.html')
 
 
 def send_mail_view(request, user_id):
+    """
+    Sends a password recovery email to the specified user.
+    Args:
+        request (HttpRequest): The HTTP request object.
+        user_id (int): The ID of the user to send the email to.
+    Returns:
+        HttpResponse: An HTTP response indicating that the email was sent.
+    Raises:
+        Http404: If the user with the specified ID does not exist.
+    This view function performs the following steps:
+    1. Retrieves the user by their ID.
+    2. Generates a password recovery link.
+    3. Renders the HTML content of the email using a template.
+    4. Creates an email message with the rendered HTML content.
+    5. Sends the email to the user's email address.
+    """
     user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
     # Aquí deberías generar el link de recuperación
     link = 'http://tusitio.com/recovery-link'
@@ -345,6 +484,23 @@ def send_mail_view(request, user_id):
 
 
 def recuperar_contra(request):
+    """
+    Handle password recovery process.
+    This view handles the password recovery process by sending an email with a password reset link to the user.
+    If the request method is POST, it retrieves the email from the request, checks if a user with that email exists,
+    generates a password reset link, and sends it to the user's email in a separate thread.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: Renders the password recovery page or redirects to the password reset email sent confirmation page.
+    Raises:
+        User.DoesNotExist: If no user with the provided email exists.
+    Templates:
+        recuperar_contra.html: The template for the password recovery page.
+    Messages:
+        success: If the email with the password reset link is sent successfully.
+        error: If no user with the provided email exists.
+    """
     if request.method == 'POST':
         email = request.POST.get['email']
         try:
@@ -367,10 +523,33 @@ def recuperar_contra(request):
 
 
 def envio_contra(request):
+    """
+    Handles the request to render the 'envio_contra.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'envio_contra.html' template.
+    """
     return render(request, 'envio_contra.html')
 
 
 def confirmar_contra(request, uidb64=None, token=None):
+    """
+    Handles the password reset confirmation process.
+
+    This view function wraps around the PasswordResetConfirmView to provide
+    a custom template and success URL for the password reset confirmation.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        uidb64 (str, optional): The base64 encoded user ID. Defaults to None.
+        token (str, optional): The password reset token. Defaults to None.
+
+    Returns:
+        HttpResponse: The HTTP response object generated by the PasswordResetConfirmView.
+    """
     return PasswordResetConfirmView.as_view(
         template_name='recuperar_contra.html',
         success_url=reverse_lazy('completo_contra')
@@ -378,4 +557,35 @@ def confirmar_contra(request, uidb64=None, token=None):
 
 
 def completo_contra(request):
+    """
+    Handles the HTTP request to render the 'completo_contra.html' template.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered 'completo_contra.html' template.
+    """
     return render(request, 'completo_contra.html')
+
+
+def google_login(request):
+    """
+    Maneja el inicio de sesión con Google.
+    Verifica si el usuario ya tiene una cuenta. Si no, lo redirige a la página de registro
+    con el correo electrónico ya ingresado.
+    """
+    if request.user.is_authenticated:
+        return redirect('index')
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+
+        if User.objects.filter(email=email).exists():
+            user = authenticate(request, email=email)
+            login(request, user)
+            return redirect('index')
+        else:
+            return redirect('register', email=email)
+
+    return render(request, 'index')

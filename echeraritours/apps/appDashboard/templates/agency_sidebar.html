@@ -1,0 +1,37 @@
+{% load static %}
+<div class="bg-body-tertiary">
+    <div class="flex-column p-3 overflow-y-auto">
+      <ul class="nav flex-column">
+        <li class="nav-item mb-3">
+          <a class="nav-link btn d-flex align-items-center" href="{% url "agency_dashboard" %}">
+            Inicio 
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="nav-link btn d-flex align-items-center" href="#">
+            Perfil 
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="nav-link btn d-flex align-items-center" href="#">
+            Planes activos
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="nav-link btn  d-flex align-items-center" href="#">
+            Metodos de pago
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="nav-link btn  d-flex align-items-center" href="{% url "reports" %}">
+            Reportes
+          </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="nav-link btn d-flex align-items-center" href="#">
+            Cerrar sesion
+          </a>
+        </li>
+      </ul>
+    </div>
+</div>

@@ -14,7 +14,9 @@ from pathlib import Path
 import os
 import environ
 import logging
+import paypalrestsdk
 from dotenv import load_dotenv
+# import pymysql
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,6 +51,11 @@ INSTALLED_APPS = [
     'apps.appPayment',
     'apps.appDashboard',
     'widget_tweaks',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'storages',
     # 'social_django',
 ]
 
@@ -60,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'echeraritours.urls'
@@ -140,38 +148,40 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Ajustado
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-
-# AL RATO LE MOVEMOS A ESTO JIJI
-
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.google.GoogleOAuth2',
-#     'social_core.backends.facebook.FacebookOAuth2',
-#     'social_core.backends.apple.AppleIdAuth',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
 
 AUTHENTICATION_BACKENDS = (
     'apps.appUser.authentication_backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'tu-google-client-id'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'tu-google-client-secret'
+SITE_ID = 1
 
-# SOCIAL_AUTH_FACEBOOK_KEY = 'tu-facebook-app-id'
-# SOCIAL_AUTH_FACEBOOK_SECRET = 'tu-facebook-app-secret'
-
-# SOCIAL_AUTH_APPLE_ID_CLIENT = 'tu-apple-client-id'
-# SOCIAL_AUTH_APPLE_ID_TEAM = 'tu-apple-team-id'
-# try:
-#     SOCIAL_AUTH_APPLE_ID_KEY = open(BASE_DIR / 'tu_clave_privada.pem').read()
-# except FileNotFoundError:
-#     print("No se encontró el archivo tu_clave_privada.pem. Verifica la ruta.")
-#     SOCIAL_AUTH_APPLE_ID_KEY = None  # O manejar el error de otra manera
-
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': {
+            'profile',
+            'email'},
+        'OAUTH_PARAMS': {'access_type': 'online'},
+        'AUTH_PKCE_ENABLED': True,
+        'METHOD': 'oauth2',
+        'VERIFIED_EMAIL': True,
+        'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),
+        'SECRET': os.getenv('GOOGLE_SECRET'),
+    }
+}
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+LOGIN_REDIRECT_URL = 'index'
 
 # Esta seccion la modifique por mientras para que cualquiera
 # pueda abrir el repo sin necesidad de tener que hacer el archivo .env
@@ -205,4 +215,25 @@ env = environ.Env()
 environ.Env.read_env()
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
+# Stripe jiji
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
+PAYPAL_CLIENT_SECRET = os.getenv("PAYPAL_CLIENT_SECRET")
+PAYPAL_MODE = os.getenv('PAYPAL_MODE')  # Puede ser "sandbox" o "live"
+
+
+ID_ANALYZER_API_KEY = os.getenv('ID_ANALYZER_API_KEY')
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends_s3boto3.S3Boto3Storage'
