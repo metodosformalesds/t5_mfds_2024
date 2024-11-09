@@ -170,8 +170,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PKCE_ENABLED': True,
         'METHOD': 'oauth2',
         'VERIFIED_EMAIL': True,
-        'CLIENT_ID': '559389935285-t66a8qq573pafiud56jntmfia2igu3bs.apps.googleusercontent.com',
-        'SECRET': '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',
+        'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),
+        'SECRET': os.getenv('GOOGLE_SECRET'),
     }
 }
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
