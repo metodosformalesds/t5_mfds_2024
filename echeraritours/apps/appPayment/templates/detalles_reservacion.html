@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-md-6">
             <h5>Fecha de reservación</h5>
-            <input type="text" class="form-control mb-3" value="{{ reservation_date|date:'Y-m-d' }}" disabled>
+            <input type="text" class="form-control mb-3" value="{{ current_date|date:'Y-m-d' }}" disabled>
 
             <h5>Fecha que inicia</h5>
             <input type="text" class="form-control mb-3" value="{{ tour.start_date|date:'Y-m-d' }}" disabled>
@@ -39,7 +39,8 @@
             <h5>Capacidad disponible</h5>
             <div class="input-group mb-3">
                 <span class="input-group-text"><img src="{% static 'appPayment/img/user.png' %}" alt="User Icon" width="20"></span>
-                <input type="text" class="form-control" value="{{ tour.capacity }} personas" disabled>
+                <!-- Input para mostrar la capacidad disponible, solo lectura -->
+                <input type="text" class="form-control" id="capacidad-disponible" value="{{ available_bookings }} personas" disabled>
             </div>
 
             <h5>¿Cuánta gente asistirá al tour?</h5>
@@ -51,9 +52,10 @@
                 <div class="ms-auto">
                     <div class="input-group">
                         <button class="btn btn-outline-secondary" type="button" id="minus">-</button>
-                        <input type="number" class="form-control" value="1" id="cantidad-adultos" min="1">
+                        <!-- Input para mostrar el número de personas, solo lectura -->
+                        <input type="text" class="form-control" value="1" id="cantidad-adultos" readonly>
                         <button class="btn btn-outline-secondary" type="button" id="plus">+</button>
-                    </div>
+                    </div>                  
                 </div>
             </div>
         </div>
@@ -65,7 +67,7 @@
                         {% csrf_token %}
                         <h5 class="card-title">Resumen de tus entradas</h5>
                         <div class="d-flex row">
-                            <img src="{{ tour.tour_image.url }}" class="img-thumbnail me-3" alt="Imagen del Tour en Cancún" width="220" height="auto">
+                            <img src="{{ tour.tour_image.url }}" class="img-thumbnail me-3" alt="Imagen de {{ tour.title }}" width="220" height="auto">
                             <div>
                                 <p class="fw-bold">{{ tour.title }}</p>
                                 <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:'Y-m-d' }}</p>
@@ -73,17 +75,11 @@
                         </div>
                         <hr>
                         <h5 class="fw-bold">Precio Total <span id="total-price" class="text-success">${{ total_price }}</span></h5>
-                    {% comment %} Lo hice formulario para poder mandar la información {% endcomment %}
-                        {% comment %} <form action="{% url 'realizar_pago_stripe' %}" method="post">
-                            {% csrf_token %} {% endcomment %}
-                            <input type="hidden" name="tour_id" value="{{ tour.id }}">
-                            <input type="hidden" name="number_people" id="number_people_input" value="1">
-                            <!-- El botón de pago -->
-                            <input type="hidden" id="hidden-total-price" name="total_price" value="">
-                            <input type="hidden" id="hidden-number-people" name="number_people" value="">
-                
-
-                            <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3">Realizar pago</button>
+                        
+                        <input type="hidden" name="number_people" id="number_people_input" value="1">
+                        <input type="hidden" name="total_price" id="hidden-total-price" value="{{ total_price }}">
+                    
+                        <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3">Realizar pago</button>
                     </form>
                 </div>
             </div>
@@ -93,40 +89,64 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>document.addEventListener('DOMContentLoaded', function () {
-    const cantidadInput = document.getElementById('cantidad-adultos');
-    const pricePerPerson = parseFloat("{{ tour.price_per_person }}");
-    const totalPriceElement = document.getElementById('total-price');
-    const hiddenTotalPrice = document.getElementById('hidden-total-price');
-    const hiddenNumberPeople = document.getElementById('hidden-number-people');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Elementos necesarios para calcular el precio y la cantidad
+        const cantidadInput = document.getElementById('cantidad-adultos');
+        const numberPeopleInput = document.getElementById('number_people_input');  // input hidden que envía el número de personas
+        const capacidadDisponibleInput = document.getElementById('capacidad-disponible');
+        const totalPriceElement = document.getElementById('total-price');
+        const hiddenTotalPrice = document.getElementById('hidden-total-price');
+        const plusButton = document.getElementById('plus');
+        const minusButton = document.getElementById('minus');
+        
+        const pricePerPerson = parseFloat("{{ tour.price_per_person }}");
+        let availableBookings = {{ available_bookings }};
 
-    function updateTotalPrice() {
-        const cantidad = parseInt(cantidadInput.value) || 1;
-        const totalPrice = pricePerPerson * cantidad;
-        totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
-
-        // Actualizar los valores de los campos ocultos
-        hiddenTotalPrice.value = totalPrice.toFixed(2);
-        hiddenNumberPeople.value = cantidad;
-    }
-
-    document.getElementById('minus').addEventListener('click', function() {
-        let cantidad = parseInt(cantidadInput.value);
-        if (cantidad > 1) {
-            cantidadInput.value = --cantidad;
-            updateTotalPrice();
+        function updateTotalPrice() {
+            const cantidad = parseInt(cantidadInput.value) || 1;
+            const totalPrice = pricePerPerson * cantidad;
+            totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+            hiddenTotalPrice.value = totalPrice.toFixed(2);
+            numberPeopleInput.value = cantidad;  // Actualiza el valor de 'number_people' para enviar en el formulario
         }
-    });
-    
-    document.getElementById('plus').addEventListener('click', function() {
-        let cantidad = parseInt(cantidadInput.value);
-        cantidadInput.value = ++cantidad;
+
+        function updateAvailability() {
+            const cantidad = parseInt(cantidadInput.value) || 1;
+            const capacidadRestante = availableBookings - cantidad;
+            capacidadDisponibleInput.value = capacidadRestante + " personas";
+            
+            // Desactiva el botón plus si no hay más espacios disponibles
+            plusButton.disabled = capacidadRestante <= 0;
+            // Desactiva el botón minus si la cantidad es 1
+            minusButton.disabled = cantidad <= 1;
+        }
+
+        // Evento para disminuir el número de personas
+        minusButton.addEventListener('click', function() {
+            let cantidad = parseInt(cantidadInput.value);
+            if (cantidad > 1) {
+                cantidadInput.value = --cantidad;
+                updateTotalPrice();
+                updateAvailability();
+            }
+        });
+
+        // Evento para aumentar el número de personas
+        plusButton.addEventListener('click', function() {
+            let cantidad = parseInt(cantidadInput.value);
+            if (cantidad < availableBookings) {
+                cantidadInput.value = ++cantidad;
+                updateTotalPrice();
+                updateAvailability();
+            }
+        });
+
+        // Actualizar el precio total y la capacidad disponible al cargar la página
         updateTotalPrice();
+        updateAvailability();
     });
-
-    // Actualizar el precio total al cargar la página
-    updateTotalPrice();
-});
-
 </script>
+
+
 {% endblock content %}

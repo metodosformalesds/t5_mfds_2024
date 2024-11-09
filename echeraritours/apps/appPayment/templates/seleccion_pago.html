@@ -4,6 +4,8 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'appPayment/css/pago_reservacion.css' %}">
+<!-- Agrega el script de Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
 {% endblock extra_styles %}
 
 {% block content %}
@@ -24,19 +26,11 @@
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
                     <label class="form-check-label" for="paypal">
-                        PayPal &nbsp; 
+                        PayPal &nbsp;
                         <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
                     </label>
                 </div>
-
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="radio" name="payment_method" id="stripe" value="stripe">
-                    <label class="form-check-label" for="stripe">
-                        Stripe &nbsp;
-                        <span class="text-muted">Usa Stripe para un pago seguro y rápido.</span>
-                    </label>
-                </div>
-
+                
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
                     <label class="form-check-label" for="credit_card">
@@ -50,6 +44,15 @@
                     </label>
                 </div>
 
+                <!-- Campos de tarjeta de crédito, ahora con Stripe -->
+                <div id="credit-card-fields" style="display: none;">
+                    <h6 class="mt-3">Detalles de la tarjeta</h6>
+                    <!-- Elemento de tarjeta de Stripe -->
+                    <div id="card-element" class="mb-3"><!-- Stripe.js inyectará el elemento de la tarjeta aquí --></div>
+                    <!-- Mostrar errores de Stripe -->
+                    <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+                </div>
+
                 <button type="submit" class="btn btn-success">Continuar con el pago</button>
             </form>
         </div>
@@ -59,7 +62,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Resumen de la compra</h5>
                     <div class="d-flex">
-                        <img src="{{ tour.image_url }}" class="img-thumbnail me-3" alt="{{ tour.title }}" style="width: 100px;">
+                        <img src="{{ tour.tour_image.url }}" class="img-thumbnail me-3" alt="{{ tour.title }}" style="width: 100px;">
                         <div>
                             <p class="fw-bold">{{ tour.title }}</p>
                             <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:"d \\d\\e F \\d\\e\\l Y" }}</p>
@@ -74,55 +77,79 @@
     </div>
 </div>
 
+<!-- Scripts necesarios -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>document.addEventListener('DOMContentLoaded', function () {
-    const cantidadInput = document.getElementById('cantidad-adultos');
-    const pricePerPerson = parseFloat("{{ tour.price_per_person }}");
-    const totalPriceElement = document.getElementById('total-price');
-    const hiddenTotalPrice = document.getElementById('hidden-total-price');
-    const hiddenNumberPeople = document.getElementById('hidden-number-people');
-
-    function updateTotalPrice() {
-        const cantidad = parseInt(cantidadInput.value) || 1;
-        const totalPrice = pricePerPerson * cantidad;
-        totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
-
-        // Actualizar los valores de los campos ocultos
-        hiddenTotalPrice.value = totalPrice.toFixed(2);
-        hiddenNumberPeople.value = cantidad;
-    }
-
-    document.getElementById('minus').addEventListener('click', function() {
-        let cantidad = parseInt(cantidadInput.value);
-        if (cantidad > 1) {
-            cantidadInput.value = --cantidad;
-            updateTotalPrice();
-        }
-    });
-    
-    document.getElementById('plus').addEventListener('click', function() {
-        let cantidad = parseInt(cantidadInput.value);
-        cantidadInput.value = ++cantidad;
-        updateTotalPrice();
-    });
-
-    // Actualizar el precio total al cargar la página
-    updateTotalPrice();
-});
-
-</script>
-
 <script>
-    document.getElementById('payment-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-        if (selectedMethod === 'paypal') {
-            // Asegúrate de que esta línea redirija correctamente
-            window.location.href = "{% url 'realizar_pago_paypal' tour.id %}";
-        } else {
-            // Puedes manejar otras redirecciones aquí
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentForm = document.getElementById('payment-form');
+        const creditCardFields = document.getElementById('credit-card-fields');
+        const cardErrors = document.getElementById('card-errors');
+
+        // Inicializar Stripe
+        const stripe = Stripe('{{ stripe_public_key }}');
+        const elements = stripe.elements();
+        const card = elements.create('card');
+        let cardMounted = false;
+
+        // Mostrar los campos de tarjeta de crédito solo si se selecciona "Pago con tarjeta"
+        paymentForm.addEventListener('change', function() {
+            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            if (selectedMethod === 'credit_card') {
+                creditCardFields.style.display = 'block';
+                if (!cardMounted) {
+                    card.mount('#card-element');
+                    cardMounted = true;
+                }
+            } else {
+                creditCardFields.style.display = 'none';
+                cardErrors.textContent = ''; // Limpiar errores al cambiar de método de pago
+            }
+        });
+
+        // Manejo del envío del formulario
+        paymentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+            if (selectedMethod === 'paypal') {
+                window.location.href = "{% url 'realizar_pago_paypal' tour.id %}";
+            } else if (selectedMethod === 'credit_card') {
+                // Procesar pago con tarjeta a través de Stripe
+                stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                }).then(function(result) {
+                    if (result.error) {
+                        // Mostrar errores en el formulario
+                        cardErrors.textContent = result.error.message;
+                    } else {
+                        // Enviar el PaymentMethod al servidor
+                        fetch("{% url 'process_payment' %}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": "{{ csrf_token }}",
+                            },
+                            body: JSON.stringify({
+                                'payment_method_id': result.paymentMethod.id,
+                                'tour_id': {{ tour.id }},
+                                'number_people': {{ number_people }},
+                                'total_price': {{ total_price|floatformat:2 }},
+                            })
+                        }).then(function(response) {
+                            return response.json();
+                        }).then(function(responseJson) {
+                            if (responseJson.status == 'success') {
+                                window.location.href = "{% url 'pago_completado' %}";
+                            } else {
+                                cardErrors.textContent = responseJson.error;
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
 </script>
 {% endblock content %}

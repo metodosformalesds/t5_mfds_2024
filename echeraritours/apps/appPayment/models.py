@@ -71,7 +71,7 @@ class PaymentMethod(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        owner = self.client.full_name if self.client else (
+        owner = self.client.first_name if self.client else (
             self.agency.agency_name if self.agency else "Unknown")
         return f"{self.method_type} - {owner}"
 
@@ -143,4 +143,4 @@ class Payments(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Pago de {self.client.full_name} a {self.agency.agency_name} por {self.amount}"
+        return f"Pago de {self.client.first_name} a {self.agency.agency_name} por {self.amount}"

@@ -11,6 +11,8 @@ urlpatterns = [
      path('pago_completado/', views.pago_completado, name='pago_completado'),
      path('seleccion_pago/<int:id>/', views.seleccion_pago, name='seleccion_pago'),
      path('realizar_pago_paypal/<int:id>/', views.realizar_pago_paypal, name='realizar_pago_paypal'),
+     path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
+     path('process_payment', views.process_payment, name='process_payment'),
 ]
 
 
