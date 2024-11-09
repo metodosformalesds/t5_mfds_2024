@@ -29,8 +29,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="direccion" class="form-label">Dirección</label>
-                <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese su dirección" required>
+                <label for="estado" class="form-label">Estado</label>
+                <input type="text" id="codigo-postal" name="estado" class="form-control" placeholder="Seleccione el estado" required>
             </div>
 
             <div class="mb-3">
@@ -38,29 +38,32 @@
                 <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ingrese su teléfono" required>
             </div>
 
+
             <div class="mb-3">
                 <label for="codigo-postal" class="form-label">Código postal</label>
                 <input type="text" id="codigo-postal" name="codigo-postal" class="form-control" placeholder="Ingrese su código postal" required>
-            </div>
-
-            <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="terminos" required>
-                <label class="form-check-label" for="terminos"> Acepto <a href="{% url 'terminos_y_condiciones' %}" class="link-terminos">Términos y Condiciones </a></label>
             </div>
 
             <button type="submit" class="btn btn-custom">Continuar</button>
 
             <!-- Paso 2 -->
             {% elif step == 2 %}
-            
-            <p class="mb-4">Por favor, sube tu certificado de autenticidad para terminar el registro.</p>
-            <div class="d-flex justify-content-center">
-                <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
-            </div>
+
             <div class="mb-3">
-                <label for="certificado" class="form-label">Certificado de autenticidad</label>
-                <input type="file" id="certificado" name="certificado" class="form-control" accept=".jpg,.jpeg,.png" required>
+                <label for="direccion" class="form-label">Calle</label>
+                <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese la calle registrada" required>
             </div>
+            
+            <div class="mb-3">
+                <label for="colonia" class="form-label">Colonia</label>
+                <input type="text" id="colonia" name="colonia" class="form-control" placeholder="Ingrese la colonia registrada" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="municipio" class="form-label">Municipio</label>
+                <input type="text" id="municipio" name="municipio" class="form-control" placeholder="Ingrese el municipio registrado" required>
+            </div>
+
             <div class="d-flex justify-content-between">
                 <button type="submit" id="previousButton" name="previous" value="previous" class="btn btn-secondary btn-custom-previous">Regresar</button>
                 <button type="submit" class="btn btn-custom btn-custom-next">Finalizar Registro</button>

@@ -1,3 +1,10 @@
+import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.common.by import By
+from selenium import webdriver
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from echeraritours import settings
@@ -314,13 +321,13 @@ def registrar_agencia(request):
 
         if request.session['form_step'] == 1:
             agency_name = request.POST.get('nombre-agencia')
-            address = request.POST.get('direccion')
+            state = request.POST.get('estado')
             phone = request.POST.get('telefono')
             zip_code = request.POST.get('codigo-postal')
 
-            if agency_name and address and phone and zip_code:
+            if agency_name and state and phone and zip_code:
                 request.session['agency_name'] = agency_name
-                request.session['address'] = address
+                request.session['state'] = state
                 request.session['phone'] = phone
                 request.session['zip_code'] = zip_code
 
@@ -330,33 +337,41 @@ def registrar_agencia(request):
                 return HttpResponse('Por favor completa todos los campos.')
 
         elif request.session['form_step'] == 2:
-            if 'certificado' in request.FILES:
-                certificate = request.FILES['certificado']
-                fs = FileSystemStorage(location='static/certificates/')
-                filename = fs.save(certificate.name, certificate)
-                uploaded_file_url = fs.url(filename)
+            # Esta es la calle a partir de ahora
+            address = request.POST.get('direccion')
+            suburb = request.POST.get('colonia')
+            town = request.POST.get('municipio')
 
-                agency, created = Agency.objects.update_or_create(
-                    user=request.user,
-                    defaults={
-                        'agency_name': request.session['agency_name'],
-                        'address': request.session['address'],
-                        'phone': request.session['phone'],
-                        'zip_code': request.session['zip_code'],
-                        'certificate': uploaded_file_url,
-                    }
-                )
-
-                if created:
-                    for key in ['agency_name', 'address', 'phone', 'zip_code', 'form_step']:
-                        del request.session[key]
-
-                    return redirect('index')
-                else:
-                    return HttpResponse('La agencia ya esta registrada u ocurrio un error al ser guardado.')
-
+            if address and suburb and town:
+                request.session['address'] = address
+                request.session['suburb'] = suburb
+                request.session['town'] = town
             else:
-                return HttpResponse('Por favor, sube un certificado valido.')
+                return HttpResponse('Por favor completa todos los campos.')
+
+            agency, created = Agency.objects.update_or_create(
+                user=request.user,
+                defaults={
+                    'agency_name': request.session['agency_name'],
+                    'state': request.session['state'],
+                    'address': request.session['address'],
+                    'suburb': request.session['suburb'],
+                    'town': request.session['town'],
+                    'phone': request.session['phone'],
+                    'zip_code': request.session['zip_code'],
+                }
+            )
+
+            if created:
+                for key in ['agency_name', 'address', 'suburb', 'town', 'phone', 'zip_code', 'form_step']:
+                    del request.session[key]
+
+                return redirect('index')
+            else:
+                return HttpResponse('La agencia ya esta registrada u ocurrio un error al ser guardado.')
+
+        else:
+            return HttpResponse('Ingresa campos validos.')
 
     step = request.session['form_step']
     return render(request, 'registrar_agencia.html', {'step': step})
