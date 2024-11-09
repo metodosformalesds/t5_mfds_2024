@@ -83,7 +83,8 @@
                 <input type="file" id="identificacion_oficial" name="identificacion_oficial" class="form-control" accept=".jpg,.jpeg,.png" required>
             </div>
             
-            <label class="form-label">Captura una foto en tiempo real para verificación biométrica</label>
+            {# Aqui cambior #}
+            {% comment %} <label class="form-label">Captura una foto en tiempo real para verificación biométrica</label>
             <div class="center-container">
                 <div class="canvas-ellipse-container">
                     <video id="video" autoplay style="width: 100%;"></video>
@@ -98,6 +99,22 @@
             <div class="d-flex justify-content-between">
                 <button type="submit" id="previousButton" name="previous" value="previous" class="btn btn-secondary btn-custom-previous">Regresar</button>
                 <button type="submit" class="btn btn-custom btn-custom-next">Finalizar Registro</button>
+            </div> {% endcomment %}
+            <label class="form-label">Captura una foto en tiempo real para verificación biométrica</label>
+            <div class="center-container">
+                <div class="canvas-ellipse-container">
+                    <video id="video" autoplay style="width: 100%;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                <button type="button" id="captureButton" class="btn btn-secondary mt-2">Capturar Foto</button>
+                <button type="button" id="retryButton" class="btn btn-secondary mt-2" style="display: none;">Repetir Foto</button>
+            </div>
+
+            <input type="file" id="identificacion_biometrica" name="identificacion_biometrica" style="display: none;" accept="image/*">
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" id="previousButton" name="previous" value="previous" class="btn btn-secondary btn-custom-previous">Regresar</button>
+                <button type="submit" class="btn btn-custom btn-custom-next">Finalizar Registro</button>
             </div>
             {% endif %}
         </form>
@@ -106,51 +123,96 @@
 
 <script src="{% static 'appUser/js/boton_regresar.js' %}"></script> 
 
-<script>
+{% comment %} <script>
     const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const captureButton = document.getElementById('captureButton');
-const confirmButton = document.createElement('button'); 
-confirmButton.innerText = "Confirmar y Enviar";
-confirmButton.classList.add('btn', 'btn-custom', 'mt-2');
-confirmButton.style.display = 'none';
-document.querySelector('.canvas-ellipse-container').appendChild(confirmButton);
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('captureButton');
+    const confirmButton = document.createElement('button'); 
+    confirmButton.innerText = "Confirmar y Enviar";
+    confirmButton.classList.add('btn', 'btn-custom', 'mt-2');
+    confirmButton.style.display = 'none';
+    document.querySelector('.canvas-ellipse-container').appendChild(confirmButton);
 
-const identificacionBiometrica = document.getElementById('identificacion_biometrica');
+    const identificacionBiometrica = document.getElementById('identificacion_biometrica');
 
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-        video.srcObject = stream;
-        video.style.display = 'block';
-        canvas.style.display = 'none';
-    })
-    .catch(error => {
-        console.error("Error al acceder a la cámara: ", error);
-        alert("No se pudo acceder a la cámara. Asegúrate de que tienes permisos.");
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+        })
+        .catch(error => {
+            console.error("Error al acceder a la cámara: ", error);
+            alert("No se pudo acceder a la cámara. Asegúrate de que tienes permisos.");
+        });
+
+    captureButton.addEventListener('click', () => {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+        captureButton.style.display = 'none';
+        confirmButton.style.display = 'block'; 
+
+        retryButton.style.display = 'inline-block';
+
+        identificacionBiometrica.value = canvas.toDataURL('image/png');
     });
 
-captureButton.addEventListener('click', () => {
-    const context = canvas.getContext('2d');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
-    video.style.display = 'none';
-    canvas.style.display = 'block';
-    captureButton.style.display = 'none';
-    confirmButton.style.display = 'block'; 
+    retryButton.addEventListener('click', () => {
+        video.style.display = 'block';
+        canvas.style.display = 'none';
 
-    retryButton.style.display = 'inline-block';
+        captureButton.style.display = 'inline-block';
+        retryButton.style.display = 'none';
 
-    identificacionBiometrica.value = canvas.toDataURL('image/png');
-});
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error("Error al acceder a la cámara: ", error);
+                alert("No se pudo acceder a la cámara. Asegúrate de que tienes permisos.");
+            });
+    });
+        confirmButton.addEventListener('click', () => {
+        const imageData = identificacionBiometrica.value;
 
-retryButton.addEventListener('click', () => {
-    video.style.display = 'block';
-    canvas.style.display = 'none';
+        const apiUrl = 'https://api.idanalyzer.com/v2/id'; // cambiar
+        const apiKey = 'R2pYN6W6OghEu5FwTVZ4bjaVph2IhFxa'; 
+        const data = {
+            api_key: apiKey,
+            file_base64: imageData.replace(/^data:image\/(png|jpg);base64,/, ''), 
+            options: 'ocr_full' 
+        };
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log("Response from ID Analyzer:", result);
+            alert("La verificación fue enviada correctamente.");
+        })
+        .catch(error => {
+            console.error("Error al enviar la imagen a ID Analyzer:", error);
+            alert("Hubo un error al enviar la verificación.");
+        });
+    }); 
+</script> {% endcomment %}
 
-    captureButton.style.display = 'inline-block';
-    retryButton.style.display = 'none';
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureButton = document.getElementById('captureButton');
+    const retryButton = document.getElementById('retryButton');
+    const identificacionBiometrica = document.getElementById('identificacion_biometrica');
 
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
@@ -159,36 +221,31 @@ retryButton.addEventListener('click', () => {
         .catch(error => {
             console.error("Error al acceder a la cámara: ", error);
             alert("No se pudo acceder a la cámara. Asegúrate de que tienes permisos.");
-        });
-});
-confirmButton.addEventListener('click', () => {
-    const imageData = identificacionBiometrica.value;
-
-    const apiUrl = 'https://api.idanalyzer.com/v2/id'; // cambiar
-    const apiKey = 'R2pYN6W6OghEu5FwTVZ4bjaVph2IhFxa'; 
-    const data = {
-        api_key: apiKey,
-        file_base64: imageData.replace(/^data:image\/(png|jpg);base64,/, ''), 
-        options: 'ocr_full' 
-    };
-    fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log("Response from ID Analyzer:", result);
-        alert("La verificación fue enviada correctamente.");
-    })
-    .catch(error => {
-        console.error("Error al enviar la imagen a ID Analyzer:", error);
-        alert("Hubo un error al enviar la verificación.");
     });
-});
-</script>
 
 
+    captureButton.addEventListener('click', () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob => {
+            const file = new File([blob], 'biometric_image.jpg', { type: 'image/jpeg' });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            identificacionBiometrica.files = dataTransfer.files;
+        });
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+        captureButton.style.display = 'none';
+        retryButton.style.display = 'block';
+    });
+
+    retryButton.addEventListener('click', () => {
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+        captureButton.style.display = 'block';
+        retryButton.style.display = 'none';
+        identificacionBiometrica.value = '';
+    });
+    </script>
 {% endblock content %}

@@ -1,6 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from echeraritours import settings
+from django.core.files.storage import default_storage
+import requests
+import boto3
+import idanalyzer
+import io
+import base64
 
 # Para los formularios
 from django.contrib.auth.forms import UserCreationForm
@@ -130,6 +136,14 @@ def logoutUser(request):
     return redirect('login')
 
 
+# def add_base64_padding(base64_string):
+#     """Agrega el relleno necesario a una cadena base64."""
+#     missing_padding = len(base64_string) % 4
+#     if missing_padding:
+#         base64_string += '=' * (4 - missing_padding)
+#     return base64_string
+
+
 @login_required
 def registrar_cliente(request):
     """
@@ -190,37 +204,84 @@ def registrar_cliente(request):
             else:
                 return HttpResponse('Por favor completa todos los campos.')
 
-        elif request.session['form_step'] == 3 and 'identificacion_oficial' in request.FILES:
-            identification = request.FILES['identificacion_oficial']
-            fs = FileSystemStorage(location='static/identifications/')
-            filename = fs.save(identification.name, identification)
-            uploaded_file_url = fs.url(filename)
+        elif request.session['form_step'] == 3 and 'identificacion_oficial' in request.FILES and 'identificacion_biometrica' in request.FILES:
+            id_identificacion_oficial = request.FILES['identificacion_oficial']
+            id_identificacion_biometrica = request.FILES['identificacion_biometrica']
 
-            client, created = Client.objects.update_or_create(
-                user=request.user,
-                defaults={
-                    'first_name': request.session['first_name'],
-                    'paternal_surname': request.session['paternal_surname'],
-                    'maternal_surname': request.session['maternal_surname'],
-                    'birth_date': request.session['birth_date'],
-                    'phone': request.session['phone'],
-                    'zip_code': request.session['zip_code'],
-                    'city': request.session['city'],
-                    'identification': uploaded_file_url,
-                }
-            )
+            s3 = boto3.client('s3',
+                              aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                              region_name=settings.AWS_S3_REGION_NAME)
 
-            if created:
-                for key in ['first_name', 'paternal_surname', 'maternal_surname', 'birth_date', 'phone', 'zip_code', 'city', 'form_step']:
-                    if key in request.session:
-                        del request.session[key]
+            official_id_key = f"uploads/{id_identificacion_oficial.name}"
+            biometric_id_key = f"uploads/{id_identificacion_biometrica}_biometric.jpg"
 
-                return redirect('index')
-            else:
-                return HttpResponse('El cliente ya esta registrado o ocurrio un error al ser guardado')
+            s3.upload_fileobj(id_identificacion_oficial,
+                              settings.AWS_STORAGE_BUCKET_NAME, official_id_key)
+            s3.upload_fileobj(id_identificacion_biometrica,
+                              settings.AWS_STORAGE_BUCKET_NAME, biometric_id_key)
+
+            # URLs completas de los archivos en S3 utilizando el dominio personalizado y las rutas de cada archivo
+            # official_id_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{official_id_key}"
+            # biometric_id_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{biometric_id_key}"
+            official_id_url = s3.generate_presigned_url('get_object',
+                                                        Params={
+                                                            'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': official_id_key},
+                                                        ExpiresIn=3600)
+            biometric_id_url = s3.generate_presigned_url('get_object',
+                                                         Params={
+                                                             'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': biometric_id_key},
+                                                         ExpiresIn=3600)
+
+            try:
+                client = idanalyzer.CoreAPI(
+                    f"{settings.ID_ANALYZER_API_KEY}", 'US')
+
+                client.throw_api_exception(True)
+
+                # Llamada a la API de ID Analyzer
+                response = client.scan(
+                    document_primary=official_id_url,
+                    biometric_photo=biometric_id_url
+                )
+                print(response)
+
+                # Procesa la respuesta de ID Analyzer
+                if response.get('verification', {}).get('passed'):
+                    client, created = Client.objects.update_or_create(
+                        user=request.user,
+                        defaults={
+                            'first_name': request.session['first_name'],
+                            'paternal_surname': request.session['paternal_surname'],
+                            'maternal_surname': request.session['maternal_surname'],
+                            'birth_date': request.session['birth_date'],
+                            'phone': request.session['phone'],
+                            'zip_code': request.session['zip_code'],
+                            'city': request.session['city'],
+                            'id_identificacion_oficial_url': official_id_url,
+                            'id_identificacion_biometrica_url': biometric_id_url,
+                        }
+                    )
+
+                    if created:
+                        for key in ['first_name', 'paternal_surname', 'maternal_surname', 'birth_date', 'phone', 'zip_code', 'city', 'form_step']:
+                            if key in request.session:
+                                del request.session[key]
+
+                        return redirect('index')
+                    else:
+                        return HttpResponse('El cliente ya está registrado o ocurrió un error al ser guardado.')
+                else:
+                    error_message = response.get(
+                        'message', 'No se proporcionó un mensaje de error.')
+                    return HttpResponse(f"Error en la verificación de ID: {error_message}")
+            except idanalyzer.APIError as e:
+                details = e.args[0]
+                print(
+                    f"API error code {details['code']}, message: {details['message']}")
 
         else:
-            return HttpResponse('Debe dar una identificacion valida.')
+            return HttpResponse('Debe dar una identificación válida y una imagen biométrica.')
 
     step = request.session['form_step']
 
@@ -508,6 +569,7 @@ def completo_contra(request):
     """
     return render(request, 'completo_contra.html')
 
+
 def google_login(request):
     """
     Maneja el inicio de sesión con Google.
@@ -516,9 +578,9 @@ def google_login(request):
     """
     if request.user.is_authenticated:
         return redirect('index')
-        
+
     if request.method == 'POST':
-        email = request.POST.get('email')  
+        email = request.POST.get('email')
 
         if User.objects.filter(email=email).exists():
             user = authenticate(request, email=email)
@@ -527,4 +589,4 @@ def google_login(request):
         else:
             return redirect('register', email=email)
 
-    return render(request, 'index')  
+    return render(request, 'index')

@@ -39,7 +39,13 @@ class Client(models.Model):
     phone = models.CharField(max_length=15)
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
+
     identification = models.ImageField(upload_to='static/identifications/')
+    id_identificacion_oficial_url = models.URLField(
+        max_length=500, blank=True, null=True)
+    id_identificacion_biometrica_url = models.URLField(
+        max_length=500, blank=True, null=True)
+
     profile_image = models.ImageField(
         upload_to='profile_images', blank=True, null=True)
     stripe_customer_id = models.CharField(
