@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Pago Reservación - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appPayment/css/pago_reservacion.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-center mb-4">
+        <ul class="progressbar">
+            <li class="active"><span class="circle"></span><p>Detalles de reservación</p></li>
+            <li class="active"><span class="circle"></span><p>Pago</p></li>
+            <li><span class="circle"></span><p>Finalización</p></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Selección de método de pago</h5>
+            <form id="payment-form" method="post">
+                {% csrf_token %}
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
+                    <label class="form-check-label" for="paypal">
+                        PayPal &nbsp; 
+                        <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
+                    </label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="stripe" value="stripe">
+                    <label class="form-check-label" for="stripe">
+                        Stripe &nbsp;
+                        <span class="text-muted">Usa Stripe para un pago seguro y rápido.</span>
+                    </label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
+                    <label class="form-check-label" for="credit_card">
+                        Pago con tarjeta
+                        <div class="d-flex payment-icons mt-1">
+                            <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
+                            <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
+                            <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
+                            <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
+                        </div>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-success">Continuar con el pago</button>
+            </form>
+        </div>
+
+        <div class="col-md-5 offset-md-1">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Resumen de la compra</h5>
+                    <div class="d-flex">
+                        <img src="{{ tour.image_url }}" class="img-thumbnail me-3" alt="{{ tour.title }}" style="width: 100px;">
+                        <div>
+                            <p class="fw-bold">{{ tour.title }}</p>
+                            <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:"d \\d\\e F \\d\\e\\l Y" }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5 class="fw-bold">Precio Total <span class="text-success">${{ total_price }}</span></h5>
+                    <p>Número de personas: {{ number_people }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>document.addEventListener('DOMContentLoaded', function () {
+    const cantidadInput = document.getElementById('cantidad-adultos');
+    const pricePerPerson = parseFloat("{{ tour.price_per_person }}");
+    const totalPriceElement = document.getElementById('total-price');
+    const hiddenTotalPrice = document.getElementById('hidden-total-price');
+    const hiddenNumberPeople = document.getElementById('hidden-number-people');
+
+    function updateTotalPrice() {
+        const cantidad = parseInt(cantidadInput.value) || 1;
+        const totalPrice = pricePerPerson * cantidad;
+        totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+
+        // Actualizar los valores de los campos ocultos
+        hiddenTotalPrice.value = totalPrice.toFixed(2);
+        hiddenNumberPeople.value = cantidad;
+    }
+
+    document.getElementById('minus').addEventListener('click', function() {
+        let cantidad = parseInt(cantidadInput.value);
+        if (cantidad > 1) {
+            cantidadInput.value = --cantidad;
+            updateTotalPrice();
+        }
+    });
+    
+    document.getElementById('plus').addEventListener('click', function() {
+        let cantidad = parseInt(cantidadInput.value);
+        cantidadInput.value = ++cantidad;
+        updateTotalPrice();
+    });
+
+    // Actualizar el precio total al cargar la página
+    updateTotalPrice();
+});
+
+</script>
+
+<script>
+    document.getElementById('payment-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        if (selectedMethod === 'paypal') {
+            // Asegúrate de que esta línea redirija correctamente
+            window.location.href = "{% url 'realizar_pago_paypal' tour.id %}";
+        } else {
+            // Puedes manejar otras redirecciones aquí
+        }
+    });
+</script>
+{% endblock content %}

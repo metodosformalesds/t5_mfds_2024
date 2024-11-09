@@ -61,7 +61,7 @@
         <div class="col-md-5 offset-md-1">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{% url 'pago_reservacion' tour.id %}">
+                    <form method="POST" action="{% url 'seleccion_pago' tour.id %}">
                         {% csrf_token %}
                         <h5 class="card-title">Resumen de tus entradas</h5>
                         <div class="d-flex row">
@@ -84,7 +84,6 @@
                 
 
                             <button id="realizar_pago-btn" class="btn btn-success w-100 mt-3">Realizar pago</button>
-                      
                     </form>
                 </div>
             </div>

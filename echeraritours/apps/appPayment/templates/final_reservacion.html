@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Compra Finalizada - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appPayment/css/final_reservacion.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-center mb-4">
+        <ul class="progressbar">
+            <li class="active">
+                <span class="circle">1</span>
+                <p>Detalles de reservación</p>
+            </li>
+            <li class="active">
+                <span class="circle">2</span>
+                <p>Pago</p>
+            </li>
+            <li class="active">
+                <span class="circle">3</span>
+                <p>Finalización</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="icon-check">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h2 class="fw-bold text-success">¡Compra finalizada!</h2>
+            <p class="lead">
+                Se le ha enviado el recibo a través de su correo electrónico.
+            </p>
+            <a href="/" class="btn btn-outline-success mt-4">Volver a la pagina de inicio</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
