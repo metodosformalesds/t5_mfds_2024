@@ -74,6 +74,9 @@
 
             {% elif step == 3 %}
             <p class="mb-4">Por favor, sube tu identificación para terminar el registro.</p>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
             <div class="d-flex justify-content-center">
                 <img src="{% static 'appUser/img/subir_documento.jpg' %}" alt="Ejemplo de certificado" class="certificado-img mb-4">
             </div>
@@ -82,24 +85,6 @@
                 <label for="identificacion_oficial" class="form-label">Selecciona tu identificación</label>
                 <input type="file" id="identificacion_oficial" name="identificacion_oficial" class="form-control" accept=".jpg,.jpeg,.png" required>
             </div>
-            
-            {# Aqui cambior #}
-            {% comment %} <label class="form-label">Captura una foto en tiempo real para verificación biométrica</label>
-            <div class="center-container">
-                <div class="canvas-ellipse-container">
-                    <video id="video" autoplay style="width: 100%;"></video>
-                    <canvas id="canvas" style="display: none;"></canvas>
-                </div>
-                <button type="button" id="captureButton" class="btn btn-secondary mt-2">Capturar Foto</button>
-                <button type="button" id="retryButton" class="btn btn-secondary mt-2" style="display: none;">Repetir Foto</button>
-            </div>
-
-            <input type="hidden" id="identificacion_biometrica" name="identificacion_biometrica">
-
-            <div class="d-flex justify-content-between">
-                <button type="submit" id="previousButton" name="previous" value="previous" class="btn btn-secondary btn-custom-previous">Regresar</button>
-                <button type="submit" class="btn btn-custom btn-custom-next">Finalizar Registro</button>
-            </div> {% endcomment %}
             <label class="form-label">Captura una foto en tiempo real para verificación biométrica</label>
             <div class="center-container">
                 <div class="canvas-ellipse-container">

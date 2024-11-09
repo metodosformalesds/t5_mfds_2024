@@ -272,9 +272,8 @@ def registrar_cliente(request):
                     else:
                         return HttpResponse('El cliente ya está registrado o ocurrió un error al ser guardado.')
                 else:
-                    error_message = response.get(
-                        'message', 'No se proporcionó un mensaje de error.')
-                    return HttpResponse(f"Error en la verificación de ID: {error_message}")
+                    messages.info(
+                        request, 'No pudimos validar las fotos que proporcionaste, intentalo de nuevo')
             except idanalyzer.APIError as e:
                 details = e.args[0]
                 print(
