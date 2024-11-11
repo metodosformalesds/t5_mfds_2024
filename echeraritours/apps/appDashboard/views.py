@@ -180,6 +180,11 @@ class CreateTour(CreateView):
         return super().form_valid(form)
 
 
+def payment_methods_agency(request):
+    metodos = PaymentMethod.objects.filter(agency=request.user.agency)
+
+    return render(request, 'agencia/metodos_pago.html', {'metodos': metodos})
+
 # import pandas as pd
 # from django.http import HttpResponse
 # from reportlab.lib.pagesizes import letter

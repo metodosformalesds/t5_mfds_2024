@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Métodos de pago - Echérari Tours{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <article class="card">
+            <header class="card-header">
+                <h2 class="card-title">Métodos de pago</h2>
+                <a href="{% url 'add_payment_method' %}" class="btn btn-primary">Agregar método de pago</a>
+            </header>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment_method in payment_methods %}
+                            <tr>
+                                <td>{{ payment_method.name }}</td>
+                                <td>{{ payment_method.description }}</td>
+                                <td>
+                                    <a href="{% url 'edit_payment_method' payment_method.id %}" class="btn btn-primary">Editar</a>
+                                    <a href="{% url 'delete_payment_method' payment_method.id %}" class="btn btn-danger">Eliminar</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+    </main>
+</div>
+{% endblock content %}

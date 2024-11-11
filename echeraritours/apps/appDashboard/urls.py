@@ -17,6 +17,8 @@ urlpatterns = [
     path('agencia/dashboard/tours/', views.tours_dashboard, name='tours_dashboard'),
     path('agencia/dashboard/tours/crear/',
          views.CreateTour.as_view(), name='create_tour'),
+    path('agencia/dashboard/metodos_pago/',
+         views.payment_methods_agency, name='payment_methods_agency'),
     path('agencia/dashboard/reportes/', views.reports, name='reports'),
 ]
 
