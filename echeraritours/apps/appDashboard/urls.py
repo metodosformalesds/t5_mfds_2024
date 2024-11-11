@@ -20,6 +20,8 @@ urlpatterns = [
     path('agencia/dashboard/metodos_pago/',
          views.payment_methods_agency, name='payment_methods_agency'),
     path('agencia/dashboard/reportes/', views.reports, name='reports'),
+    path('agencia/dashboard/reportes/<int:tour_id>/',
+         views.generate_report, name='generate_report'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
