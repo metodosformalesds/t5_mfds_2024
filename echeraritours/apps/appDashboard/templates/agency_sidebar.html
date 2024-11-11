@@ -8,7 +8,7 @@
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="#">
+          <a class="nav-link btn d-flex align-items-center" href="{% url "agency_profile" %}">
             Perfil 
           </a>
         </li>
@@ -18,7 +18,7 @@
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn  d-flex align-items-center" href="#">
+          <a class="nav-link btn  d-flex align-items-center" href="{% url "payment_methods_agency" %}">
             Metodos de pago
           </a>
         </li>
@@ -28,9 +28,27 @@
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="#">
+          <a class="nav-link btn d-flex align-items-center" type="button" data-bs-toggle="modal" data-bs-target="#logoutmodal">
             Cerrar sesion
-          </a>
+        </a>
+          
+          <!-- Modal -->
+        <div class="modal fade" id="logoutmodal" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Cerrar Sesion</h1>
+                </div>
+                <div class="modal-body">
+                  ¿Estas seguro que deseas cerrar sesion?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <a type="button" class="btn btn-danger" href="{% url 'logout' %}">Cerrar sesion</a>
+                </div>
+              </div>
+            </div>
+        </div>    
         </li>
       </ul>
     </div>

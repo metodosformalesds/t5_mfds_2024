@@ -34,11 +34,16 @@
                             {% for tour in tours %}
                             <tr>
                                 <td>{{ tour.title }}</td>
-                                <td>{{ tour.start_date }}</td>
+                                <td>{{ tour.start_date|date:"d M Y" }}</td>
                                 <td>{{ tour.lodging_place }}</td>
-                                <td>{{ tour.end_date }}</td>
+                                <td>{{ tour.end_date|date:"d M Y" }}</td>
                                 <td>{{ tour.price_per_person }}</td>
-                                <td><a class="btn btn-primary">Exportar</a></td>
+                                <td>
+                                <form action="{% url 'generate_report' tour.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">Exportar</button>
+                                </form>
+                                </td>                            
                             </tr>
                             {% endfor %}
                         </tbody>

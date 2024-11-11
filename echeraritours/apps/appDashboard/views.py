@@ -1,3 +1,5 @@
+import io
+from reportlab.pdfgen import canvas
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -5,7 +7,7 @@ from apps.appUser.models import Client, Agency
 from apps.appPayment.models import PaymentMethod
 from apps.appTour.models import Reservation, Tour
 from django.views.generic.edit import CreateView
-from .forms import UserForm, UserProfileForm
+from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
 from .models import Reports
 from django.urls import reverse_lazy
@@ -128,6 +130,35 @@ def agency_dashboard(request):
     return render(request, 'agency_dashboard.html')
 
 
+@login_required(login_url='login')
+def agency_profile(request):
+    agencia = get_object_or_404(Agency, user=request.user)
+
+    if request.method == 'POST':
+        agency_form = AgencyForm(request.POST, request.FILES, instance=agencia)
+        agency_profile_form = AgencyProfileForm(
+            request.POST, request.FILES, instance=agencia)
+
+        if agency_form.is_valid() and agency_profile_form.is_valid():
+            agency_form.save()
+            agency_profile_form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado.')
+            return redirect('agency_profile')
+    else:
+        agency_form = AgencyForm(instance=agencia)
+        agency_profile_form = AgencyProfileForm(instance=agencia)
+
+    context = {
+        'agency_form': agency_form,
+        'agency_profile_form': agency_profile_form,
+        'agencia': agencia,
+        'valid_states': VALID_STATES
+    }
+
+    return render(request, 'agencia/perfil.html', context)
+
+
+@login_required(login_url='login')
 def reports(request):
     agency_tours = Tour.objects.filter(agency=request.user.agency)
 
@@ -136,6 +167,48 @@ def reports(request):
     }
 
     return render(request, 'agencia/reportes.html', context)
+
+
+@login_required(login_url='login')
+def generate_report(request, tour_id):
+    tour = get_object_or_404(Tour, id=tour_id)
+
+    report, created = Reports.objects.get_or_create(
+        agency=tour.agency, tour=tour)
+    report.save()
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, 800, f"Reporte del Tour: {tour.title}")
+
+    p.setFont("Helvetica", 12)
+    data = [
+        ["Descripción", tour.description],
+        ["Lugar de hospedaje", tour.lodging_place],
+        ["Precio por persona", f"${tour.price_per_person}"],
+        ["Capacidad", tour.capacity],
+        ["Total de reservas", tour.total_bookings],
+        ["Fecha de inicio", tour.start_date.strftime('%d/%m/%Y %H:%M')],
+        ["Fecha de fin", tour.end_date.strftime('%d/%m/%Y %H:%M')],
+        ["Lugar de origen", tour.place_of_origin],
+        ["Lugar de destino", tour.destination_place],
+        ["Total de clientes", report.total_clients],
+        ["Ganancias totales", f"${report.earnings}"]
+    ]
+
+    x = 100
+    y = 750
+    for row in data:
+        p.drawString(x, y, row[0])
+        p.drawString(x + 200, y, str(row[1]))
+        y -= 20
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return HttpResponse(buffer, content_type='application/pdf')
 
 
 @login_required(login_url='login')
@@ -180,69 +253,7 @@ class CreateTour(CreateView):
         return super().form_valid(form)
 
 
-# import pandas as pd
-# from django.http import HttpResponse
-# from reportlab.lib.pagesizes import letter
-# from reportlab.pdfgen import canvas
-# from .models import Reports
+def payment_methods_agency(request):
+    metodos = PaymentMethod.objects.filter(agency=request.user.agency)
 
-# def export_report(request):
-#     if request.method == 'POST':
-#         tour_id = request.POST.get('tour_id')
-#         agency_id = request.POST.get('agency_id')
-#         export_format = request.POST.get('format')
-#         tour = Tour.objects.get(id=tour_id)
-#         agency = Agency.objects.get(id=agency_id)
-
-#         report = Reports(
-#             agency=agency,
-#             tour=tour
-#         )
-#         report.save()
-
-#         if export_format == 'csv':
-#             return export_report_csv(report)
-#         elif export_format == 'excel':
-#             return export_report_excel(report)
-#         elif export_format == 'pdf':
-#             return export_report_pdf(report)
-
-#     return HttpResponse('Error al generar el reporte.')
-
-# def export_report_csv(report):
-#     data = {
-#         'Tour Title': [report.tour_title],
-#         'Total Clients': [report.total_clients],
-#         'Tour Description': [report.tour_description],
-#         'Earnings': [report.earnings]
-#     }
-#     df = pd.DataFrame(data)
-#     response = HttpResponse(content_type='text/csv')
-#     response['Content-Disposition'] = f'attachment; filename="reporte_{report.tour_title}.csv"'
-#     df.to_csv(path_or_buf=response, index=False)
-#     return response
-
-# def export_report_excel(report):
-#     data = {
-#         'Tour Title': [report.tour_title],
-#         'Total Clients': [report.total_clients],
-#         'Tour Description': [report.tour_description],
-#         'Earnings': [report.earnings]
-#     }
-#     df = pd.DataFrame(data)
-#     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-#     response['Content-Disposition'] = f'attachment; filename="reporte_{report.tour_title}.xlsx"'
-#     df.to_excel(response, index=False)
-#     return response
-
-# def export_report_pdf(report):
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = f'attachment; filename="reporte_{report.tour_title}.pdf"'
-#     buffer = canvas.Canvas(response, pagesize=letter)
-#     buffer.drawString(100, 750, f"Tour Title: {report.tour_title}")
-#     buffer.drawString(100, 730, f"Total Clients: {report.total_clients}")
-#     buffer.drawString(100, 710, f"Tour Description: {report.tour_description}")
-#     buffer.drawString(100, 690, f"Earnings: {report.earnings}")
-#     buffer.showPage()
-#     buffer.save()
-#     return response
+    return render(request, 'agencia/metodos_pago.html', {'metodos': metodos})

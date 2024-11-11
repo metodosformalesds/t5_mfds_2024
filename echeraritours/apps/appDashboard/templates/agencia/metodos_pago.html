@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Métodos de pago - Echérari Tours{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <article class="card">
+            <header class="card-header">
+                <h2 class="card-title">Métodos de pago</h2>
+                <a href="#" class="btn btn-primary">Agregar método de pago</a>
+            </header>
+            
+        </article>
+    </main>
+</div>
+{% endblock content %}

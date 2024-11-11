@@ -49,4 +49,4 @@ class Reports(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Reporte de {self.tour_title} para la agencia {self.agency.name}"
+        return f"Reporte de {self.tour_title} para la agencia {self.agency.agency_name}"
