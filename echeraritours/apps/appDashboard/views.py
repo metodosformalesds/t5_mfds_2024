@@ -7,7 +7,7 @@ from apps.appUser.models import Client, Agency
 from apps.appPayment.models import PaymentMethod
 from apps.appTour.models import Reservation, Tour
 from django.views.generic.edit import CreateView
-from .forms import UserForm, UserProfileForm
+from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
 from .models import Reports
 from django.urls import reverse_lazy
@@ -128,6 +128,34 @@ def agency_dashboard(request):
         HttpResponse: The rendered agency dashboard HTML page.
     """
     return render(request, 'agency_dashboard.html')
+
+
+@login_required(login_url='login')
+def agency_profile(request):
+    agencia = get_object_or_404(Agency, user=request.user)
+
+    if request.method == 'POST':
+        agency_form = AgencyForm(request.POST, request.FILES, instance=agencia)
+        agency_profile_form = AgencyProfileForm(
+            request.POST, request.FILES, instance=agencia)
+
+        if agency_form.is_valid() and agency_profile_form.is_valid():
+            agency_form.save()
+            agency_profile_form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado.')
+            return redirect('agency_profile')
+    else:
+        agency_form = AgencyForm(instance=agencia)
+        agency_profile_form = AgencyProfileForm(instance=agencia)
+
+    context = {
+        'agency_form': agency_form,
+        'agency_profile_form': agency_profile_form,
+        'agencia': agencia,
+        'valid_states': VALID_STATES
+    }
+
+    return render(request, 'agencia/perfil.html', context)
 
 
 @login_required(login_url='login')
