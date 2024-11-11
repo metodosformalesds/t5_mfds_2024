@@ -47,7 +47,7 @@ class Client(models.Model):
         max_length=500, blank=True, null=True)
 
     profile_image = models.ImageField(
-        upload_to='profile_images', blank=True, null=True)
+        upload_to='profile_images', blank=True, null=True, default='default_profile.jpg')
     stripe_customer_id = models.CharField(
         max_length=255, blank=True, null=True)
 
@@ -102,12 +102,15 @@ class Agency(models.Model):
     agency_name = models.CharField(max_length=255)
     agency_description = models.TextField(
         max_length=255, blank=True, null=True)
-    address = models.CharField(max_length=255)
+    state = models.CharField(max_length=255, blank=True, null=True)  # Estado
+    address = models.CharField(max_length=255)  # Calle
+    suburb = models.CharField(max_length=255, blank=True, null=True)  # Colonia
+    town = models.CharField(max_length=255, blank=True, null=True)  # Municipio
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
     certificate = models.ImageField(upload_to='static/certificates/')
     profile_image = models.ImageField(
-        upload_to='agency_profile_images/', blank=True, null=True)
+        upload_to='agency_profile_images/', blank=True, null=True, default='default_profile.jpg')
     stripe_agency_id = models.CharField(max_length=255, blank=True, null=True)
 
     def create_stripe_account_for_agency(self):
