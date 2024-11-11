@@ -3,14 +3,28 @@
     color: #1B1C1E;
     border: none;
     font-size: 1.2rem;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
 }
 
 .btn-success {
     background-color: #68DDBD;
     border: none;
-    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
 }
 
 .btn-success:hover {
     background-color: #56c4a2;
+    transform: scale(1.05);
+}
+
+.alert-success,
+.btn-success {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

@@ -4,6 +4,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.urls import reverse
 from django.contrib import messages
+import paypalrestsdk
 from paypalrestsdk import Payment
 from .models import Payments, PaymentMethod
 from apps.appTour.models import Reservation, Tour
@@ -43,6 +44,7 @@ def seleccion_pago(request, id):
 
     context = {
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+        'paypal_client_id': settings.PAYPAL_CLIENT_ID,
         'tour': tour,
         'current_date': current_date,
         'total_price': total_price,
@@ -63,7 +65,7 @@ def realizar_pago_paypal(request, id):
             "payment_method": "paypal"
         },
         "redirect_urls": {
-            "return_url": request.build_absolute_uri(reverse('pago_exitoso')),
+            "return_url": request.build_absolute_uri(reverse('pago_completado')),
             "cancel_url": request.build_absolute_uri(reverse('pago_cancelado'))
         },
         "transactions": [{
@@ -95,7 +97,7 @@ def realizar_pago_paypal(request, id):
                 return redirect(link.href)
     else:
         messages.error(request, "Error al crear el pago con PayPal")
-        return redirect('detalles_reservacion', id=id)
+        return redirect('seleccion_pago', id=id)
 
 
 def realizar_pago_stripe(request, id):
@@ -215,72 +217,17 @@ def process_payment(request):
     except stripe.error.StripeError as e:
         return JsonResponse({'error': str(e)}, status=400)
 
-
-def pago_exitoso_view(request):
-    payment_id = request.GET.get("paymentId")
-    payer_id = request.GET.get("PayerID")
-
-    # Recupera los datos de la sesión
-    tour_id = request.session.get('tour_id')
-    number_people = request.session.get('number_people')
-    total_price = request.session.get('total_price')
-
-    # Ejecutar el pago en PayPal
-    pago = Payment.find(payment_id)
-    if pago.execute({"payer_id": payer_id}):
-        messages.success(request, "Pago completado con éxito")
-
-        # Obtener el usuario y cliente
-        user = request.user
-        if not user.is_authenticated:
-            messages.error(request, "Usuario no autenticado")
-            return redirect('detalles_reservacion', id=tour_id)
-
-        try:
-            client = Client.objects.get(user=user)
-        except Client.DoesNotExist:
-            messages.error(request, "Cliente no encontrado")
-            return redirect('detalles_reservacion', id=tour_id)
-
-        # Obtener el tour y la agencia
-        tour = get_object_or_404(Tour, id=tour_id)
-        agency = tour.agency
-
-        # Crear la reservación
-        reservation = Reservation.objects.create(
-            tour=tour,
-            client=client,
-            number_people=number_people,
-            total_price=total_price,
-        )
-
-        # Crear un registro de pago
-        Payments.objects.create(
-            client=client,
-            agency=agency,
-            reservation=reservation,
-            amount=total_price,
-            status='completado',
-            payment_intent_id=payment_id,
-        )
-
-        # Limpiar la sesión
+def pago_cancelado(request):
+    # Limpiar la información de la sesión si es necesario
+    if 'tour_id' in request.session:
         del request.session['tour_id']
+    if 'number_people' in request.session:
         del request.session['number_people']
+    if 'total_price' in request.session:
         del request.session['total_price']
 
-        return render(request, 'pago_completado.html')
-    else:
-        messages.error(request, "Error al confirmar el pago")
-        return redirect("detalles_reservacion", id=tour_id)
-
-
-def pago_cancelado_view(request):
-    # Recupera el tour_id de la sesión
-    tour_id = request.session.get('tour_id')
-
-    messages.info(request, "El pago fue cancelado.")
-    return redirect("detalles_reservacion", id=tour_id)
+    messages.warning(request, "Has cancelado el pago. Tu reservación no ha sido confirmada.")
+    return redirect('index.html')
 
 
 def pago_completado(request):
