@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard Tours - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appTour/css/tours.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <header class="card-header">
+            <h2 class="card-title">Tours</h2>
+        </header>
+        <div>
+            <a href="{% url 'create_tour' %}" class="btn btn-primary mt-3">Crear tour</a>
+        </div>
+        <div class="container my-4">
+            {% if tours %}
+            <div class="row">
+                {% for tour in tours %}
+                    <div class="col-lg-6 col-md-6 mb-4">
+                        <a href="{% url 'detalle_tour' tour.id %}" class="card-link" style="text-decoration: none;">
+                            <div class="card">
+                                <img src="{{ tour.tour_image.url }}" class="card-img-top" alt="{{ tour.title }}">
+                                <div class="card-body">
+                                    <h5 class="font-weight-bold text-center">{{ tour.title }}</h5>
+                                    <p class="text-muted">Desde <span class="span-echerari">{{ tour.start_date|date:"d M Y" }}</span> hasta <span class="span-echerari">{{ tour.end_date|date:"d M Y" }}</span></p>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-airplane-fill" viewBox="0 0 16 16">
+                                            <path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849"/>
+                                        </svg>
+                                        De <span class="span-echerari">{{ tour.place_of_origin }}</span> a <span class="span-echerari">{{ tour.destination_place }}</span>
+                                    </p>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                        </svg>
+                                        Para <span class="span-echerari"> {{ tour.capacity }} personas</span></p>
+                                    <div class="price-section">
+                                        <p class="precio"><span class="span-echerari">MXN ${{ tour.price_per_person }}</span> por persona</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                No hay tours disponibles.
+            </div>
+            {% endif %}
+        </div>   
+    </main>
+</div>
+
+{% endblock content %}

@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView
 from .forms import UserForm, UserProfileForm
 from django.contrib import messages
 from .models import Reports
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -135,6 +136,48 @@ def reports(request):
     }
 
     return render(request, 'agencia/reportes.html', context)
+
+
+@login_required(login_url='login')
+def tours_dashboard(request):
+    """
+    Renders the tours dashboard page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered tours dashboard HTML page.
+    """
+    tours = Tour.objects.filter(agency=request.user.agency)
+
+    context = {
+        'tours': tours,
+    }
+
+    return render(request, 'agencia/tours_dashboard.html', context)
+
+
+class CreateTour(CreateView):
+    """
+    A view to create a new Tour object.
+
+    Attributes:
+        model (Tour): The model associated with this view.
+        fields (list): The fields to be displayed in the form.
+        template_name (str): The name of the template to be rendered.
+        success_url (str): The URL to redirect to upon successful form submission.
+    """
+    model = Tour
+    fields = ['title', 'description', 'lodging_place', 'price_per_person', 'capacity',
+              'start_date', 'end_date', 'place_of_origin', 'destination_place', 'tour_image']
+    template_name = 'agencia/crear_tour.html'
+    success_url = reverse_lazy('tours_dashboard')
+
+    def form_valid(self, form):
+        form.instance.total_bookings = 0
+        form.instance.agency = self.request.user.agency
+        return super().form_valid(form)
 
 
 # import pandas as pd

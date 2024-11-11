@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Crear Tour - Echérari Tours{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <header class="card-header">
+            <h2 class="card-title">Crear Tour</h2>
+        </header>
+        <div class="container my-4">
+            <form method="POST" action="{% url "create_tour" %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">Fecha de inicio</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="end_date" class="form-label">Fecha de fin</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="place_of_origin" class="form-label">Lugar de origen</label>
+                    <input type="text" class="form-control" id="place_of_origin" name="place_of_origin" required>
+                </div>
+                <div class="mb-3">
+                    <label for="destination_place" class="form-label">Lugar de destino</label>
+                    <input type="text" class="form-control" id="destination_place" name="destination_place" required>
+                </div>
+                <div class="mb-3">
+                    <label for="lodging_place" class="form-label">Lugar de hospedaje</label>
+                    <input type="text" class="form-control" id="lodging_place" name="lodging_place" required>
+                </div>
+                <div class="mb-3">
+                    <label for="capacity" class="form-label">Capacidad</label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" required>
+                </div>
+                <div class="mb-3">
+                    <label for="price_per_person" class="form-label">Precio por persona</label>
+                    <input type="number" class="form-control" id="price_per_person" name="price_per_person" required>
+                    <div id="priceHelp" class="form-text">El precio es en pesos mexicanos.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="tour_image" class="form-label">Imagen del tour</label>
+                    <input type="file" class="form-control" id="tour_image" name="tour_image" required> 
+                </div>
+                <button type="submit" class="btn btn-primary">Crear tour</button>
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock content %}
