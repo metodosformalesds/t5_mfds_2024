@@ -1,10 +1,4 @@
 import time
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.common.by import By
-from selenium import webdriver
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from echeraritours import settings
