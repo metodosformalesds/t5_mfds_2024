@@ -19,7 +19,6 @@
         <div class="row justify-content-center">
             <!-- Bloque 1: Imagen -->
             <div class="col-lg-5 d-flex align-items-center justify-content-center mb-4 px-5">
-                <img src="{{ agencia.profile_image.url }}" class="rounded-circle logo" alt="{{ agencia.agency_name }} logo">
             </div>
     
             <!-- Bloque 2: Nombre de la agencia -->
@@ -56,7 +55,6 @@
                 <div class="col-lg-6 col-md-6 mb-4">
                     <a href="{% url 'detalle_tour' tour.id %}" class="card-link" style="text-decoration: none;">
                         <div class="card">
-                            <img src="{{ tour.tour_image.url }}" class="card-img-top" alt="{{ tour.title }}">
                             <div class="card-body">
                                 <h5 class="font-weight-bold text-center">{{ tour.title }}</h5>
                                 <p class="text-muted">Desde <span class="span-echerari">{{ tour.start_date }}</span> hasta <span class="span-echerari">{{ tour.end_date }}</span></p>
