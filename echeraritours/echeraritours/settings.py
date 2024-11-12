@@ -31,6 +31,8 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+# Aqui se utilizaria el dominio de pythonanywhere si se estuviera trabajando en pythonanywhere
 # if 'PYTHONANYWHERE_DOMAIN' in os.environ:
 #    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
 # else:
@@ -91,6 +93,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'echeraritours.wsgi.application'
 
+
+# La base de datos debe ser cambiada segun sea el entorno de desarrollo o produccion
 # Database
 #https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {

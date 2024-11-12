@@ -17,14 +17,13 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="{{ plan.imagen.url }}" class="card-img-top" alt="{{ plan.titulo }}">
+                    <img src="{{ reservacion.tour.tour_image.url }}" class="card-img-top" alt="{{ plan.titulo }}">
                     <div class="card-body">
-                        <h5 class="card-title">{{ plan.titulo }}</h5>
-                        <p class="card-text">{{ plan.descripcion }}</p>
-                        <p class="card-text"><strong>Agencia:</strong> {{ plan.agencia }}</p>
-                        <p class="card-text"><strong>Total Pagado:</strong> {{ plan.total_pagado }}</p>
-                        <p class="card-text"><strong>Fecha del Tour:</strong> {{ plan.fecha_tour }}</p>
-                        <p class="card-text"><strong>Duración del Tour:</strong> {{ plan.duracion_tour }}</p>
+                        <h5 class="card-title">{{ reservacion.tour.title }}</h5>
+                        <p class="card-text">{{ reservacion.tour.descripcion }}</p>
+                        <p class="card-text"><strong>Agencia:</strong> {{ reservacion.tour.agency.agency_name }}</p>
+                        <p class="card-text"><strong>Total Pagado:</strong> MXN${{ reservacion.calculate_total_price }}</p>
+                        <p class="card-text"><strong>Fecha del Tour:</strong> {{ reservacion.tour.start_date|date:"d M Y" }} a {{ reservacion.tour.end_date|date:"d M Y" }}</p>
                     </div>
                 </div>
             </div>
