@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <h2 class="font-weight-bold">¡Prepárate para vivir la mejor experiencia en {{ tour.destination_place }} con nuestro increíble {{ tour.title }}!</h2>
             <h3 class="text-muted">Destino: {{ tour.destination_place }}</h3>
-            <h4 class="span-echerari">Empresa: {{ tour.agency.agency_name }}</h4>
+            <h4 class="span-echerari">Empresa: <a href="{% url 'detalle_agencia' tour.agency.id %}">{{ tour.agency.agency_name }}</a></h4>
         </div>
     </div>
 
@@ -20,6 +20,7 @@
     <div class="row mt-2">
         <!-- Imagen del tour -->
         <div class="col-lg-6 mb-4">
+            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f3/a3/dc/caption.jpg?w=500&h=400&s=1" class="img-fluid" alt="Imagen del tour">
         </div>
 
         <!-- Descripción y detalles -->
@@ -52,11 +53,11 @@
             </div>
             <div class="col-lg-6">
                 <!-- Botón para reservar -->
-                <div class="text-center">
-                    <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-success btn-lg">Reservar ahora</a>
-                </div>
-            <div class="text-center">
-                <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-success btn-lg">Reservar ahora</a>
+                {% if show_booking_button %}
+                    <div class="text-center">
+                        <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-success btn-lg">Reservar ahora</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

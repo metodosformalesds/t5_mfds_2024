@@ -58,6 +58,8 @@ class TourDetailView(DetailView):
 
         context['available_bookings'] = self.object.capacity - \
             self.object.total_bookings
+        
+        context['show_booking_button'] = not Agency.objects.filter(user=self.request.user).exists()
 
         return context
 
