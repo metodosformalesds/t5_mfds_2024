@@ -1,0 +1,92 @@
+h5, h2, p, a {
+    color: #1B1C1E;
+}
+
+/* Para las card de los tours */
+.span-echerari {
+    color: #12AB81;
+    font-weight: bold;
+}
+
+.card-link {
+    display: block;
+    color: inherit; 
+    text-decoration: none; 
+}
+
+.card-link:hover .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05); 
+    transition: transform 0.3s ease; 
+}
+
+.card {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Sección de reseñas */
+.reviews-section {
+    padding: 50px 0;
+    background-color: #fff;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    text-align: left;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.star {
+    color: #f1c40f;
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.review-card {
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.review-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.review-text {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.review-footer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.review-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.review-author {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.review-date {
+    font-size: 0.875rem;
+    color: #999;
+}
