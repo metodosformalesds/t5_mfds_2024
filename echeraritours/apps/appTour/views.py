@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import requests
 from django.http import HttpResponse
 from django.views.generic import DetailView
 
@@ -56,10 +57,37 @@ class TourDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['google_api'] = settings.GOOGLE_MAPS_API_KEY
 
-        context['available_bookings'] = self.object.capacity - \
-            self.object.total_bookings
+        context['available_bookings'] = self.object.capacity - self.object.total_bookings
+        context['total_capacity'] = self.object.capacity
         
-        context['show_booking_button'] = not Agency.objects.filter(user=self.request.user).exists()
+        if self.request.user.is_authenticated:
+            context['show_booking_button'] = not Agency.objects.filter(user=self.request.user).exists()
+        else:
+            context['show_booking_button'] = True
+
+        # Lo puse para poder jalar info del hotel que ponga la agencia
+        place_url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
+        params = {
+            'input': self.object.lodging_place,
+            'inputtype': 'textquery',
+            'fields': 'name,rating,formatted_address,photo',
+            'key': context['google_api']
+        }
+
+        response = requests.get(place_url, params=params)
+        candidates = response.json().get('candidates', [])
+
+        # Verifica si hay resultados antes de acceder al primer elemento
+        if candidates:
+            place_data = candidates[0]
+            
+            # Extraer referencia de foto si existe
+            if 'photos' in place_data:
+                place_data['photo_reference'] = place_data['photos'][0].get('photo_reference')
+            
+            context['place_data'] = place_data
+        else:
+            context['place_data'] = {}
 
         return context
 

@@ -1,11 +1,35 @@
 {% extends "base.html" %}
-{% block title %}Pago comletado{% endblock title %}
+{% load static %}
+{% block title %}Pago completado{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appPayment/css/pago_completado.css' %}">
+{% endblock extra_styles %}
 
 {% block content %}
-<div class="container">
-    <h1>¡Pago realizado con éxito!</h1>
-    <p>Gracias por su compra.</p>
+<!-- Progress bar -->
+<div class="d-flex justify-content-center mt-5">
+    <ul class="progressbar">
+        <li class="active"><span class="circle"></span><p>Detalles de reservación</p></li>
+        <li class="active"><span class="circle"></span><p>Pago</p></li>
+        <li class="active"><span class="circle"></span><p>Finalización</p></li>
+    </ul>
+</div>
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="text-center">
+        <!-- Success icon -->
+        <div>
+            <img src="{% static 'appPayment/img/marked_pago_completado.png' %}" alt="Success" class="mb-4 icon-marked">
+        </div>
 
-    <a href="{% url "client_active_plans" %}"> Ver en el dashboard </a>
+        <!-- Confirmation message -->
+        <h2 class="fw-bold">¡Reservación hecha!</h2>
+        <p>Se le ha enviado el recibo a través de su correo electrónico.</p>
+
+        <!-- Dashboard button -->
+        <a href="{% url 'client_active_plans' %}" class="btn mt-3 btn-dashboard">
+            Ver en el dashboard
+        </a>
+    </div>
 </div>
 {% endblock content %}
