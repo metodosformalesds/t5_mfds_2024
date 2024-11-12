@@ -34,7 +34,7 @@ DEBUG = True
 # if 'PYTHONANYWHERE_DOMAIN' in os.environ:
 #    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
 # else:
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["echeraritours.live"]
 # ALLOWED_HOSTS = ["35.95.38.255"]
 
 # Application definition
