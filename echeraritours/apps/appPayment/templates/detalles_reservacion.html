@@ -67,7 +67,6 @@
                         {% csrf_token %}
                         <h5 class="card-title">Resumen de tus entradas</h5>
                         <div class="d-flex row">
-                            <img src="{{ tour.tour_image.url }}" class="img-thumbnail me-3" alt="Imagen de {{ tour.title }}" width="220" height="auto">
                             <div>
                                 <p class="fw-bold">{{ tour.title }}</p>
                                 <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:'Y-m-d' }}</p>
