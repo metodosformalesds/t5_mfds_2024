@@ -1,30 +1,44 @@
-.alert-success {
+
+.btn-reservar {
     background-color: #68DDBD;
-    color: #1B1C1E;
-    border: none;
+    color: #fff;
     font-size: 1.2rem;
-    border-radius: 5px;
-    padding: 15px;
-    text-align: center;
+    padding: 0.75rem 1.2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
-.btn-success {
+.btn-reservar:hover {
     background-color: #68DDBD;
-    border: none;
-    border-radius: 5px;
-    color: #ffffff;
-    font-size: 1rem;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    cursor: pointer;
-}
-
-.btn-success:hover {
-    background-color: #56c4a2;
     transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.alert-success,
-.btn-success {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.d-flex.align-items-center {
+    gap: 1rem; 
+}
+
+.alert {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    margin: 0; 
+}
+
+.echerari-color {
+    font-weight: bold;
+    color: #68DDBD; 
+}
+
+.hotel-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover; 
+    border-radius: 8px;
+}
+
+
+.fondo-echerari {
+    background-color: #a6f6e1;
 }

@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <h2 class="font-weight-bold">¡Prepárate para vivir la mejor experiencia en {{ tour.destination_place }} con nuestro increíble {{ tour.title }}!</h2>
             <h3 class="text-muted">Destino: {{ tour.destination_place }}</h3>
-            <h4 class="span-echerari">Empresa: {{ tour.agency.agency_name }}</h4>
+            <h4 class="span-echerari">Empresa: <a href="{% url 'detalle_agencia' tour.agency.id %}">{{ tour.agency.agency_name }}</a></h4>
         </div>
     </div>
 
@@ -20,6 +20,7 @@
     <div class="row mt-2">
         <!-- Imagen del tour -->
         <div class="col-lg-6 mb-4">
+            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f3/a3/dc/caption.jpg?w=500&h=400&s=1" class="img-fluid" alt="Imagen del tour">
         </div>
 
         <!-- Descripción y detalles -->
@@ -29,12 +30,32 @@
             <p class="text-muted my-0">Fecha de termina: <span class="font-weight-bold">{{ tour.end_date }}</span></p>
             <h4 class="mt-4">¿De qué es el tour?</h4>
             <p>{{ tour.description }}</p>
+            <div class="col-lg-12 row">
+                <div class="col-lg-6">
+                    <!-- Botón para reservar -->
+                    {% if show_booking_button %}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-reservar me-3">Reservar ahora</a>
+                        {% else %}
+                            <a href="{% url 'register' %}" class="btn btn-reservar me-3">Reservar ahora</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="col-lg-6">
+                    {% if available_bookings <= total_capacity %}
+                        <div class="alert alert-danger font-weight-bold text-center mt-2">
+                            ¡Solo quedan {{ available_bookings }} lugares!
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-5">
+        <h4 class="mb-3">Hospedate en <span class="echerari-color">{{tour.lodging_place}}</span> para disfrutar de tu visita a {{ tour.destination_place }} </h4>
         <div class="col-lg-6">
-            <h5>Visita el lugar de destino desde el mapa:</h5>
-            <div class="container my-5">
+            <h5 class="mt-2">Visita el lugar de destino desde el mapa:</h5>
+            <div class="container my-3">
                 <iframe
                     width="100%"
                     height="450"
@@ -46,17 +67,20 @@
                 </iframe>
             </div>
         </div>
-        <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center">
-            <div class="alert alert-danger font-weight-bold text-center mt-4">
-                ¡Solo quedan {{ available_bookings }} lugares!
-            </div>
-            <div class="col-lg-6">
-                <!-- Botón para reservar -->
-                <div class="text-center">
-                    <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-success btn-lg">Reservar ahora</a>
-                </div>
-            <div class="text-center">
-                <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-success btn-lg">Reservar ahora</a>
+        <div class="col-lg-6">
+            <h5 class="mt-2">{{ place_data.name }}</h5>
+            <div class="my-3">
+                {% if place_data %}
+                    <p>Dirección: {{ place_data.formatted_address }}</p>
+                    <p>Calificación: {{ place_data.rating }}</p>
+                    {% if place_data.photo_reference %}
+                        <img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={{ place_data.photo_reference }}&key={{ google_api }}" class="img-fluid hotel-image" alt="Foto de {{ tour.lodging_place}}">
+                    {% else %}
+                        <p>No hay foto disponible para este lugar.</p>
+                    {% endif %}
+                {% else %}
+                    <p>No se pudo obtener información adicional sobre el hospedaje.</p>
+                {% endif %}
             </div>
         </div>
     </div>

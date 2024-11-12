@@ -1,4 +1,3 @@
-
 .progressbar {
     display: flex;
     justify-content: space-between;
@@ -65,26 +64,29 @@
     background-color: #68ddbd;
 }
 
-.btn-success {
-    background-color: #68ddbd;
-    border-color: #68ddbd;
-    border-radius: 30px;  
-    padding: 12px 30px;
-    font-size: 18px;
-    font-weight: bold;
+.icon-marked{
+    width: 15rem;
+    height: 15rem;
 }
 
-.btn-success:hover {
-    background-color: #56c1a5;
-    border-color: #56c1a5;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  
-}
-.tour-image {
-    width: 100px; 
-    height: auto; 
+h2{
+    font-size: 3.7rem;
 }
 
-.span-echerari a {
+p{
+    font-size: 1.2rem;
+}
+
+.btn-dashboard {
+    color: #68ddbd;
+    border: 1px solid #68ddbd;
+    border-radius: 20px;
+    padding: 10px 20px;
     text-decoration: none;
-    color: inherit;
+    transition: background-color 0.3s ease;
+}
+
+.btn-dashboard:hover {
+    background-color: #68ddbd;
+    color: #ffffff;
 }
