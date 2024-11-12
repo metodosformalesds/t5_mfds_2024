@@ -13,6 +13,35 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
       </div>
+      <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Perfil</h5>
+                <p class="card-text">Administra tu perfil</p>
+                <a href="{% url "client_profile" %}" class="btn btn-primary">Ver perfil</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Planes activos</h5>
+                <p class="card-text">Revisa los planes en los que estas inscrito</p>
+                <a href="{% url "client_active_plans" %}" class="btn btn-primary">Ver planes</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Métodos de pago</h5>
+                <p class="card-text">Administra tus métodos de pago</p>
+                <a href="#" class="btn btn-primary">Ver métodos de pago</a>
+                </div>
+            </div>
+        </div>        
+    </div>
     </main>
 </div>
 

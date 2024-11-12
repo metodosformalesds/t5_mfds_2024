@@ -31,10 +31,12 @@ SECRET_KEY = 'django-insecure-avsk3*vt5klexdi1&z(l&a5wy2xhlxnu$9=1(s4%(do9tzko%_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+# Aqui se utilizaria el dominio de pythonanywhere si se estuviera trabajando en pythonanywhere
 # if 'PYTHONANYWHERE_DOMAIN' in os.environ:
 #    ALLOWED_HOSTS = ['echeraritours.pythonanywhere.com']
 # else:
-ALLOWED_HOSTS = ["echeraritours.live"]
+ALLOWED_HOSTS = ["echeraritours.live", "*"]
 # ALLOWED_HOSTS = ["35.95.38.255"]
 
 # Application definition
@@ -91,25 +93,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'echeraritours.wsgi.application'
 
+
+# La base de datos debe ser cambiada segun sea el entorno de desarrollo o produccion
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
-        'USER': 'Leonardo',  # Nombre de usuario de la base de datos
-        'PASSWORD': 'echeraritours',  # La contraseña que creaste
-        # El endpoint de la base de datos
-        'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',
-        'PORT': '3306',  # Puerto por defecto de MySQL
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
+#         'USER': 'Leonardo',  # Nombre de usuario de la base de datos
+#         'PASSWORD': 'echeraritours',  # La contraseña que creaste
+#         # El endpoint de la base de datos
+#         'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',
+#         'PORT': '3306',  # Puerto por defecto de MySQL
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
