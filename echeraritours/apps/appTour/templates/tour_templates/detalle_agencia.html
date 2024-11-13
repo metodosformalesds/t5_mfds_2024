@@ -12,13 +12,18 @@
 
 <div class="container-fluid p-0">
     <div>
-        <img src="{% static 'appTour/img/Cancun_Mexico.jpg' %}" class="full-width-image" alt="{{ agencia.agency_name }}">
+        <img src="{% static 'img/cancun.jpg' %}" class="full-width-image img-fluid" alt="{{ agencia.agency_name }}">
     </div>
     <!-- Banner con información de la agencia -->
     <div class="container my-3">
         <div class="row justify-content-center">
             <!-- Bloque 1: Imagen -->
             <div class="col-lg-5 d-flex align-items-center justify-content-center mb-4 px-5">
+                {% if cliente.profile_image %}
+                    <img src="{{ cliente.profile_image.url }}" alt="Foto de perfil" width="300" class="img-fluid rounded-circle">
+                {% else %}
+                    <img src="{% static 'img/default_profile.jpg' %}" alt="Foto de perfil" width="300" class="img-fluid rounded-circle">
+                {% endif %}
             </div>
     
             <!-- Bloque 2: Nombre de la agencia -->
