@@ -1,16 +1,25 @@
 import io
+from django.conf import settings
 from reportlab.pdfgen import canvas
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from apps.appUser.models import Client, Agency
-from apps.appPayment.models import PaymentMethod
-from apps.appTour.models import Reservation, Tour
+
 from django.views.generic.edit import CreateView
 from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
-from .models import Reports
+
 from django.urls import reverse_lazy
+
+# Modelos
+from .models import Reports
+from apps.appUser.models import Client, Agency
+from apps.appPayment.models import PaymentMethod
+from apps.appTour.models import Reservation, Tour
+
+# Configurar Stripe
+import stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
 
@@ -96,33 +105,69 @@ def client_profile(request):
     return render(request, 'cliente/perfil.html', context)
 
 
+@login_required
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)
-
-    return render(request, 'cliente/metodos_pago.html', {'metodos': metodos})
-
-
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from .models import PaymentMethod
-from django.contrib.auth.decorators import login_required
+    context = {
+        'metodos': metodos,
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY 
+    }
+    return render(request, 'cliente/metodos_pago.html', context)
 
 @login_required
 def add_payment_method(request):
     if request.method == 'POST':
-        # Obten el método de pago de Stripe
         stripe_payment_method_id = request.POST.get('stripe_payment_method_id')
         
-        # Crea el nuevo método en la base de datos
         if stripe_payment_method_id:
+            customer_id = request.user.client.stripe_customer_id
+            payment_method = stripe.PaymentMethod.attach(
+                stripe_payment_method_id,
+                customer=customer_id,
+            )
+            
+            stripe.Customer.modify(
+                customer_id,
+                invoice_settings={
+                    'default_payment_method': stripe_payment_method_id,
+                },
+            )
+            
             PaymentMethod.objects.create(
                 client=request.user.client,
                 method_type='credit_card',
-                stripe_payment_method_id=stripe_payment_method_id
+                stripe_payment_method_id=stripe_payment_method_id,
+                card_last4=payment_method.card.last4,
+                card_brand=payment_method.card.brand,
+                cardholder_name=request.POST.get('cardholder_name')
             )
-            return redirect('payment_methods_client') 
+            return redirect('payment_methods_client')
+    
+    return render(request, "cliente/agregar_metodo_pago.html", {'stripe_public_key': settings.STRIPE_PUBLIC_KEY})
 
-    return render(request, "cliente/agregar_metodo_pago.html")
+
+@login_required
+def set_default_payment_method(request, metodo_id):
+    metodo = get_object_or_404(PaymentMethod, id=metodo_id, client=request.user.client)
+    
+    PaymentMethod.objects.filter(client=request.user.client).update(is_default=False)
+    
+    metodo.is_default = True
+    metodo.save()
+    
+    return redirect('payment_methods_client')
+
+@login_required
+def delete_payment_method(request, metodo_id):
+    metodo = get_object_or_404(PaymentMethod, id=metodo_id, client=request.user.client)
+
+    if metodo.is_default:
+        messages.error(request, "No puedes eliminar el método de pago predeterminado. Por favor, selecciona otro método predeterminado primero.")
+    else:
+        metodo.delete()
+        messages.success(request, "El método de pago ha sido eliminado exitosamente.")
+
+    return redirect('payment_methods_client')
 
 
 
@@ -253,7 +298,7 @@ class CreateTour(CreateView):
     """
     model = Tour
     fields = ['title', 'description', 'lodging_place', 'price_per_person', 'capacity',
-              'start_date', 'end_date', 'place_of_origin', 'destination_place', 'tour_image']
+                'start_date', 'end_date', 'place_of_origin', 'destination_place', 'tour_image']
     template_name = 'agencia/crear_tour.html'
     success_url = reverse_lazy('tours_dashboard')
 

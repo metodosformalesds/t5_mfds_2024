@@ -11,45 +11,36 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <div class="container">
-                <h1>Agregar Método de Pago</h1>
-                <p>Por favor, completa el siguiente formulario para agregar un nuevo método de pago.</p>
-                <hr>
-                <div class="alert alert-warning" role="alert">
-                    <strong>¡Atención!</strong> No guardamos información de tarjetas de crédito en nuestra base de datos. Toda la información de pago es manejada por Stripe.
-                </div>
-
-                <form id="payment-form" method="post" action="{% url 'add_payment_method' %}">
-                    {% csrf_token %}
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="method_type" id="credit_card" value="credit_card" checked>
-                        <label class="form-check-label" for="credit_card">Tarjeta de Crédito</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="method_type" id="paypal" value="paypal">
-                        <label class="form-check-label" for="paypal">PayPal</label>
-                    </div>
-
-                    <div id="credit-card-form">
-                        <label for="cardholder-name">Nombre del Titular:</label>
-                        <input type="text" id="cardholder-name" class="form-control" required>
-
-                        <label>Número de Tarjeta:</label>
-                        <div id="card-element" class="form-control"></div> <!-- Elemento de tarjeta de Stripe -->
-
-                        <div id="card-errors" role="alert"></div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mt-3">Agregar Método de Pago</button>
-                </form>
-            </div>
+            <h1 class="h2">Agregar Método de Pago</h1>
         </div>
+        <p>Por favor, completa el siguiente formulario para agregar un nuevo método de pago.</p>
+        <hr>
+        <div class="alert alert-warning" role="alert">
+            <strong>¡Atención!</strong> No guardamos información de tarjetas de crédito en nuestra base de datos. Toda la información de pago es manejada por Stripe.
+        </div>
+
+        <form id="payment-form" method="post" action="{% url 'add_payment_method' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cardholder-name">Nombre del Titular:</label>
+                <input type="text" id="cardholder-name" class="form-control" required>
+            </div>
+        
+            <div class="form-group">
+                <label>Número de Tarjeta:</label>
+                <div id="card-element" class="form-control"></div> <!-- Este es el elemento de Stripe -->
+            </div>
+        
+            <div id="card-errors" role="alert" class="text-danger mt-2"></div>
+        
+            <button type="submit" class="btn btn-primary mt-3">Agregar Método de Pago</button>
+        </form>
     </main>
 </div>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const stripe = Stripe("TU_CLAVE_PUBLICA_STRIPE");  // Reemplaza con tu clave pública de Stripe
+    const stripe = Stripe("{{ stripe_public_key }}");
     const elements = stripe.elements();
     const cardElement = elements.create("card");
     cardElement.mount("#card-element");
@@ -68,12 +59,18 @@
         if (error) {
             document.getElementById("card-errors").textContent = error.message;
         } else {
-            // Crea un campo oculto para enviar el payment_method_id al servidor
-            const hiddenInput = document.createElement("input");
-            hiddenInput.type = "hidden";
-            hiddenInput.name = "stripe_payment_method_id";
-            hiddenInput.value = paymentMethod.id;
-            form.appendChild(hiddenInput);
+            // Agregar el payment_method_id y el nombre del titular como campos ocultos en el formulario
+            const hiddenPaymentMethodInput = document.createElement("input");
+            hiddenPaymentMethodInput.type = "hidden";
+            hiddenPaymentMethodInput.name = "stripe_payment_method_id";
+            hiddenPaymentMethodInput.value = paymentMethod.id;
+            form.appendChild(hiddenPaymentMethodInput);
+
+            const hiddenNameInput = document.createElement("input");
+            hiddenNameInput.type = "hidden";
+            hiddenNameInput.name = "cardholder_name";
+            hiddenNameInput.value = cardholderName;
+            form.appendChild(hiddenNameInput);
 
             form.submit();
         }

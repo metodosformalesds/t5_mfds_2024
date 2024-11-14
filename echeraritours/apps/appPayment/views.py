@@ -102,32 +102,33 @@ def realizar_pago_paypal(request, id):
 
 def realizar_pago_stripe(request, id):
     if request.method == 'GET':
-        # Mostrar la página de pago con Stripe
         tour = get_object_or_404(Tour, id=id)
         number_people = int(request.GET.get('number_people', 1))
         total_price = float(tour.price_per_person) * number_people
+        
+        # Obtener métodos de pago guardados
+        client = Client.objects.get(user=request.user)
+        saved_payment_methods = PaymentMethod.objects.filter(client=client)
 
         context = {
             'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
             'tour': tour,
             'number_people': number_people,
             'total_price': total_price,
+            'saved_payment_methods': saved_payment_methods,
         }
         return render(request, 'realizar_pago_stripe.html', context)
     else:
-        # Procesar el pago con Stripe (manejado por la función process_payment)
         return redirect('seleccion_pago', id=id)
 
 
 @csrf_exempt
 def process_payment(request):
     data = json.loads(request.body)
-    payment_method_id = data['payment_method_id']
     tour_id = data['tour_id']
     number_people = int(data['number_people'])
     total_price = float(data['total_price'])
 
-    # Obtener el cliente
     user = request.user
     if not user.is_authenticated:
         return JsonResponse({'error': 'Usuario no autenticado'}, status=401)
@@ -137,7 +138,7 @@ def process_payment(request):
     except Client.DoesNotExist:
         return JsonResponse({'error': 'Cliente no encontrado'}, status=400)
 
-    # Crear o recuperar el cliente de Stripe
+    # Obtener o crear cliente de Stripe
     if not client.stripe_customer_id:
         stripe_customer = stripe.Customer.create(
             email=user.email,
@@ -145,37 +146,14 @@ def process_payment(request):
         )
         client.stripe_customer_id = stripe_customer.id
         client.save()
-    else:
-        stripe_customer = stripe.Customer.retrieve(client.stripe_customer_id)
 
-    # Asociar el PaymentMethod al cliente en Stripe
-    try:
-        stripe.PaymentMethod.attach(
-            payment_method_id,
-            customer=stripe_customer.id,
-        )
-    except stripe.error.StripeError as e:
-        return JsonResponse({'error': str(e)}, status=400)
+    payment_method_id = data.get('selected_payment_method_id') or data.get('payment_method_id')
 
-    # Actualizar el método de pago predeterminado del cliente
-    stripe.Customer.modify(
-        stripe_customer.id,
-        invoice_settings={
-            'default_payment_method': payment_method_id,
-        },
-    )
+    if not payment_method_id:
+        return JsonResponse({'error': 'Método de pago no proporcionado'}, status=400)
 
-    # Obtener el tour y la agencia
+    # Crear la reserva y realizar el pago con el método seleccionado
     tour = get_object_or_404(Tour, id=tour_id)
-    agency = tour.agency
-
-    # Obtener o crear el método de pago del cliente en tu base de datos
-    payment_method, created = PaymentMethod.objects.get_or_create(
-        client=client,
-        stripe_payment_method_id=payment_method_id
-    )
-
-    # Crear la reservación
     reservation = Reservation.objects.create(
         tour=tour,
         client=client,
@@ -183,39 +161,38 @@ def process_payment(request):
         total_price=total_price,
     )
 
-    # Crear el PaymentIntent con `automatic_payment_methods` configurado
     try:
         payment_intent = stripe.PaymentIntent.create(
-            amount=int(total_price * 100),  # Convertir a centavos
+            amount=int(total_price * 100),
             currency='mxn',
-            customer=stripe_customer.id,
+            customer=client.stripe_customer_id,
             payment_method=payment_method_id,
             confirm=True,
-            application_fee_amount=int(
-                total_price * 0.1 * 100),  # Comisión del 10%
-            transfer_data={
-                'destination': agency.stripe_agency_id,
-            },
-            # Deshabilitar métodos de pago que requieren redirección
-            payment_method_types=['card'],  # Solo aceptar pagos con tarjeta
+            application_fee_amount=int(total_price * 0.1 * 100),
+            transfer_data={'destination': tour.agency.stripe_agency_id},
+            payment_method_types=['card'],
         )
 
-        # Crear un registro de pago
         Payments.objects.create(
             client=client,
-            agency=agency,
+            agency=tour.agency,
             reservation=reservation,
-            payment_method=payment_method,
+            payment_method=PaymentMethod.objects.get(stripe_payment_method_id=payment_method_id),
             amount=total_price,
             status='completado' if payment_intent.status == 'succeeded' else 'pendiente',
             payment_intent_id=payment_intent.id,
         )
 
         return JsonResponse({'status': 'success'})
+
     except stripe.error.CardError as e:
-        return JsonResponse({'error': str(e)}, status=400)
+        return JsonResponse({'error': 'Error en el pago: ' + str(e)}, status=400)
     except stripe.error.StripeError as e:
-        return JsonResponse({'error': str(e)}, status=400)
+        return JsonResponse({'error': 'Error en Stripe: ' + str(e)}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': 'Ocurrió un error inesperado: ' + str(e)}, status=500)
+
+
 
 def pago_cancelado(request):
     # Limpiar la información de la sesión si es necesario
