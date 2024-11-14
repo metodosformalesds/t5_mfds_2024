@@ -3,27 +3,31 @@
     <div class="flex-column p-3 overflow-y-auto">
       <ul class="nav flex-column">
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="{% url "client_dashboard" %}">
+          <a class="nav-link active btn d-flex align-items-center" href="{% url "client_dashboard" %}">
+            <img src="{% static 'img/dash.png' %}" alt="Dashboard Icon" class="icon-img">
             Inicio 
           </a>
         </li>
         <li class="nav-item mb-3">
           <a class="nav-link btn d-flex align-items-center" href="{% url "client_profile" %}">
+            <img src="{% static 'img/icono.png' %}" alt="Dashboard Icon" class="icon-img">
             Perfil 
           </a>
-        </li>
         <li class="nav-item mb-3">
           <a class="nav-link btn d-flex align-items-center" href="{% url "client_active_plans" %}">
-            Planes activos
+            <img src="{% static 'img/carrito.png' %}" alt="Dashboard Icon" class="icon-img">
+              Planes activos
           </a>
         </li>
         <li class="nav-item mb-3">
           <a class="nav-link btn d-flex align-items-center" href="{% url "payment_methods_client" %}">
+            <img src="{% static 'img/pago.png' %}" alt="Dashboard Icon" class="icon-img">
             Metodos de pago
           </a>
         </li>
         <li class="nav-item mb-3">
             <a class="nav-link btn d-flex align-items-center" type="button" data-bs-toggle="modal" data-bs-target="#logoutmodal">
+                <img src="{% static 'img/cerrar.png' %}" alt="Dashboard Icon" class="icon-img">
                 Cerrar sesion
             </a>
               
