@@ -22,10 +22,10 @@
     <h2 class="text-center text-light">De Chihuahua a todo México: Tu aventura te espera</h2>
 </div> 
 
-<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+<div class="container col-xl-10 col-xxl-8 px-4 py-5 ">
     <div class="row d-flex g-lg-5 py-5">
-        <div class="col-md-10 mx-auto col-lg-5">
-            <form method="get" action="{% url 'filtro_tour' %}" class="p-4 p-md-5 border rounded-3 bg-body-tertiary" style="background-color: #68DDBD">
+        <div class="col-md-10 mx-auto col-lg-5 rounded-3 border shadow-lg">
+            <form method="get" action="{% url 'filtro_tour' %}" class="p-4 p-md-5 border rounded-3 bg-body-tertiary rounded-3 border shadow-lg mt-2" style="background-color: #68DDBD">
 
                 <h4 class="text-center">Planifica con precisión, explora sin límites.</h4>
                 <div class="form-floating mb-3">
@@ -53,29 +53,28 @@
 <!-- Línea para separar secciones -->
 <div class="w-100 linea-color"></div>
 
-<!-- Carrusel para los tours -->
-<div class="container-fluid mt-5 pt-3 pb-5 fondo-verde">
-    <h3 class="text-center mt-3 mb-3 text-light"> Ultimos Tours </h3>
-    <div id="tourCarousel" class="carousel slide mb-3" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Montañas">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100 carousel-image" src="{% static 'img/cancun.jpg' %}" alt="Tour Cancún">
+<hr class="my-4" style="border-color: black">
+
+<div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+        <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for tour in tours %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ tour.tour_image.url }}" class="d-block w-100 shadow-lg" alt="..." style="background-color: transparent;">
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-        <a class="carousel-control-prev" href="#tourCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Anterior</span>
-        </a>
-        <a class="carousel-control-next" href="#tourCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Siguiente</span>
-        </a>
+        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+            <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Ultimos tours registrados</h1>
+            <p class="lead">Explora los tours más recientes publicados por agencias de viajes por todo México. Esta es tu oportunidad de agendar esas vacaciones que tanto esperas</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                <a href="{% url "tours" %}" class="w-100 btn btn-lg" style="background-color: #68DDBD; color: white;">Ir a tours</a>
+            </div>
+        </div>
     </div>
 </div>
 
