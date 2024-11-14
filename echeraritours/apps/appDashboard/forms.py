@@ -29,7 +29,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['first_name', 'maternal_surname', 'paternal_surname', 'city',
-                  'phone', 'birth_date', 'zip_code', 'identification', 'profile_image']
+                  'phone', 'birth_date', 'zip_code', 'identification', 'profile_image'] 
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)

@@ -68,33 +68,42 @@ def client_active_plans(request):
 
     return render(request, 'cliente/planes_activos.html', {'reservaciones': reservaciones})
 
-
 def client_profile(request):
     cliente = get_object_or_404(Client, user=request.user)
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, request.FILES, instance=cliente)
-        profile_form = UserProfileForm(
-            request.POST, request.FILES, instance=cliente)
+        user_form = UserForm(request.POST, instance=cliente)
+        profile_form = UserProfileForm(request.POST, request.FILES)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
-            profile_form.save()
-            messages.success(request, 'Tu perfil ha sido actualizado.')
+
+            # Si se sube una nueva imagen de perfil
+            profile_image = request.FILES.get('profile_image')
+            if profile_image:
+                # Define la ruta de guardado en static/img/perfil
+                save_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'perfil', profile_image.name)
+                
+                # Guarda la imagen en static/img/perfil
+                with open(save_path, 'wb+') as destination:
+                    for chunk in profile_image.chunks():
+                        destination.write(chunk)
+
+                cliente.profile_image = 'img/default_profile.jpg'
+                cliente.save()
+
             return redirect('client_profile')
+
     else:
         user_form = UserForm(instance=cliente)
-        profile_form = UserProfileForm(instance=cliente)
+        profile_form = UserProfileForm()
 
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
         'cliente': cliente,
-        'valid_states': VALID_STATES
     }
-
     return render(request, 'cliente/perfil.html', context)
-
 
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)

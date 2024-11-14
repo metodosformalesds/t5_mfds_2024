@@ -1,68 +1,61 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top mb-5">
-    <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-        <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;" class="mr-2">
-        <h5 class="mb-0">Echérari Tours {% if user.is_authenticated %} - Bienvenid@ {{ user.username }} {% endif %} </h5>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse text-right" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top mb-5" style="background-color: #2b2d42;">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+            <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;" class="mr-2">
+            <h5 class="mb-0" style="color: #68ddbd; font-weight: bold;">Echérari Tours</h5>
+        </a>
 
-        <li class="nav-item">
-            <a class="nav-link fw-bolder" href="{% url 'tours' %}">Tours</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link fw-bolder" href="{% url 'agencias' %}">Agencias</a>
-        </li>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link fw-bolder" href="{% url "dashboard" %}">Dashboard</a>
-            </li>
-
-            {% if not is_client_registered and not is_agency_registered %}
-            <li class="nav-item">
-                <a class="nav-link fw-bolder" href="{% url "seleccion_registro" %}">Finalizar registro</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-                <a class="nav-link fw-bolder" type="button" data-bs-toggle="modal" data-bs-target="#logoutmodal">
-                    Cerrar sesion
-                </a>
-                <!-- Modal -->
-
-            </li>
-            
-        {% endif %}
-
-        {% if not user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link fw-bolder" href="{% url 'login' %}">Iniciar sesión</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link registrar fw-bolder" href="{% url 'register' %}">Registrarse</a>
-            </li>
-        {% endif %}
-        </ul>
+        <div class="collapse navbar-collapse ml-auto" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <!-- Mostrar la imagen de perfil del usuario o una predeterminada -->
+                            <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                 alt="Perfil" class="rounded-circle" style="height: 40px; width: 40px;">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu" style="background-color: #ffffff; border: none;">
+                            <a class="dropdown-item fw-bolder" href="{% url 'tours' %}" style="color: #333333;" onmouseover="this.style.backgroundColor='#68ddbd'; this.style.color='#ffffff';" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#333333';">Tours</a>
+                            <a class="dropdown-item fw-bolder" href="{% url 'agencias' %}" style="color: #333333;" onmouseover="this.style.backgroundColor='#68ddbd'; this.style.color='#ffffff';" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#333333';">Agencias</a>
+                            <a class="dropdown-item fw-bolder" href="{% url 'dashboard' %}" style="color: #333333;" onmouseover="this.style.backgroundColor='#68ddbd'; this.style.color='#ffffff';" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#333333';">Dashboard</a>
+                            {% if not is_client_registered and not is_agency_registered %}
+                                <a class="dropdown-item fw-bolder" href="{% url 'seleccion_registro' %}" style="color: #333333;" onmouseover="this.style.backgroundColor='#68ddbd'; this.style.color='#ffffff';" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#333333';">Finalizar registro</a>
+                            {% endif %}
+                            <a class="dropdown-item fw-bolder" type="button" data-bs-toggle="modal" data-bs-target="#logoutmodal" style="color: #d9534f;" onmouseover="this.style.color='#ffffff'; this.style.backgroundColor='#d9534f';" onmouseout="this.style.color='#d9534f'; this.style.backgroundColor='#ffffff';">Cerrar sesión</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link fw-bolder" href="{% url 'login' %}">Iniciar sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link registrar fw-bolder" href="{% url 'register' %}">Registrarse</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
 
-<!-- Modal -->
+<!-- Modal de Cerrar Sesión -->
 <div class="modal fade" id="logoutmodal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Cerrar Sesion</h1>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Cerrar Sesión</h1>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro que deseas cerrar sesión?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a type="button" class="btn btn-danger" href="{% url 'logout' %}">Cerrar sesión</a>
+            </div>
         </div>
-        <div class="modal-body">
-          ¿Estas seguro que deseas cerrar sesion?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <a type="button" class="btn btn-danger" href="{% url 'logout' %}">Cerrar sesion</a>
-        </div>
-      </div>
     </div>
-</div>       
+</div>
