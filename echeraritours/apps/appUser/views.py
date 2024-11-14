@@ -23,7 +23,7 @@ from django.contrib.auth.decorators import login_required
 
 # Para modelos
 from .models import Client, Agency
-from apps.appTour.models import Reviews
+from apps.appTour.models import Reviews, Tour
 from django.core.files.storage import FileSystemStorage
 
 # Para recuperacion de contraseña
@@ -55,8 +55,9 @@ def index(request):
                       the latest 5 reviews.
     """
     reviews = Reviews.objects.order_by('-review_date')[:5]
+    tours = Tour.objects.all()
 
-    return render(request, 'index.html', {'reviews': reviews})
+    return render(request, 'index.html', {'reviews': reviews, 'tours': tours})
 
 
 def registerPage(request):
