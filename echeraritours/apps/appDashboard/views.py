@@ -102,18 +102,28 @@ def payment_methods_client(request):
     return render(request, 'cliente/metodos_pago.html', {'metodos': metodos})
 
 
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from .models import PaymentMethod
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def add_payment_method(request):
     if request.method == 'POST':
-        if request.POST.get('tipo_tarjeta') == 'Tarjeta de crédito' or request.POST.get('tipo_tarjeta') == 'Tarjeta de débito':
-            metodo = PaymentMethod(
+        # Obten el método de pago de Stripe
+        stripe_payment_method_id = request.POST.get('stripe_payment_method_id')
+        
+        # Crea el nuevo método en la base de datos
+        if stripe_payment_method_id:
+            PaymentMethod.objects.create(
                 client=request.user.client,
                 method_type='credit_card',
-                stripe_payment_method_id=request.POST.get(
-                    'stripe_payment_method_id')
+                stripe_payment_method_id=stripe_payment_method_id
             )
-            metodo.save()
+            return redirect('payment_methods_client') 
 
     return render(request, "cliente/agregar_metodo_pago.html")
+
 
 
 @login_required(login_url='login')
