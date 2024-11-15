@@ -22,29 +22,26 @@
     <h2 class="text-center text-light">De Chihuahua a todo México: Tu aventura te espera</h2>
 </div> 
 
-<div class="container col-xl-10 col-xxl-8 px-4 py-5 ">
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
     <div class="row d-flex g-lg-5 py-5">
         <div class="col-md-10 mx-auto col-lg-5 rounded-3 border shadow-lg">
-            <form method="get" action="{% url 'filtro_tour' %}" class="p-4 p-md-5 border rounded-3 bg-body-tertiary rounded-3 border shadow-lg mt-2" style="background-color: #68DDBD">
-
+            <form method="get" action="{% url 'tours' %}" class="p-4 p-md-5 border rounded-3 bg-body-tertiary rounded-3 border shadow-lg mt-2 my-4" style="background-color: #68DDBD">
+                <h1 class="text-center">Encuentra el viaje que quieres</h1>
                 <h4 class="text-center">Planifica con precisión, explora sin límites.</h4>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Elige tu punto de partida" name="place_of_origin" value="{{ request.GET.place_of_origin }}">
-                    <label for="place_of_origin">Elige tu punto de partida</label>
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <label for="destination_place">Lugar de destino:</label>
+                        <input type="text" name="destination_place" id="destination_place" placeholder="Lugar de destino" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label for="precio">Precio máximo:</label>
+                        <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control">
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Elige tu destino" name="destination_place" value="{{ request.GET.destination_place }}">
-                    <label for="destination_place">Elige tu destino</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="date" class="form-control" placeholder="Elige tu fecha" name="start_date" value="{{ request.GET.start_date }}">
-                    <label for="start_date">Elige tu fecha</label>
-                </div>
-                <hr class="my-4">
-                <button class="w-100 btn btn-lg btn-secondary" type="submit">Buscar</button>
+                <button type="submit" class="w-100 btn btn-lg btn-secondary">Filtrar</button>
             </form>
         </div>
-        <div class="col-lg-7 text-center text-lg-start d-flex align-items-center justify-content-center">
+        <div class="col-md-10 mx-auto col-lg-5 d-flex align-items-center justify-content-center">
             <img src="{% static 'img/mexico.png' %}" alt="Mapa de México" class="img-fluid map-image">
         </div>
     </div>

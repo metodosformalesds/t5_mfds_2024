@@ -138,14 +138,6 @@ def logoutUser(request):
     return redirect('login')
 
 
-# def add_base64_padding(base64_string):
-#     """Agrega el relleno necesario a una cadena base64."""
-#     missing_padding = len(base64_string) % 4
-#     if missing_padding:
-#         base64_string += '=' * (4 - missing_padding)
-#     return base64_string
-
-
 @login_required
 def registrar_cliente(request):
     """

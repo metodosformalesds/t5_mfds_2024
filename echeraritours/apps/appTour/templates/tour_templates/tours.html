@@ -8,16 +8,16 @@
 
 {% block content %}
 
-<form method="get" class="container mt-4">
+<form method="get" action="{% url 'tours' %}" class="container mt-4">
     <h1>Encuentra el viaje que quieres</h1>
     <div class="form-row mb-3">
         <div class="col">
-            <label for="precio">Precio máximo:</label>
-            <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" required>
+            <label for="destination_place">Lugar de destino:</label>
+            <input type="text" name="destination_place" id="destination_place" placeholder="Lugar de destino" class="form-control" value="{{ request.GET.destination_place }}">
         </div>
         <div class="col">
-            <label for="lugar">Lugar:</label>
-            <input type="text" name="lugar" id="lugar" placeholder="Lugar" class="form-control" required>
+            <label for="precio">Precio máximo:</label>
+            <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" value="{{ request.GET.precio }}">
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Filtrar</button>
