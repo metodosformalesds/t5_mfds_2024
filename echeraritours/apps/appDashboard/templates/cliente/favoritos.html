@@ -16,6 +16,13 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="container my-5">
             <h2 class="font-weight-bold">Mis Tours Favoritos</h2>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
             {% if tours %}
                 <div class="row">
                     {% for tour in tours %}
@@ -26,6 +33,10 @@
                                     <h5 class="card-title">{{ tour.title }}</h5>
                                     <p class="card-text">{{ tour.description }}</p>
                                     <a href="{% url 'detalle_tour' tour.id %}" class="btn btn-primary">Ver Detalles</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <small class="text-muted font-weight-bold">Precio por persona: ${{ tour.price_per_person }}</small>
+                                    <a href="{% url "delete_favorite" tour.id %}" class="btn btn-danger">Eliminar de Favoritos</a>
                                 </div>
                             </div>
                         </div>

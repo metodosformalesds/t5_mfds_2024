@@ -132,6 +132,18 @@ def favorites(request):
         return redirect('login')
 
 
+def delete_favorite(request, tour_id):
+    favorite_list = FavoriteList.objects.filter(
+        client=request.user.client).first()
+    tour = get_object_or_404(Tour, id=tour_id)
+    favorite_list.tours.remove(tour)
+    favorite_list.save()
+
+    messages.success(request, 'Tour eliminado de favoritos.')
+
+    return redirect('favorites')
+
+
 @login_required(login_url='login')
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)

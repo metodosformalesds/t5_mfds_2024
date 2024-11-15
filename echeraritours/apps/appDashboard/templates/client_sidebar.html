@@ -3,31 +3,36 @@
     <div class="flex-column p-3 overflow-y-auto">
       <ul class="nav flex-column">
         <li class="nav-item mb-3">
-          <a class="nav-link active btn d-flex align-items-center" href="{% url "client_dashboard" %}">
+          {% url 'client_dashboard' as client_dashboard_url %}
+          <a class="nav-link btn d-flex align-items-center {% if request.path == client_dashboard_url %}active{% endif %}" href="{{ client_dashboard_url }}">
             <img src="{% static 'img/dash.png' %}" alt="Dashboard Icon" class="icon-img">
             Inicio 
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="{% url "client_profile" %}">
+          {% url 'client_profile' as client_profile_url %}
+          <a class="nav-link btn d-flex align-items-center {% if request.path == client_profile_url %}active{% endif %}" href="{{ client_profile_url }}">
             <img src="{% static 'img/icono.png' %}" alt="Dashboard Icon" class="icon-img">
             Perfil 
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="{% url "favorites" %}">
+          {% url 'favorites' as favorites_url %}
+          <a class="nav-link btn d-flex align-items-center {% if request.path == favorites_url %}active{% endif %}" href="{{ favorites_url }}">
             <img src="{% static 'img/Heart.png' %}" alt="Dashboard Icon" class="icon-img">
             Lista de favoritos
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="{% url "client_active_plans" %}">
+          {% url 'client_active_plans' as client_active_plans_url %}
+          <a class="nav-link btn d-flex align-items-center {% if request.path == client_active_plans_url %}active{% endif %}" href="{{ client_active_plans_url }}">
             <img src="{% static 'img/carrito.png' %}" alt="Dashboard Icon" class="icon-img">
               Planes activos
           </a>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link btn d-flex align-items-center" href="{% url "payment_methods_client" %}">
+          {% url 'payment_methods_client' as payment_methods_client_url %}
+          <a class="nav-link btn d-flex align-items-center {% if request.path == payment_methods_client_url %}active{% endif %}" href="{{ payment_methods_client_url }}">
             <img src="{% static 'img/pago.png' %}" alt="Dashboard Icon" class="icon-img">
             Metodos de pago
           </a>
@@ -46,15 +51,11 @@
                       <h1 class="modal-title fs-5" id="exampleModalLabel">Cerrar Sesion</h1>
                     </div>
                     <div class="modal-body">
-                      ¿Estas seguro que deseas cerrar sesion?
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                      <a type="button" class="btn btn-danger" href="{% url 'logout' %}">Cerrar sesion</a>
+                      <!-- Contenido del modal -->
                     </div>
                   </div>
                 </div>
-            </div>              
+            </div>
         </li>
       </ul>
     </div>
