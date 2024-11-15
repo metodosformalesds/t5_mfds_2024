@@ -44,7 +44,25 @@
                 <a href="{% url "payment_methods_client" %}" class="btn btn-primary">Ver métodos de pago</a>
                 </div>
             </div>
-        </div>        
+        </div>  
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Historial de compras</h5>
+                <p class="card-text">Revisa tus compras anteriores</p>
+                <a href="{% url "client_purchases" %}" class="btn btn-primary">Ver historial</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Lista de favoritos</h5> 
+                    <p class="card-text">Revisa tus tours favoritos</p>
+                    <a href="{% url "favorites" %}" class="btn btn-primary">Ver favoritos</a>
+                </div>
+            </div>
+        </div>
     </div>
     </main>
 </div>

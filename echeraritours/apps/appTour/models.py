@@ -31,7 +31,7 @@ class Tour(models.Model):
     title = models.CharField(max_length=100)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     description = models.TextField(max_length=500)
-    lodging_place = models.CharField(max_length=30)
+    lodging_place = models.CharField(max_length=30)  # Lugar de hospedaje
     price_per_person = models.DecimalField(
         validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
@@ -39,7 +39,8 @@ class Tour(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     place_of_origin = models.CharField(max_length=100, null=True, blank=True)
-    destination_place = models.CharField(max_length=100, null=True, blank=True)
+    destination_place = models.CharField(
+        max_length=100, null=True, blank=True)  # Ciudad o estado
     tour_image = models.ImageField(
         upload_to='media/tours/', null=True, blank=True)
 

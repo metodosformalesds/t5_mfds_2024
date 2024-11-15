@@ -13,6 +13,11 @@ urlpatterns = [
          views.payment_methods_client, name='payment_methods_client'),
     path('cliente/dashboard/agregar_metodo_pago/',
          views.add_payment_method, name='add_payment_method'),
+    path('cliente/dashboard/favoritos/', views.favorites, name='favorites'),
+    path('cliente/dashboard/favoritos/eliminar/<int:tour_id>/',
+         views.delete_favorite, name='delete_favorite'),
+    path('cliente/dashboard/historial',
+         views.client_purchases, name='client_purchases'),
 
 
     path('agencia/dashboard/', views.agency_dashboard, name='agency_dashboard'),

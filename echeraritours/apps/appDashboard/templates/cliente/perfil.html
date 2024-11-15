@@ -30,7 +30,7 @@
                     <div class="col-md-4 text-center">
                         <label for="profileImageInput" class="profile-image-label">
                             <img id="profileImagePreview" 
-                                 src="{% if cliente.profile_image %}{% static cliente.profile_image %}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                 src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
                                  alt="Foto de perfil" 
                                  width="150" 
                                  class="img-fluid rounded-circle profile-image">
