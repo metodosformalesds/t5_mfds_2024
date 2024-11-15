@@ -6,16 +6,16 @@
             <div class="col-md-3">
                 <h5>Contacto</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#">echeraritours@gmail.com</a></li>
+                    <li><a href="mailto:echeraritours@gmail.com">echeraritours@gmail.com</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <h5>Sobre nosotros</h5>
                 <ul class="list-unstyled">
                     <li><a href="{% url 'sobre_nosotros' %}">Quiénes somos</a></li>
-                    <li><a href="#">Misión</a></li>
-                    <li><a href="#">Visión</a></li>
-                    <li><a href="#">Valores</a></li>
+                    <li><a href="{% url 'sobre_nosotros' %}#mision">Misión</a></li>
+                    <li><a href="{% url "sobre_nosotros" %}#vision">Visión</a></li>
+                    <li><a href="{% url "sobre_nosotros" %}#valores">Valores</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
