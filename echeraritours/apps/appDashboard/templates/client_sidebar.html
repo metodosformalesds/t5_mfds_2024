@@ -31,6 +31,13 @@
           </a>
         </li>
         <li class="nav-item mb-3">
+          {% url 'client_purchases' as client_purchases_url %}
+          <a class="nav-link btn d-flex align-items-center {% if request.path == client_purchases_url %}active{% endif %}" href="{{ client_purchases_url }}">
+            <img src="{% static 'img/carrito.png' %}" alt="Dashboard Icon" class="icon-img">
+              Historial de compras
+          </a>
+        </li>
+        <li class="nav-item mb-3">
           {% url 'payment_methods_client' as payment_methods_client_url %}
           <a class="nav-link btn d-flex align-items-center {% if request.path == payment_methods_client_url %}active{% endif %}" href="{{ payment_methods_client_url }}">
             <img src="{% static 'img/pago.png' %}" alt="Dashboard Icon" class="icon-img">

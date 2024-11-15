@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 import os
 from echeraritours import settings
 from .models import FavoriteList
+from django.utils import timezone
 
 # Create your views here.
 
@@ -68,7 +69,9 @@ def client_dashboard(request):
 
 @login_required(login_url='login')
 def client_active_plans(request):
-    reservaciones = Reservation.objects.filter(client=request.user.client)
+    current_time = timezone.now()
+    reservaciones = Reservation.objects.filter(
+        client=request.user.client, tour__end_date__gt=current_time)
 
     return render(request, 'cliente/planes_activos.html', {'reservaciones': reservaciones})
 
@@ -132,6 +135,7 @@ def favorites(request):
         return redirect('login')
 
 
+@login_required(login_url='login')
 def delete_favorite(request, tour_id):
     favorite_list = FavoriteList.objects.filter(
         client=request.user.client).first()
@@ -142,6 +146,13 @@ def delete_favorite(request, tour_id):
     messages.success(request, 'Tour eliminado de favoritos.')
 
     return redirect('favorites')
+
+
+@login_required(login_url='login')
+def client_purchases(request):
+    reservaciones = Reservation.objects.filter(client=request.user.client)
+
+    return render(request, 'cliente/compras.html', {'reservaciones': reservaciones})
 
 
 @login_required(login_url='login')

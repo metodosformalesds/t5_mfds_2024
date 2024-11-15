@@ -15,13 +15,16 @@
     <div class="row">
         {% for agencia in agencias %}
         <div class="col-lg-4 col-md-6 mb-4">
-            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none">
+            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none card-link">
                 <div class="card h-100">
-                    <img src="{% static 'img/cancun.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
                     <div class="card-body text-center">
-                        <h5 class="card-title">{{ agencia.agency_name }}</h5>
-                        <hr class="divider">
-                        <p class="card-text mt-3"> {% if agencia.agency_description %} {{ agencia.agency_description }}{% else %} Sin descripcion  {% endif %} </p>
+                        <img src="{% static 'img/cancun.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
+                        <div class="card-body text-center">
+                            <h5 class="card-title span-echerari">{{ agencia.agency_name }}</h5>
+                            <hr class="divider">
+                            <p class="card-text mt-3"> {% if agencia.agency_description %} {{ agencia.agency_description }}{% else %} Sin descripcion  {% endif %} </p>
+                            <p class="card-text"> <strong>Ubicación:</strong> {{ agencia.state }}, {{ agencia.address }}, {{ agencia.suburb }}, {{ agencia.town }}</p>
+                        </div>
                     </div>
                 </div>
             </a>
