@@ -13,6 +13,13 @@
             <img src="{% static 'img/icono.png' %}" alt="Dashboard Icon" class="icon-img">
             Perfil 
           </a>
+        </li>
+        <li class="nav-item mb-3">
+          <a class="nav-link btn d-flex align-items-center" href="{% url "favorites" %}">
+            <img src="{% static 'img/Heart.png' %}" alt="Dashboard Icon" class="icon-img">
+            Lista de favoritos
+          </a>
+        </li>
         <li class="nav-item mb-3">
           <a class="nav-link btn d-flex align-items-center" href="{% url "client_active_plans" %}">
             <img src="{% static 'img/carrito.png' %}" alt="Dashboard Icon" class="icon-img">

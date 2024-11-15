@@ -13,6 +13,7 @@ from .models import Reports
 from django.urls import reverse_lazy
 import os
 from echeraritours import settings
+from .models import FavoriteList
 
 # Create your views here.
 
@@ -65,12 +66,14 @@ def client_dashboard(request):
     return render(request, 'client_dashboard.html')
 
 
+@login_required(login_url='login')
 def client_active_plans(request):
     reservaciones = Reservation.objects.filter(client=request.user.client)
 
     return render(request, 'cliente/planes_activos.html', {'reservaciones': reservaciones})
 
 
+@login_required(login_url='login')
 def client_profile(request):
     cliente = get_object_or_404(Client, user=request.user)
 
@@ -112,6 +115,24 @@ def client_profile(request):
     return render(request, 'cliente/perfil.html', context)
 
 
+@login_required(login_url='login')
+def favorites(request):
+    if request.user.is_authenticated:
+        favorite_list = FavoriteList.objects.filter(
+            client=request.user.client).first()
+        tours = favorite_list.tours.all() if favorite_list else []
+
+        context = {
+            "tours": tours,
+        }
+
+        return render(request, 'cliente/favoritos.html', context)
+    else:
+        messages.error(request, 'Debes iniciar sesión para ver tus favoritos.')
+        return redirect('login')
+
+
+@login_required(login_url='login')
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)
 
