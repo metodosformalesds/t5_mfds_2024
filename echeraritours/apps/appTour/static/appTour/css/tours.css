@@ -1,4 +1,7 @@
-h5, h2, p, a {
+h5,
+h2,
+p,
+a {
     color: #1B1C1E;
 }
 
@@ -10,14 +13,14 @@ h5, h2, p, a {
 
 .card-link {
     display: block;
-    color: inherit; 
-    text-decoration: none; 
+    color: inherit;
+    text-decoration: none;
 }
 
 .card-link:hover .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05); 
-    transition: transform 0.3s ease; 
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
 }
 
 .card {
