@@ -11,6 +11,8 @@ from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
 from .models import Reports
 from django.urls import reverse_lazy
+import os
+from echeraritours import settings
 
 # Create your views here.
 
@@ -68,6 +70,7 @@ def client_active_plans(request):
 
     return render(request, 'cliente/planes_activos.html', {'reservaciones': reservaciones})
 
+
 def client_profile(request):
     cliente = get_object_or_404(Client, user=request.user)
 
@@ -82,15 +85,18 @@ def client_profile(request):
             profile_image = request.FILES.get('profile_image')
             if profile_image:
                 # Define la ruta de guardado en static/img/perfil
-                save_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'perfil', profile_image.name)
-                
+                save_path = os.path.join(
+                    settings.BASE_DIR, 'static', 'img', 'perfil', profile_image.name)
+
                 # Guarda la imagen en static/img/perfil
                 with open(save_path, 'wb+') as destination:
                     for chunk in profile_image.chunks():
                         destination.write(chunk)
 
                 cliente.profile_image = 'img/default_profile.jpg'
+                profile_form.save()
                 cliente.save()
+                messages.success(request, 'Perfil actualizado exitosamente.')
 
             return redirect('client_profile')
 
@@ -104,6 +110,7 @@ def client_profile(request):
         'cliente': cliente,
     }
     return render(request, 'cliente/perfil.html', context)
+
 
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)
