@@ -4,18 +4,19 @@
 {% block content %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/favoritos.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> 
 {% endblock extra_styles %}
 
 <div class="row">
     <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-      {% include "client_sidebar.html" %}
+        {% include "client_sidebar.html" %}
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="container my-5">
-            <h2 class="font-weight-bold">Mis Tours Favoritos</h2>
+            <h2 style="color: #68ddbd; font-size: 1.8rem; font-weight: 500;margin-bottom: 40px;">Lista de Favoritos</h2>
             {% if messages %}
             {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">
@@ -34,9 +35,14 @@
                                     <p class="card-text">{{ tour.description }}</p>
                                     <a href="{% url 'detalle_tour' tour.id %}" class="btn btn-primary">Ver Detalles</a>
                                 </div>
-                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                <div class="card-footer d-flex justify-content-between align-items-center" style="background: linear-gradient(80deg, #ffffff, #f0f4f8, #bceae0);">
                                     <small class="text-muted font-weight-bold">Precio por persona: ${{ tour.price_per_person }}</small>
-                                    <a href="{% url "delete_favorite" tour.id %}" class="btn btn-danger">Eliminar de Favoritos</a>
+                                    <form action="{% url 'delete_favorite' tour.id %}" method="post" style="margin: 0;">
+                                        {% csrf_token %}
+                                        <a href="#" class="favorite-icon" title="Eliminar de Favoritos" onclick="this.closest('form').submit();">
+                                            <i class="fas fa-heart"></i> 
+                                        </a>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -50,4 +56,5 @@
         </div>
     </main>
 </div>
+
 {% endblock %}
