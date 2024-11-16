@@ -15,6 +15,7 @@ import os
 from echeraritours import settings
 from .models import FavoriteList
 from django.utils import timezone
+from .models import ClienteHistorial
 
 # Create your views here.
 

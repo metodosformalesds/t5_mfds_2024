@@ -1,0 +1,52 @@
+.historial-container {
+    background-color: #f8f9fa; 
+    border-radius: 15px; 
+    padding: 30px; 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); 
+    margin-top: 20px; 
+    text-align: center; 
+}
+
+.table {
+    margin: 0 auto; 
+    background-color: white;
+    border-radius: 10px; 
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    width: 100%; 
+    max-width: 90%; 
+}
+
+.table thead th {
+    background-color: #68ddbd; 
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table tbody tr {
+    text-align: left;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #eef7f4;
+}
+
+.table .btn {
+    background-color: #68ddbd;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.table .btn:hover {
+    background-color: #34b9a0;
+}

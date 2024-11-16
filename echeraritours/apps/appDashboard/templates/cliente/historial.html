@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Historial de Compras - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/historial.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="dashboard-header d-flex justify-content-between align-items-center pt-3 pb-2 mb-3">
+            <h1 class="dashboard-title">Historial de Compras</h1>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="historial-container">
+            {% if reservaciones %}
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tour</th>
+                            <th>Fecha de Compra</th>
+                            <th>Fecha del Tour</th>
+                            <th>Total Pagado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservacion in reservaciones %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ reservacion.tour.title }}</td>
+                            <td>{{ reservacion.date_purchased|date:"d M Y" }}</td>
+                            <td>{{ reservacion.tour.start_date|date:"d M Y" }} a {{ reservacion.tour.end_date|date:"d M Y" }}</td>
+                            <td>MXN${{ reservacion.calculate_total_price }}</td>
+                            <td>
+                                <a href="{% url 'detalle_compra' reservacion.id %}" class="btn btn-primary btn-sm">Detalles</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="no-purchases-message text-center">
+                    <i class="fas fa-shopping-cart fa-3x"></i>
+                    <h3>¡Ups! No tienes compras registradas</h3>
+                    <p>Parece que aún no has realizado ninguna compra. Explora nuestros tours y encuentra el próximo destino de tus sueños.</p>
+                    <a href="{% url 'tours' %}" class="btn btn-primary">Ver tours</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+</div>
+{% endblock content %}

@@ -2,55 +2,59 @@
 <div class="bg-body-tertiary">
     <div class="flex-column p-3 overflow-y-auto">
       <ul class="nav flex-column">
+        {% url 'client_dashboard' as client_dashboard_url %}
         <li class="nav-item mb-3">
-          {% url 'client_dashboard' as client_dashboard_url %}
           <a class="nav-link btn d-flex align-items-center {% if request.path == client_dashboard_url %}active{% endif %}" href="{{ client_dashboard_url }}">
             <img src="{% static 'img/dash.png' %}" alt="Dashboard Icon" class="icon-img">
             Inicio 
           </a>
         </li>
+        
+        {% url 'client_profile' as client_profile_url %}
         <li class="nav-item mb-3">
-          {% url 'client_profile' as client_profile_url %}
           <a class="nav-link btn d-flex align-items-center {% if request.path == client_profile_url %}active{% endif %}" href="{{ client_profile_url }}">
-            <img src="{% static 'img/icono.png' %}" alt="Dashboard Icon" class="icon-img">
+            <img src="{% static 'img/icono.png' %}" alt="Profile Icon" class="icon-img">
             Perfil 
           </a>
         </li>
-        <li class="nav-item mb-3">
+        
           {% url 'favorites' as favorites_url %}
+          <li class="nav-item mb-3">
           <a class="nav-link btn d-flex align-items-center {% if request.path == favorites_url %}active{% endif %}" href="{{ favorites_url }}">
-            <img src="{% static 'img/Heart.png' %}" alt="Dashboard Icon" class="icon-img">
+            <img src="{% static 'img/favorito.png' %}" alt="Dashboard Icon" class="icon-img">
             Lista de favoritos
           </a>
         </li>
+        {% url 'client_active_plans' as client_active_plans_url %}
         <li class="nav-item mb-3">
-          {% url 'client_active_plans' as client_active_plans_url %}
           <a class="nav-link btn d-flex align-items-center {% if request.path == client_active_plans_url %}active{% endif %}" href="{{ client_active_plans_url }}">
-            <img src="{% static 'img/carrito.png' %}" alt="Dashboard Icon" class="icon-img">
-              Planes activos
+            <img src="{% static 'img/carrito.png' %}" alt="Active Plans Icon" class="icon-img">
+            Planes activos
           </a>
         </li>
+        
+        {% url 'payment_methods_client' as payment_methods_client_url %}
         <li class="nav-item mb-3">
-          {% url 'client_purchases' as client_purchases_url %}
-          <a class="nav-link btn d-flex align-items-center {% if request.path == client_purchases_url %}active{% endif %}" href="{{ client_purchases_url }}">
-            <img src="{% static 'img/carrito.png' %}" alt="Dashboard Icon" class="icon-img">
-              Historial de compras
-          </a>
-        </li>
-        <li class="nav-item mb-3">
-          {% url 'payment_methods_client' as payment_methods_client_url %}
           <a class="nav-link btn d-flex align-items-center {% if request.path == payment_methods_client_url %}active{% endif %}" href="{{ payment_methods_client_url }}">
-            <img src="{% static 'img/pago.png' %}" alt="Dashboard Icon" class="icon-img">
+            <img src="{% static 'img/pago.png' %}" alt="Payment Methods Icon" class="icon-img">
             Metodos de pago
           </a>
         </li>
+        
+        <li class="nav-item mb-3">
+          <a class="nav-link btn d-flex align-items-center {% if request.path == '/dashboard/cliente/historial/' %}active{% endif %}" href="{% url 'client_purchases' %}">
+              <img src="{% static 'img/historial.png' %}" alt="History Icon" class="icon-img">
+              Historial
+          </a>
+      </li>
+      
         <li class="nav-item mb-3">
             <a class="nav-link btn d-flex align-items-center" type="button" data-bs-toggle="modal" data-bs-target="#logoutmodal">
-                <img src="{% static 'img/cerrar.png' %}" alt="Dashboard Icon" class="icon-img">
+                <img src="{% static 'img/cerrar.png' %}" alt="Logout Icon" class="icon-img">
                 Cerrar sesion
             </a>
               
-              <!-- Modal -->
+            <!-- Modal -->
             <div class="modal fade" id="logoutmodal" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -58,11 +62,15 @@
                       <h1 class="modal-title fs-5" id="exampleModalLabel">Cerrar Sesion</h1>
                     </div>
                     <div class="modal-body">
-                      <!-- Contenido del modal -->
+                      ¿Estas seguro que deseas cerrar sesion?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      <a type="button" class="btn btn-danger" href="{% url 'logout' %}">Cerrar sesion</a>
                     </div>
                   </div>
                 </div>
-            </div>
+            </div>              
         </li>
       </ul>
     </div>
