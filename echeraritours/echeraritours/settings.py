@@ -180,13 +180,16 @@ SOCIALACCOUNT_PROVIDERS = {
         'SECRET': os.getenv('GOOGLE_SECRET'),
     }
 }
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_AUTO_SIGNUP = True
-SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_LOGIN_ON_GET = True  
 ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True               
 ACCOUNT_USERNAME_REQUIRED = False
 LOGIN_REDIRECT_URL = 'index'
+
+
 
 # Esta seccion la modifique por mientras para que cualquiera
 # pueda abrir el repo sin necesidad de tener que hacer el archivo .env

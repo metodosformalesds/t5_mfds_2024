@@ -1,0 +1,92 @@
+.progressbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    counter-reset: step;
+    list-style: none;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.progressbar li {
+    width: 33.33%;
+    text-align: center;
+    position: relative;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #7d7d7d;
+}
+
+.progressbar li::before {
+    content: counter(step);
+    counter-increment: step;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #c0c0c0; 
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 10px auto;
+    background-color: #f0f0f0; 
+    color: #7d7d7d;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.progressbar li.active::before {
+    border-color: #68ddbd;
+    background-color: #68ddbd;
+    color: white;
+}
+
+.progressbar li p {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.progressbar li::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #7d7d7d;
+    top: 14px;
+    left: -50%;
+    z-index: -1;
+}
+
+.progressbar li:first-child::after {
+    content: none;
+}
+
+.progressbar li.active + li::after {
+    background-color: #68ddbd;
+}
+
+.icon-marked{
+    width: 15rem;
+    height: 15rem;
+}
+
+h2{
+    font-size: 3.7rem;
+}
+
+p{
+    font-size: 1.2rem;
+}
+
+.btn-dashboard {
+    color: #68ddbd;
+    border: 1px solid #68ddbd;
+    border-radius: 20px;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-dashboard:hover {
+    background-color: #68ddbd;
+    color: #ffffff;
+}

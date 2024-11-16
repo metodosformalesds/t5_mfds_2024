@@ -27,20 +27,24 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <div class="col-md-4 text-center">
-                        <label for="profileImageInput" class="profile-image-label">
-                            <img id="profileImagePreview" 
-                                 src="{% if cliente.profile_image %}{% static cliente.profile_image %}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
-                                 alt="Foto de perfil" 
-                                 width="150" 
-                                 class="img-fluid rounded-circle profile-image">
-                            <div class="overlay">
-                                Haz clic aquí para cambiar la foto
-                            </div>
-                        </label>
-                        <input type="file" id="profileImageInput" name="profile_image" accept="image/*" style="display: none;">
-                    </div>
-                        <div class="col-md-8">
+                    <div class="row form-container">
+                        <!-- Foto de perfil -->
+                        <div class="col-md-4 profile-container">
+                            <label for="profileImageInput" class="profile-image-label">
+                                <img id="profileImagePreview" 
+                                     src="{% if cliente.profile_image %}{% static cliente.profile_image %}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                     alt="Foto de perfil" 
+                                     width="120" 
+                                     class="img-fluid rounded-circle profile-image">
+                                <div class="overlay">
+                                    Haz clic aquí para cambiar la foto
+                                </div>
+                            </label>
+                            <input type="file" id="profileImageInput" name="profile_image" accept="image/*" style="display: none;">
+                        </div>
+                    
+                        <!-- Formulario -->
+                        <div class="col-md-8 form-content">
                             <form action="{% url 'client_profile' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="form-row">
@@ -78,11 +82,10 @@
                                         {{ user_form.birth_date }}
                                     </div>
                                 </div>
-                                <input type="submit" id="submit-btn" class="btn btn-primary" value="Guardar cambios">
+                                <input type="submit" id="submit-btn" class="btn btn-guardar-cambios" value="Guardar cambios">
                             </form>
                         </div>
-                    </div>
-                </div>
+                    </div>                    
                 <footer class="card-footer">
                 </footer>
         </article>

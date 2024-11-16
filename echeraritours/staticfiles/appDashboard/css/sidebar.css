@@ -47,9 +47,3 @@
 .sidebar .nav-link.text-danger:hover {
     background-color: #f8d7da;
 }
-
-.sidebar .active {
-    background-color: #68DDBD; 
-    color: white;
-    font-weight: bold; 
-}

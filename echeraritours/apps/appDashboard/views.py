@@ -78,13 +78,10 @@ def client_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
 
-            # Si se sube una nueva imagen de perfil
             profile_image = request.FILES.get('profile_image')
             if profile_image:
-                # Define la ruta de guardado en static/img/perfil
                 save_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'perfil', profile_image.name)
                 
-                # Guarda la imagen en static/img/perfil
                 with open(save_path, 'wb+') as destination:
                     for chunk in profile_image.chunks():
                         destination.write(chunk)

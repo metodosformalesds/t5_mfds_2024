@@ -1,0 +1,85 @@
+.dashboard-container .card-grid {
+    display: grid;
+    grid-template-areas:
+        "perfil planes-activos favoritos metodos-pago"
+        "perfil historial historial historial"
+        "perfil historial historial historial";
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+    padding: 20px;
+}
+
+.dashboard-container .perfil {
+    grid-area: perfil;
+    height: 480px;
+    padding: 10px 15px;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.dashboard-container .planes-activos,
+.dashboard-container .favoritos,
+.dashboard-container .metodos-pago {
+    height: 150px; 
+    font-size: 0.9rem;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+}
+
+.dashboard-container .historial {
+    grid-area: historial;
+    height: 150px; 
+    text-align: center;
+}
+
+
+.dashboard-container .card {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    height: 100%;
+}
+.dashboard-container .perfil .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    object-fit: cover; 
+}
+.dashboard-container .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-container .card h5 {
+    color: #68ddbd;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.dashboard-container .card p {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.dashboard-container img {
+    display: block;
+    margin: 0 auto 15px;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
