@@ -10,10 +10,14 @@
     gap: 10px;
 }
 
-.sidebar .nav-link:first-child {
-    margin-top: 15px;
+.sidebar .nav-item {
+    margin-bottom: 5px;
 }
 
+.sidebar .nav-item:first-child {
+    margin-top: 20px; 
+    margin-bottom: 10px; 
+}
 .sidebar .nav-link {
     color: #333;
     font-weight: 500;
@@ -34,7 +38,11 @@
     color: #68ddbd;
     font-weight: bold;
 }
-
+.icon-img {
+    width: 24px; 
+    height: 24px;
+    object-fit: contain;
+}
 .sidebar .nav-link:hover {
     background-color: #e7f4f1;
 }

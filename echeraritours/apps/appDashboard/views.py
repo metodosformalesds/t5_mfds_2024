@@ -15,6 +15,7 @@ import os
 from echeraritours import settings
 from .models import FavoriteList
 from django.utils import timezone
+from .models import ClienteHistorial
 
 # Create your views here.
 
@@ -317,3 +318,8 @@ def payment_methods_agency(request):
     metodos = PaymentMethod.objects.filter(agency=request.user.agency)
 
     return render(request, 'agencia/metodos_pago.html', {'metodos': metodos})
+
+@login_required(login_url='login')
+def cliente_historial(request):
+    historial = ClienteHistorial.objects.filter(client=request.user.client)
+    return render(request, 'cliente/historial.html', {'historial': historial})

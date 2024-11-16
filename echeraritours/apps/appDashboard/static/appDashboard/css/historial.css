@@ -1,0 +1,59 @@
+/* Fondo gris para la sección de planes activos */
+.historial-container {
+    background-color: #f8f9fa; /* Gris claro */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 30px; /* Espaciado interno */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    margin-top: 20px; /* Separación superior */
+    text-align: center; /* Centrar el contenido */
+}
+
+/* Tabla dentro del contenedor */
+.table {
+    margin: 0 auto; /* Centrar la tabla dentro del contenedor */
+    background-color: white;
+    border-radius: 10px; /* Bordes redondeados de la tabla */
+    overflow: hidden;
+    border: 1px solid #dee2e6; /* Borde gris claro */
+    width: 100%; /* Asegura que la tabla ocupe todo el ancho */
+    max-width: 90%; /* Máximo ancho para evitar que ocupe todo el espacio */
+}
+
+/* Títulos de las columnas */
+.table thead th {
+    background-color: #68ddbd; /* Verde moderno */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Filas del cuerpo */
+.table tbody tr {
+    text-align: left;
+}
+
+/* Alternancia de color en filas */
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Resalta fila al pasar el mouse */
+.table tbody tr:hover {
+    background-color: #eef7f4;
+}
+
+/* Estilo para botones en la tabla */
+.table .btn {
+    background-color: #68ddbd; /* Botón verde */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.table .btn:hover {
+    background-color: #34b9a0; /* Verde más oscuro */
+}

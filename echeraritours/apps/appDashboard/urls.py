@@ -17,7 +17,7 @@ urlpatterns = [
     path('cliente/dashboard/favoritos/eliminar/<int:tour_id>/',
          views.delete_favorite, name='delete_favorite'),
     path('cliente/dashboard/historial',
-         views.client_purchases, name='client_purchases'),
+         views.cliente_historial, name='cliente_historial'),
 
 
     path('agencia/dashboard/', views.agency_dashboard, name='agency_dashboard'),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('agencia/dashboard/reportes/', views.reports, name='reports'),
     path('agencia/dashboard/reportes/<int:tour_id>/',
          views.generate_report, name='generate_report'),
+    
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

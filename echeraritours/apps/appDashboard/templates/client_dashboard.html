@@ -22,8 +22,8 @@
             <div class="card-grid">
                 <a href="{% url 'client_profile' %}" class="card perfil text-decoration-none">
                     <div class="card-body">
-                        <img src="{% static 'img/user.png' %}" alt="User Profile" class="profile-image">
-                        <h5 class="card-title">Perfil</h5>
+                        <img src="{% static 'img/user.png' %}" alt="User Profile" class="profile-image" style="margin-top: 80px;">
+                        <h5  class="card-title" >Perfil</h5>
                         <p class="card-text">Administra tu perfil</p>
                     </div>
                 </a>
@@ -34,7 +34,8 @@
                         <p class="card-text">Revisa los planes en los que estás inscrito</p>
                     </div>
                 </a>
-                <a href="{#}" class="card favoritos text-decoration-none">
+                {% url 'favorites' as favorites_url %}
+                <a href="{{ favorites_url }}" class="card favoritos text-decoration-none">
                     <div class="card-body">
                         <img src="{% static 'img/favorito.png' %}" alt="Lista de favoritos" class="favoritos-icon">
                         <h5 class="card-title">Favoritos</h5>
@@ -48,10 +49,11 @@
                         <p class="card-text">Administra tus métodos de pago</p>
                     </div>
                 </a>
-                <a href="#" class="card historial text-decoration-none">
+                <a href="{% url 'cliente_historial' %}" class="card historial text-decoration-none">
+                    <img src="{% static 'img/historial.png' %}" alt="Historial" class="historial-image">
                     <div class="card-body">
-                        <h5 class="card-title1">Historial</h5>
-                        <p class="card-text1">Visualiza tu historial de transacciones</p>
+                        <h5 class="card-title">Historial</h5>
+                        <p class="card-text">Visualiza tu historial de transacciones</p>
                     </div>
                 </a>
     </main>
