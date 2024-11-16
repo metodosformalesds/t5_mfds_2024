@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load review_filters %}
 
 {% block title %}Historial de compras - Echérari Tours{% endblock title %}
 
@@ -24,20 +25,28 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
+                                <th scope="col">Tour</th>
                                 <th scope="col">Fecha</th>
-                                <th scope="col">Total</th>
-                                <th scope="col">Acciones</th>
+                                <th scope="col">Cantidad de tickets</th>
+                                <th scope="col">Total pagado</th>
+                                <th scope="col">Dejar reseña</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for reservacion in reservaciones %}
                             <tr>
-                                <th scope="row">{{ reservacion.id }}</th>
-                                <td>{{ reservacion.date }}</td>
-                                <td>{{ reservacion.total }}</td>
+                                <th scope="row">{{ reservacion.tour.title }}</th>
+                                <td scope="row">{{ reservacion.reservation_date|date:"d/m/Y" }}</td>
+                                <td>{{ reservacion.number_people }}</td>
+                                <td>{{ reservacion.total_price }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary">Ver detalles</a>
+                                    {% with review=reservacion|get_review:reviews %}
+                                    {% if review %}
+                                    <a href="{% url 'delete_review' review.id %}" class="btn btn-secondary">Eliminar reseña</a>
+                                    {% else %}
+                                    <a href="{% url 'create_review' reservacion.id %}" class="btn btn-primary">Reseña</a>
+                                    {% endif %}
+                                    {% endwith %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -48,7 +57,4 @@
         </div>
     </main>
 </div>
-
-
-
 {% endblock %}

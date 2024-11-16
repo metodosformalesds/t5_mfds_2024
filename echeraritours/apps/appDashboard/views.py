@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from apps.appUser.models import Client, Agency
 from apps.appPayment.models import PaymentMethod
-from apps.appTour.models import Reservation, Tour
-from django.views.generic.edit import CreateView
+from apps.appTour.models import Reservation, Tour, Reviews
+from django.views.generic.edit import CreateView, DeleteView
 from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
 from .models import Reports
@@ -151,8 +151,64 @@ def delete_favorite(request, tour_id):
 @login_required(login_url='login')
 def client_purchases(request):
     reservaciones = Reservation.objects.filter(client=request.user.client)
+    reviews = Reviews.objects.filter(reservation__in=reservaciones)
 
-    return render(request, 'cliente/compras.html', {'reservaciones': reservaciones})
+    context = {
+        'reservaciones': reservaciones,
+        'reviews': reviews
+    }
+
+    return render(request, 'cliente/compras.html', context)
+
+
+class CreateReview(CreateView):
+    """
+    A view to create a new Review object.
+
+    Attributes:
+        model (Review): The model associated with this view.
+        form_class (ReviewForm): The form class to be used for creating a review.
+        template_name (str): The name of the template to be rendered.
+        success_url (str): The URL to redirect to upon successful form submission.
+    """
+    model = Reviews
+    template_name = 'cliente/reseña.html'
+    fields = ['rating', 'review_text']
+    success_url = reverse_lazy('client_purchases')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reservation_id'] = self.kwargs['reservation_id']
+        return context
+
+    def form_valid(self, form):
+        form.instance.reservation = Reservation.objects.get(
+            id=self.kwargs['reservation_id'])
+        return super().form_valid(form)
+
+
+class DeleteReview(DeleteView):
+    """
+    A view to delete a Review object.
+
+    Attributes:
+        model (Review): The model associated with this view.
+        template_name (str): The name of the template to be rendered.
+        success_url (str): The URL to redirect to upon successful form submission.
+    """
+    model = Reviews
+    template_name = 'cliente/eliminar_reseña.html'
+    success_url = reverse_lazy('client_purchases')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['review_id'] = self.kwargs['pk']
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return redirect(self.success_url)
 
 
 @login_required(login_url='login')

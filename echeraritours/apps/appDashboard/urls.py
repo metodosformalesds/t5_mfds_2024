@@ -18,6 +18,11 @@ urlpatterns = [
          views.delete_favorite, name='delete_favorite'),
     path('cliente/dashboard/historial',
          views.client_purchases, name='client_purchases'),
+    path('cliente/dashboard/reseñas/<int:reservation_id>/',
+         views.CreateReview.as_view(), name="create_review"),
+    path('cliente/dashboard/reseñas/eliminar/<int:pk>/',
+         views.DeleteReview.as_view(), name='delete_review'),
+
 
 
     path('agencia/dashboard/', views.agency_dashboard, name='agency_dashboard'),
