@@ -25,9 +25,17 @@
 
         <!-- Descripción y detalles -->
         <div class="col-lg-6 mb-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <h3 class="font-weight-bold">Desde <span class="text-success">$ {{ tour.price_per_person }}</span> por persona </h3>
-            <p class="text-muted my-0">Fecha que inicia: <span class="font-weight-bold">{{ tour.start_date }}</span></p>
-            <p class="text-muted my-0">Fecha de termina: <span class="font-weight-bold">{{ tour.end_date }}</span></p>
+            <p class="text-muted my-0">Fecha que inicia: <span class="font-weight-bold">{{ tour.start_date|date:"Y-m-d" }}</span></p>
+            <p class="text-muted my-0">Fecha de termina: <span class="font-weight-bold">{{ tour.end_date|date:"Y-m-d" }}</span></p>
+            <a href="{% url 'add_favorite' tour.id %}" class="btn btn-reservar me-3">Agregar a favoritos</a>
             <h4 class="mt-4">¿De qué es el tour?</h4>
             <p>{{ tour.description }}</p>
             <div class="col-lg-12 row">

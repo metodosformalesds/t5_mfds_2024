@@ -1,5 +1,5 @@
 from django.db import models
-from apps.appUser.models import Agency
+from apps.appUser.models import Agency, Client
 from apps.appTour.models import Tour
 
 # Create your models here.
@@ -50,3 +50,28 @@ class Reports(models.Model):
 
     def __str__(self):
         return f"Reporte de {self.tour_title} para la agencia {self.agency.agency_name}"
+
+
+class FavoriteList(models.Model):
+    """
+    Represents a list of favorite tours for a specific agency.
+    Attributes:
+        client (ForeignKey): The client associated with the favorite list.
+        tours (ManyToManyField): The tours associated with the favorite list.
+    Meta:
+        verbose_name (str): The singular name for the model.
+        verbose_name_plural (str): The plural name for the model.
+        ordering (list): The default ordering for the model.
+    Methods:
+        __str__(): Returns a string representation of the favorite list.
+    """
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    tours = models.ManyToManyField(Tour)
+
+    class Meta:
+        verbose_name = 'Lista de Favoritos'
+        verbose_name_plural = 'Listas de Favoritos'
+        ordering = ["client"]
+
+    def __str__(self):
+        return f"Lista de favoritos del cliente {self.client.user}"

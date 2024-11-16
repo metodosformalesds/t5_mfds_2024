@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+{% endblock extra_styles %}
+
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container my-5">
+            <h2 class="font-weight-bold">Mis Tours Favoritos</h2>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if tours %}
+                <div class="row">
+                    {% for tour in tours %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card h-100">
+                                <img src="{{ tour.tour_image.url }}" class="card-img-top" alt="{{ tour.title }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ tour.title }}</h5>
+                                    <p class="card-text">{{ tour.description }}</p>
+                                    <a href="{% url 'detalle_tour' tour.id %}" class="btn btn-primary">Ver Detalles</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <small class="text-muted font-weight-bold">Precio por persona: ${{ tour.price_per_person }}</small>
+                                    <a href="{% url "delete_favorite" tour.id %}" class="btn btn-danger">Eliminar de Favoritos</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    No tienes tours favoritos.
+                </div>
+            {% endif %}
+        </div>
+    </main>
+</div>
+{% endblock %}

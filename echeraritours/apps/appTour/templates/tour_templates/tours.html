@@ -7,23 +7,34 @@
 {% endblock extra_styles %}
 
 {% block content %}
-
-<form method="get" class="container mt-4">
-    <h1>Encuentra el viaje que quieres</h1>
-    <div class="form-row mb-3">
-        <div class="col">
-            <label for="precio">Precio máximo:</label>
-            <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" required>
+<div class="container-fluid col-xl-10 col-xxl-8 px-4 py-5" style="background: linear-gradient(135deg, #68DDBD 0%, #12AB81 100%); border-radius: 15px;">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3" style="color: #fff;">Encuentra el viaje que quieres.</h1>
+            <p class="col-lg-10 fs-4">Ingresa el lugar al que quieres ir o el presupuesto que tienes, o ambos! Encontrarás viajes perfectos para ti.</p>
         </div>
-        <div class="col">
-            <label for="lugar">Lugar:</label>
-            <input type="text" name="lugar" id="lugar" placeholder="Lugar" class="form-control" required>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form method="get" action="{% url 'tours' %}" class="container mt-4">
+                <h2 style="color: #fff;">Filtrar viajes</h2>
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <label for="destination_place" style="color: #e0e0e0;">Lugar de destino:</label>
+                        <input type="text" name="destination_place" id="destination_place" placeholder="Lugar de destino" class="form-control" value="{{ request.GET.destination_place }}">
+                    </div>
+                    <div class="col">
+                        <label for="precio" style="color: #e0e0e0;">Precio máximo:</label>
+                        <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" value="{{ request.GET.precio }}">
+                    </div>
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-light btn-lg">Filtrar</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-</form>
+</div>
 
-<section class="tours-section">
+<section class="tours-section" >
     <div class="container my-4">
         {% if tours %}
         <div class="row">
@@ -85,4 +96,5 @@
         {% endif %}
     </div>
 </section>
+
 {% endblock content %}
