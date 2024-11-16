@@ -54,50 +54,60 @@ def seleccion_pago(request, id):
 
 
 def realizar_pago_paypal(request, id):
-    tour = get_object_or_404(Tour, id=id)
-    number_people = int(request.POST.get('number_people', 1))
-    total_price = Decimal(tour.price_per_person) * Decimal(number_people)
+    if request.method == 'POST':
+        # Obtener el tour y los valores enviados por el formulario
+        tour = get_object_or_404(Tour, id=id)
+        number_people = int(request.POST.get('number_people', 1))
+        price_per_person = Decimal(
+            tour.price_per_person).quantize(Decimal('0.01'))
+        total_price = (price_per_person * Decimal(number_people)
+                       ).quantize(Decimal('0.01'))
 
-    # Crear un objeto de pago con PayPal
-    payment = Payment({
-        "intent": "sale",
-        "payer": {
-            "payment_method": "paypal"
-        },
-        "redirect_urls": {
-            "return_url": request.build_absolute_uri(reverse('pago_completado')),
-            "cancel_url": request.build_absolute_uri(reverse('pago_cancelado'))
-        },
-        "transactions": [{
-            "item_list": {
-                "items": [{
-                    "name": tour.title,
-                    "sku": "001",
-                    "price": f"{tour.price_per_person:.2f}",
-                    "currency": "MXN",
-                    "quantity": number_people
-                }]
+        # Crear un objeto de pago con PayPal usando los datos del contexto
+        payment = Payment({
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
             },
-            "amount": {
-                "total": f"{total_price:.2f}",
-                "currency": "MXN"
+            "redirect_urls": {
+                "return_url": request.build_absolute_uri(reverse('completar_pago_paypal')),
+                "cancel_url": request.build_absolute_uri(reverse('pago_cancelado'))
             },
-            "description": f"Reserva para el tour: {tour.title}"
-        }]
-    })
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": tour.title,
+                        "sku": "001",
+                        # Debe ser string con dos decimales
+                        "price": f"{price_per_person:.2f}",
+                        "currency": "MXN",
+                        "quantity": number_people
+                    }]
+                },
+                "amount": {
+                    # Debe ser string con dos decimales
+                    "total": f"{total_price:.2f}",
+                    "currency": "MXN"
+                },
+                "description": f"Reserva para el tour: {tour.title}"
+            }]
+        })
 
-    if payment.create():
-        # Guardar el ID de la reservación en la sesión si es necesario
-        request.session['tour_id'] = tour.id
-        request.session['number_people'] = number_people
-        request.session['total_price'] = str(total_price)
+        if payment.create():
+            print("Pago creado con éxito:", payment.id)
+            request.session['tour_id'] = tour.id
+            request.session['number_people'] = number_people
+            request.session['total_price'] = str(total_price)
 
-        for link in payment.links:
-            if link.rel == "approval_url":
-                return redirect(link.href)
-    else:
-        messages.error(request, "Error al crear el pago con PayPal")
-        return redirect('seleccion_pago', id=id)
+            for link in payment.links:
+                if link.rel == "approval_url":
+                    return redirect(link.href)
+        else:
+            messages.error(request, "Error al crear el pago con PayPal")
+            return redirect('seleccion_pago', id=id)
+
+    # Si la solicitud no es POST, redirige a la página de selección de pago
+    return redirect('seleccion_pago', id=id)
 
 
 def realizar_pago_stripe(request, id):
@@ -217,6 +227,7 @@ def process_payment(request):
     except stripe.error.StripeError as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
 def pago_cancelado(request):
     # Limpiar la información de la sesión si es necesario
     if 'tour_id' in request.session:
@@ -226,8 +237,59 @@ def pago_cancelado(request):
     if 'total_price' in request.session:
         del request.session['total_price']
 
-    messages.warning(request, "Has cancelado el pago. Tu reservación no ha sido confirmada.")
+    messages.warning(
+        request, "Has cancelado el pago. Tu reservación no ha sido confirmada.")
     return redirect('index.html')
+
+
+def completar_pago_paypal(request):
+    # Recuperar los datos de la sesión
+    payment_id = request.GET.get('paymentId')
+    payer_id = request.GET.get('PayerID')
+    tour_id = request.session.get('tour_id')
+    number_people = request.session.get('number_people')
+    total_price = request.session.get('total_price')
+
+    # Verificar que los datos de la sesión existan
+    if not (payment_id and payer_id and tour_id and number_people and total_price):
+        messages.error(request, "Datos de la sesión no válidos o incompletos.")
+        return redirect('seleccion_pago')
+
+    try:
+        # Convertir los valores al tipo adecuado
+        number_people = int(number_people)
+        total_price = Decimal(total_price).quantize(Decimal('0.01'))
+    except (ValueError, TypeError):
+        messages.error(request, "Error en la conversión de los datos.")
+        return redirect('seleccion_pago')
+
+    # Obtener el tour y el cliente
+    tour = get_object_or_404(Tour, id=tour_id)
+    client = get_object_or_404(Client, user=request.user)
+
+    # Recuperar el pago de PayPal
+    payment = paypalrestsdk.Payment.find(payment_id)
+
+    try:
+        if payment.execute({"payer_id": payer_id}):  # Ejecuta el pago
+            # Crear la reservación
+            reservation = Reservation.objects.create(
+                tour=tour,
+                client=client,
+                number_people=number_people,
+                total_price=total_price,
+            )
+
+            # Redirige a la página de confirmación con la reservación
+            messages.success(request, "El pago se hizo correctamente")
+            return render(request, 'pago_completado.html', {'reservation': reservation})
+        else:
+            messages.error(request, "El pago no pudo completarse con PayPal.")
+            return redirect('pago_cancelado')
+    except Exception as e:
+        # Maneja cualquier excepción durante la ejecución del pago
+        messages.error(request, f"Error al ejecutar el pago: {str(e)}")
+        return redirect('pago_cancelado')
 
 
 def pago_completado(request):
