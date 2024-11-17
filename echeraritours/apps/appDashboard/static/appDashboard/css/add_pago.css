@@ -1,0 +1,98 @@
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; 
+    min-height: 400px;
+    max-width: 1000px;
+    margin: 0 auto; 
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 300px;
+}
+
+.payment-card {
+    max-width: 800px; 
+    width: 100%;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.payment-card-header {
+    background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0); 
+    color: #68ddbd; 
+    padding: 20px;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: bold;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    font-family: 'Marykate', sans-serif;
+}
+
+.payment-card-body {
+    padding: 20px 30px;
+}
+
+.payment-card-body p {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.payment-card-body .alert {
+    border-radius: 10px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #68ddbd;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border: none;
+    box-shadow: none;
+}
+
+.btn-primary:hover {
+    background-color: #34b9a0;
+}
+
+.radio-group .form-check {
+    margin-bottom: 10px;
+    background-color: #68ddbd;
+}
+
+.radio-group .form-check-label {
+    font-weight: normal;
+    color: #68ddbd;
+}
+
+.radio-group .form-check-input:checked + .form-check-label {
+    font-weight: bold;
+    color: #68ddbd;
+}
+
+
+
