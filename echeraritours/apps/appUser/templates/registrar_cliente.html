@@ -24,6 +24,9 @@
             {% csrf_token %}
 
             {% if step == 1 %}
+            {% for message in messages %}
+                <p class="alert alert-danger">{{ message }}</p>
+            {% endfor %}
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ingrese su nombre(s)" required>
@@ -191,7 +194,6 @@
         });
     }); 
 </script> {% endcomment %}
-
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
@@ -207,7 +209,6 @@
             console.error("Error al acceder a la cámara: ", error);
             alert("No se pudo acceder a la cámara. Asegúrate de que tienes permisos.");
     });
-
 
     captureButton.addEventListener('click', () => {
         canvas.width = video.videoWidth;
@@ -232,5 +233,6 @@
         retryButton.style.display = 'none';
         identificacionBiometrica.value = '';
     });
-    </script>
+</script>
+
 {% endblock content %}

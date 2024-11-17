@@ -4,8 +4,9 @@
 {% block title %}Agregar Método de Pago - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/met_pago.css' %}">
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> 
 {% endblock extra_styles %}
 
 {% block content %}
@@ -16,11 +17,10 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-        </div>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2 class="h4">Métodos de Pago</h2>
-            <a href="{% url 'add_payment_method' %}" class="btn btn-primary">Agregar Método de Pago</a>
+            <h2 class="h4" style="color: #68ddbd; font-size: 1.8rem; font-weight: 500;margin-top: 25px;">Métodos de Pago</h2>
+            <a href="{% url 'add_payment_method' %}" class="btn btn-primary btn-add-payment" >
+                <i class="fas fa-plus"></i> Agregar Método de pago
+            </a>
         </div>
         {% if metodos %}
         {% for metodo in metodos %}

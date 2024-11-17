@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from apps.appUser.models import Client, Agency
 from apps.appPayment.models import PaymentMethod
-from apps.appTour.models import Reservation, Tour
-from django.views.generic.edit import CreateView
+from apps.appTour.models import Reservation, Tour, Reviews
+from django.views.generic.edit import CreateView, DeleteView
 from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
 from .models import Reports
@@ -15,6 +15,13 @@ import os
 from echeraritours import settings
 from .models import FavoriteList
 from django.utils import timezone
+from django import forms
+import boto3
+from django.views.generic.detail import DetailView
+from django.conf import settings
+import qrcode
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.pagesizes import letter
 
 # Create your views here.
 
@@ -76,39 +83,122 @@ def client_active_plans(request):
     return render(request, 'cliente/planes_activos.html', {'reservaciones': reservaciones})
 
 
-@login_required(login_url='login')
+class PlanDetailView(DetailView):
+    """
+    A view to display the details of a specific plan.
+
+    Attributes:
+        model (Reservation): The model associated with this view.
+        template_name (str): The name of the template to be rendered.
+        context_object_name (str): The name of the context object to be used in the template.
+    """
+    model = Reservation
+    template_name = 'cliente/detalles_plan.html'
+    context_object_name = 'reservacion'
+    pk_url_kwarg = 'reservation_pk'
+
+
+def ticket(request, reservation_pk):
+    """
+    Generates a PDF ticket for a specific reservation.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        reservation_pk (int): The primary key of the reservation for which to generate a ticket.
+
+    Returns:
+        HttpResponse: The generated PDF ticket.
+    """
+    reservation = get_object_or_404(Reservation, pk=reservation_pk)
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    # Draw border
+    p.setLineWidth(2)
+    p.rect(50, 50, width - 100, height - 100)
+
+    # Title
+    p.setFont("Helvetica-Bold", 20)
+    p.drawString(100, height - 100, f"Reservación: {reservation.tour.title}")
+
+    # Subtitle
+    p.setFont("Helvetica", 14)
+    p.drawString(100, height - 130,
+                 f"Folio de reservación: {reservation.folio}")
+
+    # Reservation details
+    p.setFont("Helvetica", 12)
+    data = [
+        ["Cliente", reservation.client.first_name +
+            " " + reservation.client.paternal_surname],
+        ['Identificador de cliente', reservation.client.identificator],
+        ["Tour", reservation.tour.title],
+        ["Agencia responsable", reservation.tour.agency.agency_name],
+        ["Espacios reservados", reservation.number_people],
+        ["Fecha de reservación",
+            reservation.reservation_date.strftime('%d/%m/%Y %H:%M')],
+        ["Fecha de inicio del tour",
+            reservation.tour.start_date.strftime('%d/%m/%Y %H:%M')],
+        ["Fecha de fin del tour",
+            reservation.tour.end_date.strftime('%d/%m/%Y %H:%M')],
+        ["Lugar de origen", reservation.tour.place_of_origin],
+        ["Lugar de destino", reservation.tour.destination_place],
+        ["Lugar de alojamiento", reservation.tour.lodging_place],
+        ["Precio total", f"${reservation.total_price}"],
+    ]
+
+    x = 100
+    y = height - 160
+    for row in data:
+        p.drawString(x, y, row[0] + ":")
+        p.drawString(x + 200, y, str(row[1]))
+        y -= 20
+
+    # Generate QR code
+    qr_data = f"Reservación: {reservation.folio}"
+    qr = qrcode.make(qr_data)
+    qr_buffer = io.BytesIO()
+    qr.save(qr_buffer, format='PNG')
+    qr_buffer.seek(0)
+
+    # Draw QR code
+    qr_image = ImageReader(qr_buffer)
+    p.drawImage(qr_image, width - 150, 100, width=100, height=100)
+
+    # Footer
+    p.setFont("Helvetica-Oblique", 10)
+    p.drawString(100, 70, "Gracias por su preferencia. ¡Disfrute su tour!")
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return HttpResponse(buffer, content_type='application/pdf')
+
+
+@ login_required(login_url='login')
 def client_profile(request):
     cliente = get_object_or_404(Client, user=request.user)
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=cliente)
-        profile_form = UserProfileForm(request.POST, request.FILES)
+        user_form = UserForm(request.POST, request.FILES, instance=cliente)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=cliente)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
+            profile_form.save()
 
-            # Si se sube una nueva imagen de perfil
-            profile_image = request.FILES.get('profile_image')
-            if profile_image:
-                # Define la ruta de guardado en static/img/perfil
-                save_path = os.path.join(
-                    settings.BASE_DIR, 'static', 'img', 'perfil', profile_image.name)
-
-                # Guarda la imagen en static/img/perfil
-                with open(save_path, 'wb+') as destination:
-                    for chunk in profile_image.chunks():
-                        destination.write(chunk)
-
-                cliente.profile_image = 'img/default_profile.jpg'
-                profile_form.save()
-                cliente.save()
-                messages.success(request, 'Perfil actualizado exitosamente.')
-
+            messages.success(request, 'Perfil actualizado exitosamente.')
             return redirect('client_profile')
+        else:
+            messages.error(
+                request, f'Por favor corrige los errores a continuación')
 
     else:
         user_form = UserForm(instance=cliente)
-        profile_form = UserProfileForm()
+        profile_form = UserProfileForm(instance=cliente)
 
     context = {
         'user_form': user_form,
@@ -118,7 +208,7 @@ def client_profile(request):
     return render(request, 'cliente/perfil.html', context)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def favorites(request):
     if request.user.is_authenticated:
         favorite_list = FavoriteList.objects.filter(
@@ -135,7 +225,7 @@ def favorites(request):
         return redirect('login')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def delete_favorite(request, tour_id):
     favorite_list = FavoriteList.objects.filter(
         client=request.user.client).first()
@@ -148,14 +238,70 @@ def delete_favorite(request, tour_id):
     return redirect('favorites')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def client_purchases(request):
     reservaciones = Reservation.objects.filter(client=request.user.client)
+    reviews = Reviews.objects.filter(reservation__in=reservaciones)
 
-    return render(request, 'cliente/compras.html', {'reservaciones': reservaciones})
+    context = {
+        'reservaciones': reservaciones,
+        'reviews': reviews
+    }
+
+    return render(request, 'cliente/historial.html', context)
 
 
-@login_required(login_url='login')
+class CreateReview(CreateView):
+    """
+    A view to create a new Review object.
+
+    Attributes:
+        model (Review): The model associated with this view.
+        form_class (ReviewForm): The form class to be used for creating a review.
+        template_name (str): The name of the template to be rendered.
+        success_url (str): The URL to redirect to upon successful form submission.
+    """
+    model = Reviews
+    template_name = 'cliente/reseña.html'
+    fields = ['rating', 'review_text']
+    success_url = reverse_lazy('client_purchases')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reservation_id'] = self.kwargs['reservation_id']
+        return context
+
+    def form_valid(self, form):
+        form.instance.reservation = Reservation.objects.get(
+            id=self.kwargs['reservation_id'])
+        return super().form_valid(form)
+
+
+class DeleteReview(DeleteView):
+    """
+    A view to delete a Review object.
+
+    Attributes:
+        model (Review): The model associated with this view.
+        template_name (str): The name of the template to be rendered.
+        success_url (str): The URL to redirect to upon successful form submission.
+    """
+    model = Reviews
+    template_name = 'cliente/eliminar_reseña.html'
+    success_url = reverse_lazy('client_purchases')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['review_id'] = self.kwargs['pk']
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return redirect(self.success_url)
+
+
+@ login_required(login_url='login')
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)
 
@@ -176,7 +322,7 @@ def add_payment_method(request):
     return render(request, "cliente/agregar_metodo_pago.html")
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def agency_dashboard(request):
     """
     Renders the agency dashboard page.
@@ -190,7 +336,7 @@ def agency_dashboard(request):
     return render(request, 'agency_dashboard.html')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def agency_profile(request):
     agencia = get_object_or_404(Agency, user=request.user)
 
@@ -218,7 +364,7 @@ def agency_profile(request):
     return render(request, 'agencia/perfil.html', context)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def reports(request):
     agency_tours = Tour.objects.filter(agency=request.user.agency)
 
@@ -229,7 +375,7 @@ def reports(request):
     return render(request, 'agencia/reportes.html', context)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def generate_report(request, tour_id):
     tour = get_object_or_404(Tour, id=tour_id)
 
@@ -271,7 +417,7 @@ def generate_report(request, tour_id):
     return HttpResponse(buffer, content_type='application/pdf')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def tours_dashboard(request):
     """
     Renders the tours dashboard page.
@@ -308,6 +454,24 @@ class CreateTour(CreateView):
     success_url = reverse_lazy('tours_dashboard')
 
     def form_valid(self, form):
+        start_date = form.cleaned_data.get('start_date')
+        end_date = form.cleaned_data.get('end_date')
+
+        if start_date >= end_date:
+            form.add_error(
+                'start_date', 'La fecha de inicio debe ser anterior a la fecha de fin.')
+            return self.form_invalid(form)
+
+        if start_date < timezone.now():
+            form.add_error(
+                'start_date', 'La fecha de inicio debe ser posterior a la fecha actual.')
+            return self.form_invalid(form)
+
+        if end_date < timezone.now():
+            form.add_error(
+                'end_date', 'La fecha de fin debe ser posterior a la fecha actual.')
+            return self.form_invalid(form)
+
         form.instance.total_bookings = 0
         form.instance.agency = self.request.user.agency
         return super().form_valid(form)
