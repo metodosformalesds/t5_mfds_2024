@@ -183,6 +183,10 @@ def registrar_cliente(request):
                     messages.error(
                         request, 'Debes ser mayor de edad para registrarte.')
                     return redirect('registrar_cliente')
+                elif age > 100:
+                    messages.error(
+                        request, 'Por favor ingresa una fecha de nacimiento válida.')
+                    return redirect('registrar_cliente')
 
                 request.session['first_name'] = first_name
                 request.session['paternal_surname'] = paternal_surname

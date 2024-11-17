@@ -194,7 +194,6 @@
         });
     }); 
 </script> {% endcomment %}
-
 <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
@@ -210,7 +209,6 @@
             console.error("Error al acceder a la cámara: ", error);
             alert("No se pudo acceder a la cámara. Asegúrate de que tienes permisos.");
     });
-
 
     captureButton.addEventListener('click', () => {
         canvas.width = video.videoWidth;
@@ -235,5 +233,6 @@
         retryButton.style.display = 'none';
         identificacionBiometrica.value = '';
     });
-    </script>
+</script>
+
 {% endblock content %}
