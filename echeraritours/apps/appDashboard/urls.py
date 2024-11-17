@@ -8,6 +8,10 @@ urlpatterns = [
     path('cliente/dashboard/', views.client_dashboard, name='client_dashboard'),
     path('cliente/dashboard/planes_activos/',
          views.client_active_plans, name='client_active_plans'),
+    path('cliente/dashboard/planes_activos/detalles/<int:reservation_pk>/',
+         views.PlanDetailView.as_view(), name='plan_detail'),
+    path('cliente/dashboard/planes_activos/detalles/<int:reservation_pk>/ticket/',
+         views.ticket, name='ticket'),
     path('cliente/dashboard/perfil/', views.client_profile, name='client_profile'),
     path('cliente/dashboard/metodos_pago/',
          views.payment_methods_client, name='payment_methods_client'),
@@ -18,6 +22,11 @@ urlpatterns = [
          views.delete_favorite, name='delete_favorite'),
     path('cliente/dashboard/historial',
          views.client_purchases, name='client_purchases'),
+    path('cliente/dashboard/reseñas/<int:reservation_id>/',
+         views.CreateReview.as_view(), name="create_review"),
+    path('cliente/dashboard/reseñas/eliminar/<int:pk>/',
+         views.DeleteReview.as_view(), name='delete_review'),
+
 
 
     path('agencia/dashboard/', views.agency_dashboard, name='agency_dashboard'),
@@ -30,6 +39,7 @@ urlpatterns = [
     path('agencia/dashboard/reportes/', views.reports, name='reports'),
     path('agencia/dashboard/reportes/<int:tour_id>/',
          views.generate_report, name='generate_report'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from apps.appUser.models import Client, Agency
+import random
 
 # Create your models here.
 
@@ -31,7 +32,7 @@ class Tour(models.Model):
     title = models.CharField(max_length=100)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     description = models.TextField(max_length=500)
-    lodging_place = models.CharField(max_length=30)  # Lugar de hospedaje
+    lodging_place = models.CharField(max_length=100)  # Lugar de hospedaje
     price_per_person = models.DecimalField(
         validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
@@ -78,8 +79,9 @@ class Reservation(models.Model):
     number_people = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
     total_price = models.DecimalField(
-        max_digits=10, decimal_places=2, editable=False, blank=True, null=True)
+        max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=0)
     reservation_date = models.DateTimeField(auto_now_add=True)
+    folio = models.IntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'Reservación'
@@ -89,11 +91,15 @@ class Reservation(models.Model):
     def calculate_total_price(self):
         return self.tour.price_per_person * self.number_people
 
+    def generate_random_folio(self):
+        self.folio = random.randint(100000, 999999)
+
     def save(self, *args, **kwargs):
         if self.tour.total_bookings + self.number_people > self.tour.capacity:
             raise ValueError(
                 "No se puede reservar más personas que la capacidad del tour."
             )
+        self.generate_random_folio()
         self.total_price = self.calculate_total_price()
         self.tour.total_bookings += self.number_people
         self.tour.save()

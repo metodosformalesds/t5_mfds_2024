@@ -78,20 +78,26 @@
 <!-- Sección últimas reseñas -->
 <div class="container-fluid py-5 fondo-verde-claro">
     <h3 class="text-center mb-4">Últimas reseñas</h3>
+    {% if reviews %}
     <div class="card-columns">  
         {% for review in reviews %}
         <div class="card">
-            <div class="card-body">
+            <div class="card-body text-center">
                 <h5 class="card-title">{{ review.reservation.tour.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Calificación: {{ review.rating }}💫</h6>
+                <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                     alt="Perfil" class="rounded-circle mx-auto d-block" style="height: 100px; width: 100px;">
                 <p class="card-text"> {{ review.review_text }}</p>
                 <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
             </div>
         </div>
-        {% empty %}
-        <h4> <!-- Hol a--></h4>
-        <h4 class="text-center">No hay reseñas disponibles</h4> 
         {% endfor %}
     </div>
+    {% else %}
+        <div class="text-center" role="alert">
+            No hay reseñas disponibles
+        </div>
+        {% endif %}
 </div>
 
 {% endblock content %}
