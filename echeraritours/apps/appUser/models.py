@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from django.contrib.auth.models import User
 import time
@@ -39,6 +40,7 @@ class Client(models.Model):
     phone = models.CharField(max_length=15)
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
+    identificator = models.IntegerField(blank=True, null=True, unique=True)
 
     identification = models.ImageField(upload_to='static/identifications/')
 
@@ -53,6 +55,9 @@ class Client(models.Model):
     def get_profile_image_url(self):
         return f'{self.profile_image}'
 
+    def generate_identificator(self):
+        self.identificator = random.randint(100000, 999999)
+
     stripe_customer_id = models.CharField(
         max_length=255, blank=True, null=True)
 
@@ -63,6 +68,7 @@ class Client(models.Model):
                 name=f"{self.first_name} {self.paternal_surname}",
             )
             self.stripe_customer_id = customer.id
+        self.generate_identificator()
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

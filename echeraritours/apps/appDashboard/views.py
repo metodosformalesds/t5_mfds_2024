@@ -17,7 +17,11 @@ from .models import FavoriteList
 from django.utils import timezone
 from django import forms
 import boto3
+from django.views.generic.detail import DetailView
 from django.conf import settings
+import qrcode
+from reportlab.lib.utils import ImageReader
+from reportlab.lib.pagesizes import letter
 
 # Create your views here.
 
@@ -79,7 +83,101 @@ def client_active_plans(request):
     return render(request, 'cliente/planes_activos.html', {'reservaciones': reservaciones})
 
 
-@login_required(login_url='login')
+class PlanDetailView(DetailView):
+    """
+    A view to display the details of a specific plan.
+
+    Attributes:
+        model (Reservation): The model associated with this view.
+        template_name (str): The name of the template to be rendered.
+        context_object_name (str): The name of the context object to be used in the template.
+    """
+    model = Reservation
+    template_name = 'cliente/detalles_plan.html'
+    context_object_name = 'reservacion'
+    pk_url_kwarg = 'reservation_pk'
+
+
+def ticket(request, reservation_pk):
+    """
+    Generates a PDF ticket for a specific reservation.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        reservation_pk (int): The primary key of the reservation for which to generate a ticket.
+
+    Returns:
+        HttpResponse: The generated PDF ticket.
+    """
+    reservation = get_object_or_404(Reservation, pk=reservation_pk)
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    # Draw border
+    p.setLineWidth(2)
+    p.rect(50, 50, width - 100, height - 100)
+
+    # Title
+    p.setFont("Helvetica-Bold", 20)
+    p.drawString(100, height - 100, f"Reservación: {reservation.tour.title}")
+
+    # Subtitle
+    p.setFont("Helvetica", 14)
+    p.drawString(100, height - 130,
+                 f"Folio de reservación: {reservation.folio}")
+
+    # Reservation details
+    p.setFont("Helvetica", 12)
+    data = [
+        ["Cliente", reservation.client.first_name +
+            " " + reservation.client.paternal_surname],
+        ['Identificador de cliente', reservation.client.identificator],
+        ["Tour", reservation.tour.title],
+        ["Agencia responsable", reservation.tour.agency.agency_name],
+        ["Espacios reservados", reservation.number_people],
+        ["Fecha de reservación",
+            reservation.reservation_date.strftime('%d/%m/%Y %H:%M')],
+        ["Fecha de inicio del tour",
+            reservation.tour.start_date.strftime('%d/%m/%Y %H:%M')],
+        ["Fecha de fin del tour",
+            reservation.tour.end_date.strftime('%d/%m/%Y %H:%M')],
+        ["Lugar de origen", reservation.tour.place_of_origin],
+        ["Lugar de destino", reservation.tour.destination_place],
+        ["Lugar de alojamiento", reservation.tour.lodging_place],
+        ["Precio total", f"${reservation.total_price}"],
+    ]
+
+    x = 100
+    y = height - 160
+    for row in data:
+        p.drawString(x, y, row[0] + ":")
+        p.drawString(x + 200, y, str(row[1]))
+        y -= 20
+
+    # Generate QR code
+    qr_data = f"Reservación: {reservation.folio}"
+    qr = qrcode.make(qr_data)
+    qr_buffer = io.BytesIO()
+    qr.save(qr_buffer, format='PNG')
+    qr_buffer.seek(0)
+
+    # Draw QR code
+    qr_image = ImageReader(qr_buffer)
+    p.drawImage(qr_image, width - 150, 100, width=100, height=100)
+
+    # Footer
+    p.setFont("Helvetica-Oblique", 10)
+    p.drawString(100, 70, "Gracias por su preferencia. ¡Disfrute su tour!")
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return HttpResponse(buffer, content_type='application/pdf')
+
+
+@ login_required(login_url='login')
 def client_profile(request):
     cliente = get_object_or_404(Client, user=request.user)
 
@@ -110,7 +208,7 @@ def client_profile(request):
     return render(request, 'cliente/perfil.html', context)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def favorites(request):
     if request.user.is_authenticated:
         favorite_list = FavoriteList.objects.filter(
@@ -127,7 +225,7 @@ def favorites(request):
         return redirect('login')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def delete_favorite(request, tour_id):
     favorite_list = FavoriteList.objects.filter(
         client=request.user.client).first()
@@ -140,7 +238,7 @@ def delete_favorite(request, tour_id):
     return redirect('favorites')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def client_purchases(request):
     reservaciones = Reservation.objects.filter(client=request.user.client)
     reviews = Reviews.objects.filter(reservation__in=reservaciones)
@@ -203,7 +301,7 @@ class DeleteReview(DeleteView):
         return redirect(self.success_url)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def payment_methods_client(request):
     metodos = PaymentMethod.objects.filter(client=request.user.client)
 
@@ -224,7 +322,7 @@ def add_payment_method(request):
     return render(request, "cliente/agregar_metodo_pago.html")
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def agency_dashboard(request):
     """
     Renders the agency dashboard page.
@@ -238,7 +336,7 @@ def agency_dashboard(request):
     return render(request, 'agency_dashboard.html')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def agency_profile(request):
     agencia = get_object_or_404(Agency, user=request.user)
 
@@ -266,7 +364,7 @@ def agency_profile(request):
     return render(request, 'agencia/perfil.html', context)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def reports(request):
     agency_tours = Tour.objects.filter(agency=request.user.agency)
 
@@ -277,7 +375,7 @@ def reports(request):
     return render(request, 'agencia/reportes.html', context)
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def generate_report(request, tour_id):
     tour = get_object_or_404(Tour, id=tour_id)
 
@@ -319,7 +417,7 @@ def generate_report(request, tour_id):
     return HttpResponse(buffer, content_type='application/pdf')
 
 
-@login_required(login_url='login')
+@ login_required(login_url='login')
 def tours_dashboard(request):
     """
     Renders the tours dashboard page.
