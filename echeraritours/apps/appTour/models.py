@@ -31,7 +31,7 @@ class Tour(models.Model):
     title = models.CharField(max_length=100)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     description = models.TextField(max_length=500)
-    lodging_place = models.CharField(max_length=30)  # Lugar de hospedaje
+    lodging_place = models.CharField(max_length=100)  # Lugar de hospedaje
     price_per_person = models.DecimalField(
         validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])

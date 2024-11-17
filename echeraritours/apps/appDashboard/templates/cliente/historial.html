@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load review_filters %}
 {% block title %}Historial de Compras - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
@@ -45,11 +46,17 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ reservacion.tour.title }}</td>
-                            <td>{{ reservacion.date_purchased|date:"d M Y" }}</td>
+                            <td>{{ reservacion.reservation_date|date:"d M Y" }}</td>
                             <td>{{ reservacion.tour.start_date|date:"d M Y" }} a {{ reservacion.tour.end_date|date:"d M Y" }}</td>
                             <td>MXN${{ reservacion.calculate_total_price }}</td>
                             <td>
-                                <a href="{% url 'detalle_compra' reservacion.id %}" class="btn btn-primary btn-sm">Detalles</a>
+                                {% with review=reservacion|get_review:reviews %}
+                                {% if review %}
+                                <a href="{% url 'delete_review' review.id %}" class="btn btn-secondary">Eliminar reseña</a>
+                                {% else %}
+                                <a href="{% url 'create_review' reservacion.id %}" class="btn btn-primary">Reseña</a>
+                                {% endif %}
+                                {% endwith %}
                             </td>
                         </tr>
                         {% endfor %}

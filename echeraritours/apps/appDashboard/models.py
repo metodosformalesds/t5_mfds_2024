@@ -75,31 +75,3 @@ class FavoriteList(models.Model):
 
     def __str__(self):
         return f"Lista de favoritos del cliente {self.client.user}"
-
-class ClienteHistorial(models.Model):
-    """
-    Represents the purchase history of a client.
-    Attributes:
-        client (ForeignKey): The client who made the purchase.
-        tour (ForeignKey): The tour purchased.
-        purchase_date (DateTimeField): The date and time of the purchase.
-        amount_paid (DecimalField): The total amount paid for the tour.
-    Meta:
-        verbose_name (str): The singular name for the model.
-        verbose_name_plural (str): The plural name for the model.
-        ordering (list): The default ordering for the model.
-    Methods:
-        __str__(): Returns a string representation of the purchase history.
-    """
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    tour = models.ForeignKey(Tour, on_delete=models.CASCADE)
-    purchase_date = models.DateTimeField(auto_now_add=True)
-    amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
-
-    class Meta:
-        verbose_name = 'Historial de Compra'
-        verbose_name_plural = 'Historiales de Compra'
-        ordering = ['-purchase_date']
-
-    def __str__(self):
-        return f"Compra de {self.client.user} para el tour {self.tour.title}"

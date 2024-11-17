@@ -15,7 +15,7 @@ import os
 from echeraritours import settings
 from .models import FavoriteList
 from django.utils import timezone
-from .models import ClienteHistorial
+from django import forms
 
 # Create your views here.
 
@@ -159,7 +159,7 @@ def client_purchases(request):
         'reviews': reviews
     }
 
-    return render(request, 'cliente/compras.html', context)
+    return render(request, 'cliente/historial.html', context)
 
 
 class CreateReview(CreateView):
@@ -365,6 +365,24 @@ class CreateTour(CreateView):
     success_url = reverse_lazy('tours_dashboard')
 
     def form_valid(self, form):
+        start_date = form.cleaned_data.get('start_date')
+        end_date = form.cleaned_data.get('end_date')
+
+        if start_date >= end_date:
+            form.add_error(
+                'start_date', 'La fecha de inicio debe ser anterior a la fecha de fin.')
+            return self.form_invalid(form)
+
+        if start_date < timezone.now():
+            form.add_error(
+                'start_date', 'La fecha de inicio debe ser posterior a la fecha actual.')
+            return self.form_invalid(form)
+
+        if end_date < timezone.now():
+            form.add_error(
+                'end_date', 'La fecha de fin debe ser posterior a la fecha actual.')
+            return self.form_invalid(form)
+
         form.instance.total_bookings = 0
         form.instance.agency = self.request.user.agency
         return super().form_valid(form)

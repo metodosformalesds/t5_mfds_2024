@@ -15,6 +15,7 @@ from .forms import CreateUserForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from allauth.socialaccount.models import SocialAccount
+from datetime import datetime, timedelta
 
 
 # Para los decoradores que validan ciertas vistas
@@ -173,6 +174,16 @@ def registrar_cliente(request):
             birth_date = request.POST.get('fecha_nacimiento')
 
             if first_name and paternal_surname and maternal_surname and birth_date:
+                birth_date = datetime.strptime(birth_date, '%Y-%m-%d')
+                today = datetime.now()
+                age = today.year - birth_date.year - \
+                    ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+                if age < 18:
+                    messages.error(
+                        request, 'Debes ser mayor de edad para registrarte.')
+                    return redirect('registrar_cliente')
+
                 request.session['first_name'] = first_name
                 request.session['paternal_surname'] = paternal_surname
                 request.session['maternal_surname'] = maternal_surname
@@ -579,13 +590,13 @@ def google_login(request):
     """
     if request.user.is_authenticated:
         return redirect('index')
-        
+
     if request.method == 'POST':
-        email = request.POST.get('email')  
+        email = request.POST.get('email')
         if User.objects.filter(email=email).exists():
             user = authenticate(request, email=email)
             login(request, user)
             return redirect('index')
         else:
             return redirect('register', email=email)
-    return render(request, 'index')  
+    return render(request, 'index')
