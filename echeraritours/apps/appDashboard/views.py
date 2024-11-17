@@ -16,6 +16,8 @@ from echeraritours import settings
 from .models import FavoriteList
 from django.utils import timezone
 from django import forms
+import boto3
+from django.conf import settings
 
 # Create your views here.
 
@@ -82,34 +84,23 @@ def client_profile(request):
     cliente = get_object_or_404(Client, user=request.user)
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=cliente)
-        profile_form = UserProfileForm(request.POST, request.FILES)
+        user_form = UserForm(request.POST, request.FILES, instance=cliente)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=cliente)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
+            profile_form.save()
 
-            # Si se sube una nueva imagen de perfil
-            profile_image = request.FILES.get('profile_image')
-            if profile_image:
-                # Define la ruta de guardado en static/img/perfil
-                save_path = os.path.join(
-                    settings.BASE_DIR, 'static', 'img', 'perfil', profile_image.name)
-
-                # Guarda la imagen en static/img/perfil
-                with open(save_path, 'wb+') as destination:
-                    for chunk in profile_image.chunks():
-                        destination.write(chunk)
-
-                cliente.profile_image = 'img/default_profile.jpg'
-                profile_form.save()
-                cliente.save()
-                messages.success(request, 'Perfil actualizado exitosamente.')
-
+            messages.success(request, 'Perfil actualizado exitosamente.')
             return redirect('client_profile')
+        else:
+            messages.error(
+                request, f'Por favor corrige los errores a continuación')
 
     else:
         user_form = UserForm(instance=cliente)
-        profile_form = UserProfileForm()
+        profile_form = UserProfileForm(instance=cliente)
 
     context = {
         'user_form': user_form,

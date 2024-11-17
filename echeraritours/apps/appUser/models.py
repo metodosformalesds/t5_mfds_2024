@@ -41,13 +41,14 @@ class Client(models.Model):
     zip_code = models.CharField(max_length=10)
 
     identification = models.ImageField(upload_to='static/identifications/')
-    
+
     id_identificacion_oficial_url = models.URLField(
         max_length=500, blank=True, null=True)
     id_identificacion_biometrica_url = models.URLField(
         max_length=500, blank=True, null=True)
-        
-    profile_image = models.CharField(max_length=255, null=True, blank=True, default='img/default_profile.jpg')
+
+    profile_image = models.ImageField(
+        upload_to='profile_images/', null=True, blank=True)
 
     def get_profile_image_url(self):
         return f'{self.profile_image}'
@@ -113,7 +114,8 @@ class Agency(models.Model):
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
     certificate = models.ImageField(upload_to='static/certificates/')
-    profile_image = models.CharField(max_length=255, null=True, blank=True, default='img/default_profile.jpg')
+    profile_image = models.ImageField(
+        upload_to='profile_images/', null=True, blank=True)
 
     def get_profile_image_url(self):
         if self.profile_image:
