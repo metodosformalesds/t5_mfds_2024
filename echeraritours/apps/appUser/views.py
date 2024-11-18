@@ -53,7 +53,7 @@ def index(request):
         request (HttpRequest): The HTTP request object.
     Returns:
         HttpResponse: The rendered 'index.html' template with the context containing
-                      the latest 5 reviews.
+                        the latest 5 reviews.
     """
     reviews = Reviews.objects.order_by('-review_date')[:5]
     tours = Tour.objects.all()

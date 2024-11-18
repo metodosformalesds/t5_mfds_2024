@@ -8,18 +8,20 @@
 
 {% block content %}
 <div class="container-fluid col-xl-12 col-xxl-8 px-4 py-5 blur-background">
-    <div class="container blur-content">
-        <div class="row align-items-center g-lg-5 py-5"> 
-            <div class="col-md-10 mx-auto col-lg-5 d-flex align-items-center">
-                <img src="{% static 'img/logo_eheraritours.png' %}" alt="Logo EcherariTours">
+    <div class="container-fluid blur-content pt-5">
+        <div class="row align-items-center g-4 py-5">
+            <div class="col-md-6 d-flex justify-content-center">
+                <div style="max-width: 100%; height: auto;">
+                    <img src="{% static 'img/logo_eheraritours_white.png' %}" alt="Logo EcherariTours" class="img-fluid mb-3" style="max-height: 200px;">
+                </div>
             </div>
-            <div class="col-md-10 mx-auto col-lg-5 d-flex align-items-center">
-                <h1 class="ms-3 mb-0 titulo">Echérari Tours</h1>
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <h1 class="titulo text-center text-light">Echérari Tours</h1>
             </div>
         </div>
     </div>
-    <hr class="my-4" style="border-color: white">
-    <h2 class="text-center text-light">De Chihuahua a todo México: Tu aventura te espera</h2>
+    <hr class="mt-5 mb-3" style="border-color: white">
+    <h2 class="text-center text-light pb-5 titulo">De Chihuahua a todo México: Tu aventura te espera</h2>
 </div> 
 
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
@@ -77,27 +79,37 @@
 
 <!-- Sección últimas reseñas -->
 <div class="container-fluid py-5 fondo-verde-claro">
-    <h3 class="text-center mb-4">Últimas reseñas</h3>
+    <h3 class="text-center mb-5">Últimas reseñas</h3>
     {% if reviews %}
-    <div class="card-columns">  
-        {% for review in reviews %}
-        <div class="card">
-            <div class="card-body text-center">
-                <h5 class="card-title">{{ review.reservation.tour.title }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Calificación: {{ review.rating }}💫</h6>
-                <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
-                     alt="Perfil" class="rounded-circle mx-auto d-block" style="height: 100px; width: 100px;">
-                <p class="card-text"> {{ review.review_text }}</p>
-                <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
-            </div>
+        <div class="card-columns">  
+            {% for review in reviews %}
+                <div class="card p-3 shadow-sm border-0 mt-5">
+                    <div class="card-body text-center">
+                        <img src="{% if review.reservation.client.profile_image_url %}{{ review.reservation.client.profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Perfil" class="rounded-circle mb-3" style="height: 6rem; width: 6rem;">
+
+                        <div class="d-flex justify-content-center mb-3">
+                            <i class="star {% if review.rating >= 1 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
+                            <i class="star {% if review.rating >= 2 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
+                            <i class="star {% if review.rating >= 3 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
+                            <i class="star {% if review.rating >= 4 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
+                            <i class="star {% if review.rating >= 5 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
+                        </div>                            
+
+                        <h5 class="card-title font-weight-bold mb-2"> {{ review.reservation.tour.title }} </h5>
+                        <p class="card-text">"{{ review.review_text }}"</p>
+
+                        <p class="card-text font-weight-bold">
+                            Por: {{ review.reservation.client.first_name }} - {{ review.review_date }}
+                        </p>
+                    </div>
+                </div>        
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     {% else %}
         <div class="text-center" role="alert">
             No hay reseñas disponibles
         </div>
-        {% endif %}
+    {% endif %}
 </div>
 
 {% endblock content %}

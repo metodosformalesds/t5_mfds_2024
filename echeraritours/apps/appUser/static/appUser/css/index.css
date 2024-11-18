@@ -29,8 +29,13 @@ body {
 }
 
 h1.titulo {
-    font-size: 4rem;
-    color: #68ddbd;
+    font-size: 3.7rem;
+    font-weight: bold;
+    margin: 0%;
+}
+
+h2.titulo {
+    font-size: 2rem;
     font-weight: bold;
 }
 
@@ -86,6 +91,41 @@ h1.titulo {
 }
 
 
-.review-card {
-    margin-bottom: 20px;
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.card img {
+    border: 3px solid #1B1C1E;
+    margin-top: -5rem;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.card-text {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.bi-star-fill {
+    font-size: 1.2rem;
+}
+
+.card-body {
+    background-color: #fff;
+}
+
+.star {
+    font-size: 2rem; 
+    color: #d3d3d3; 
+    transition: color 0.2s ease;
+}
+
+.star.filled {
+    color: #FFD700;
+}
+
