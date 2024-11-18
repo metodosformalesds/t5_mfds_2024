@@ -12,7 +12,6 @@
     <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
         {% include "client_sidebar.html" %}
     </div>
-
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <article class="card">
             <header class="card-header">
@@ -27,62 +26,65 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <div class="col-md-4 text-center">
-                        <label for="profileImageInput" class="profile-image-label">
-                            <img id="profileImagePreview" 
-                                 src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
-                                 alt="Foto de perfil" 
-                                 width="150" 
-                                 class="img-fluid rounded-circle profile-image">
-                            <div class="overlay">
-                                Haz clic aquí para cambiar la foto
+                    <div class="row form-container">
+
+                        <!-- Formulario -->
+                        <!-- Formulario -->
+                    <div class="col-md-8 mt-4 form-content">
+                        <form action="{% url 'client_profile' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-md-6 profile-containe text-center">
+                                <label for="profileImageInput" class="profile-image-label">
+                                    <img id="profileImagePreview" 
+                                    src="{% if cliente.profile_image %}{{ cliente.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Foto de perfil"                                         alt="Foto de perfil" 
+                                        width="50" 
+                                        height="50"
+                                        class="rounded-circle profile-image">
+                                    <div class="overlay">
+                                        Haz clic aquí para cambiar la foto
+                                    </div>
+                                </label>
+                                <input type="file" id="profileImageInput" name="profile_image" accept="image/*" style="display: none;">
                             </div>
-                        </label>
-                        <input type="file" id="profileImageInput" name="profile_image" accept="image/*" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="id_first_name">Nombre</label>
+                                    {{ user_form.first_name }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="id_paternal_surname">Apellidos</label>
+                                    {{ user_form.paternal_surname }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="id_phone">Número de teléfono</label>
+                                    {{ user_form.phone }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="id_city">Estado</label>
+                                    <input type="text" id="id_city" name="city" list="city-datalist" class="form-control" value="{{ user_form.city.value }}">
+                                    <datalist id="city-datalist">
+                                        {% for state in valid_states %}
+                                            <option value="{{ state|title }}"></option>
+                                        {% endfor %}
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="id_zip_code">Código postal</label>
+                                    {{ user_form.zip_code }}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="id_birth_date">Fecha de nacimiento</label>
+                                    {{ user_form.birth_date }}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Actualizar información</button>
+                        </form>
                     </div>
-                        <div class="col-md-8">
-                            <form action="{% url 'client_profile' %}" method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="id_first_name">Nombre</label>
-                                        {{ user_form.first_name }}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="id_paternal_surname">Apellidos</label>
-                                        {{ user_form.paternal_surname }}
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="id_phone">Número de teléfono</label>
-                                        {{ user_form.phone }}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="id_city">Estado</label>
-                                        <input type="text" id="id_city" name="city" list="city-datalist" class="form-control" value="{{ user_form.city.value }}">
-                                        <datalist id="city-datalist">
-                                            {% for state in valid_states %}
-                                                <option value="{{ state|title }}"></option>
-                                            {% endfor %}
-                                        </datalist>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="id_zip_code">Código postal</label>
-                                        {{ user_form.zip_code }}
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="id_birth_date">Fecha de nacimiento</label>
-                                        {{ user_form.birth_date }}
-                                    </div>
-                                </div>
-                                <input type="submit" id="submit-btn" class="btn btn-primary" value="Guardar cambios">
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                </div>                    
                 <footer class="card-footer">
                 </footer>
         </article>
@@ -91,118 +93,112 @@
 
 {% block extra_scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
     const phoneInput = document.getElementById('id_phone');
     const cityInput = document.getElementById('id_city');
-    const zipCodeInput = document.getElementById('id_zip_code');  
+    const zipCodeInput = document.getElementById('id_zip_code');
+    const birthDateInput = document.getElementById('id_birth_date');
     const submitBtn = document.getElementById('submit-btn');
-    document.addEventListener('DOMContentLoaded', function() {
-    const profileImageInput = document.getElementById('profileImageInput');
-    const profileImagePreview = document.getElementById('profileImagePreview');
-    profileImageInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                profileImagePreview.src = e.target.result; 
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-});
 
-    // Verifica 
-    if (phoneInput && cityInput && zipCodeInput) {
-        const validStates = [
-            'aguascalientes', 'baja california', 'baja california sur', 'campeche', 'chiapas',
-            'chihuahua', 'coahuila', 'colima', 'ciudad de méxico', 'durango', 'guanajuato',
-            'guerrero', 'hidalgo', 'jalisco', 'méxico', 'michoacán', 'morelos', 'nayarit',
-            'nuevo león', 'oaxaca', 'puebla', 'querétaro', 'quintana roo', 'san luis potosí',
-            'sinaloa', 'sonora', 'tabasco', 'tamaulipas', 'tlaxcala', 'veracruz', 'yucatán', 'zacatecas'
-        ];
+    const validStates = [
+        'aguascalientes', 'baja california', 'baja california sur', 'campeche', 'chiapas', 'chihuahua', 'coahuila', 'colima', 'ciudad de méxico', 'durango', 'guanajuato', 'guerrero', 'hidalgo', 'jalisco', 'méxico', 'michoacán', 'morelos', 'nayarit', 'nuevo león', 'oaxaca', 'puebla', 'querétaro', 'quintana roo', 'san luis potosí', 'sinaloa', 'sonora', 'tabasco', 'tamaulipas', 'tlaxcala', 'veracruz', 'yucatán', 'zacatecas'
+    ];
 
-        const stateZipCodeRanges = {
-            'aguascalientes': [20000, 20999],
-            'baja california': [21000, 22999],
-            'baja california sur': [23000, 23999],
-            'campeche': [24000, 24999],
-            'chiapas': [29000, 30999],
-            'chihuahua': [31000, 33999],
-            'coahuila': [25000, 27999],
-            'colima': [28000, 28999],
-            'ciudad de méxico': [1000, 19999],
-            'durango': [34000, 35999],
-            'guanajuato': [36000, 38999],
-            'guerrero': [39000, 41999],
-            'hidalgo': [42000, 43999],
-            'jalisco': [44000, 49999],
-            'méxico': [50000, 57999],
-            'michoacán': [58000, 61999],
-            'morelos': [62000, 62999],
-            'nayarit': [63000, 63999],
-            'nuevo león': [64000, 67999],
-            'oaxaca': [68000, 71999],
-            'puebla': [72000, 75999],
-            'querétaro': [76000, 76999],
-            'quintana roo': [77000, 77999],
-            'san luis potosí': [78000, 79999],
-            'sinaloa': [80000, 82999],
-            'sonora': [83000, 85999],
-            'tabasco': [86000, 86999],
-            'tamaulipas': [87000, 89999],
-            'tlaxcala': [90000, 90999],
-            'veracruz': [91000, 97999],
-            'yucatán': [97000, 97999],
-            'zacatecas': [98000, 99999]
-        };
+    const stateZipCodeRanges = {
+        'aguascalientes': [20000, 20999],
+        'baja california': [21000, 22999],
+        'baja california sur': [23000, 23999],
+        'campeche': [24000, 24999],
+        'chiapas': [29000, 30999],
+        'chihuahua': [31000, 33999],
+        'coahuila': [25000, 27999],
+        'colima': [28000, 28999],
+        'ciudad de méxico': [1000, 19999],
+        'durango': [34000, 35999],
+        'guanajuato': [36000, 38999],
+        'guerrero': [39000, 41999],
+        'hidalgo': [42000, 43999],
+        'jalisco': [44000, 49999],
+        'méxico': [50000, 57999],
+        'michoacán': [58000, 61999],
+        'morelos': [62000, 62999],
+        'nayarit': [63000, 63999],
+        'nuevo león': [64000, 67999],
+        'oaxaca': [68000, 71999],
+        'puebla': [72000, 75999],
+        'querétaro': [76000, 76999],
+        'quintana roo': [77000, 77999],
+        'san luis potosí': [78000, 79999],
+        'sinaloa': [80000, 82999],
+        'sonora': [83000, 85999],
+        'tabasco': [86000, 86999],
+        'tamaulipas': [87000, 89999],
+        'tlaxcala': [90000, 90999],
+        'veracruz': [91000, 97999],
+        'yucatán': [97000, 97999],
+        'zacatecas': [98000, 99999]
+    };
 
-        function validateForm() {
-            let isValid = true;
+    function validateForm() {
+        let isValid = true;
 
-            // Validar teléfono
-            if (phoneInput.value.length < 10) {
-                phoneInput.setCustomValidity('El número de teléfono debe tener al menos 10 dígitos.');
-                isValid = false;
-            } else {
-                phoneInput.setCustomValidity('');
-            }
-
-            // Validar ciudad
-            const cityValue = cityInput.value.toLowerCase();
-            if (!validStates.includes(cityValue)) {
-                cityInput.setCustomValidity('Por favor ingrese un estado válido.');
-                isValid = false;
-            } else {
-                cityInput.setCustomValidity('');
-            }
-
-            // Validar CP
-            const zipCodeValue = parseInt(zipCodeInput.value, 10);
-            if (stateZipCodeRanges[cityValue]) {
-                const [minZip, maxZip] = stateZipCodeRanges[cityValue];
-                if (zipCodeValue < minZip || zipCodeValue > maxZip) {
-                    zipCodeInput.setCustomValidity('El código postal no coincide con el estado.');
-                    isValid = false;
-                } else {
-                    zipCodeInput.setCustomValidity('');
-                }
-            } else {
-                zipCodeInput.setCustomValidity('Por favor ingrese un estado válido primero.');
-                isValid = false;
-            }
-
-            if (submitBtn) {
-                submitBtn.disabled = !isValid;
-            }
+        // Validar teléfono
+        if (phoneInput.value.length < 10) {
+            phoneInput.setCustomValidity('El número de teléfono debe tener al menos 10 dígitos.');
+            isValid = false;
+        } else {
+            phoneInput.setCustomValidity('');
         }
 
-        phoneInput.addEventListener('input', validateForm);
-        cityInput.addEventListener('input', validateForm);
-        zipCodeInput.addEventListener('input', validateForm);
+        // Validar ciudad
+        const cityValue = cityInput.value.toLowerCase();
+        if (!validStates.includes(cityValue)) {
+            cityInput.setCustomValidity('Por favor ingrese un estado válido.');
+            isValid = false;
+        } else {
+            cityInput.setCustomValidity('');
+        }
 
-        validateForm(); // Validación inicial
+        // Validar CP
+        const zipCodeValue = parseInt(zipCodeInput.value, 10);
+        if (stateZipCodeRanges[cityValue]) {
+            const [minZip, maxZip] = stateZipCodeRanges[cityValue];
+            if (zipCodeValue < minZip || maxZip < zipCodeValue) {
+                zipCodeInput.setCustomValidity('El código postal no coincide con el estado.');
+                isValid = false;
+            } else {
+                zipCodeInput.setCustomValidity('');
+            }
+        } else {
+            zipCodeInput.setCustomValidity('Por favor ingrese un estado válido primero.');
+            isValid = false;
+        }
+
+        // Validar fecha de nacimiento
+        const birthDateValue = new Date(birthDateInput.value);
+        const today = new Date();
+        const age = today.getFullYear() - birthDateValue.getFullYear();
+        const monthDiff = today.getMonth() - birthDateValue.getMonth();
+        const dayDiff = today.getDate() - birthDateValue.getDate();
+
+        if (age < 18 || (age === 18 && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)))) {
+            birthDateInput.setCustomValidity('Debes tener al menos 18 años.');
+            isValid = false;
+        } else if (age > 100) {
+            birthDateInput.setCustomValidity('Por favor ingrese una fecha válida.');
+            isValid = false;
+        } else {
+            birthDateInput.setCustomValidity('');
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = !isValid;
+        }
     }
-});
+
+    phoneInput.addEventListener('input', validateForm);
+    cityInput.addEventListener('input', validateForm);
+    zipCodeInput.addEventListener('input', validateForm);
+    birthDateInput.addEventListener('input', validateForm);
 </script>
 {% endblock extra_scripts %}
 

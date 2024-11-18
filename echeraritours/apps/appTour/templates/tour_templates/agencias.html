@@ -14,8 +14,8 @@
     {% if agencias %}
     <div class="row">
         {% for agencia in agencias %}
-        <div class="col-lg-4 col-md-6 mb-4">
-            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none card-link">
+        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none card-link w-100">
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <img src="{% static 'img/cancun.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
@@ -35,7 +35,7 @@
     <div class="alert alert-warning" role="alert">
         No hay agencias registradas.
     </div>
-    {% endif %} 
+    {% endif %}
 </div>
 
 

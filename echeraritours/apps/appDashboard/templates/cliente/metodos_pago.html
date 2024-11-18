@@ -1,43 +1,75 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Agregar Método de Pago - Echérari Tours{% endblock title %}
+{% block title %}Métodos de Pago - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/add_pago.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/cliente/metodos_pago.css' %}">
 {% endblock extra_styles %}
 
 {% block content %}
 <div class="row">
     <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-      {% include "client_sidebar.html" %}
+        {% include "client_sidebar.html" %}
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-        </div>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h2 class="h4">Métodos de Pago</h2>
             <a href="{% url 'add_payment_method' %}" class="btn btn-primary">Agregar Método de Pago</a>
         </div>
+
         {% if metodos %}
-        {% for metodo in metodos %}
         <div class="row">
-            <div class="card-body">
-                <h5 class="card-title">{{ metodo.method_type }}</h5>
-                <p class="card-text">
-                    {% if metodo.method_type == 'credit_card' %}
-                        ID de Stripe: {{ metodo.stripe_payment_method_id }}
-                    {% elif metodo.method_type == 'paypal' %}
-                        Correo de PayPal: {{ metodo.paypal_email }}
-                    {% endif %}
-                </p>
-                <p class="card-text"><small class="text-muted">Creado el {{ metodo.created_at }}</small></p>
+            {% for metodo in metodos %}
+            <div class="col-md-5 mb-4">
+                <div class="card shadow-sm border-light">
+                    <div class="card-body">
+                        <h5 class="card-title d-flex align-items-center">
+                            {% if metodo.card_brand == "visa" %}
+                                <i class="fab fa-cc-visa fa-lg me-2 text-primary"></i>
+                            {% elif metodo.card_brand == "mastercard" %}
+                                <i class="fab fa-cc-mastercard fa-lg me-2 text-danger"></i>
+                            {% elif metodo.card_brand == "amex" %}
+                                <i class="fab fa-cc-amex fa-lg me-2 text-info"></i>
+                            {% elif metodo.card_brand == "discover" %}
+                                <i class="fab fa-cc-discover fa-lg me-2 text-warning"></i>
+                            {% else %}
+                                <i class="fas fa-credit-card fa-lg me-2 text-secondary"></i>
+                            {% endif %}
+                            <div class="mx-2">{{ metodo.card_brand|title }} (**** {{ metodo.card_last4 }})</div>
+                            {% if metodo.is_default %}
+                                <span class="badge custom-badge mx-2 ms-2">Predeterminado</span>
+                            {% endif %}
+                        </h5>
+                        <p class="card-text mb-1">
+                            <strong>Nombre en la tarjeta:</strong> {{ metodo.cardholder_name }}
+                        </p>
+                        <p class="card-text text-muted" style="font-size: 0.9em;">
+                            <small>Creado el {{ metodo.created_at }}</small>
+                        </p>
+
+                        <div class="d-flex">
+                            {% if not metodo.is_default %}
+                                <form method="post" action="{% url 'set_default_payment_method' metodo.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-primary btn-sm me-2">Establecer como Predeterminado</button>
+                                </form>
+                            {% endif %}
+
+                            <form method="post" action="{% url 'delete_payment_method' metodo.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este método de pago?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
         {% else %}
         <div class="alert alert-warning" role="alert">
             No tienes métodos de pago registrados.
@@ -46,4 +78,41 @@
     </main>
 </div>
 
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ stripe_public_key }}");
+    const elements = stripe.elements();
+    const cardElement = elements.create("card");
+    cardElement.mount("#card-element");
+
+    const form = document.getElementById("payment-form");
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const cardholderName = document.getElementById("cardholder-name").value;
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: "card",
+            card: cardElement,
+            billing_details: { name: cardholderName },
+        });
+
+        if (error) {
+            document.getElementById("card-errors").textContent = error.message;
+        } else {
+            const hiddenPaymentMethodInput = document.createElement("input");
+            hiddenPaymentMethodInput.type = "hidden";
+            hiddenPaymentMethodInput.name = "stripe_payment_method_id";
+            hiddenPaymentMethodInput.value = paymentMethod.id;
+            form.appendChild(hiddenPaymentMethodInput);
+
+            const hiddenNameInput = document.createElement("input");
+            hiddenNameInput.type = "hidden";
+            hiddenNameInput.name = "cardholder_name";
+            hiddenNameInput.value = cardholderName;
+            form.appendChild(hiddenNameInput);
+
+            form.submit();
+        }
+    });
+</script>
 {% endblock content %}

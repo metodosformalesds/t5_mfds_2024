@@ -1,31 +1,37 @@
+
 .sidebar {
     background-color: #f8f9fa;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    justify-content: flex-start;
+    justify-content: flex-start; 
     padding: 10px;
     gap: 10px;
 }
 
-.sidebar .nav-link:first-child {
-    margin-top: 15px;
+.sidebar .nav-item {
+    margin-bottom: 5px;
 }
 
+.sidebar .nav-item:first-child {
+    margin-top: 20px; 
+    margin-bottom: 10px; 
+}
 .sidebar .nav-link {
+    transform: translateX(7.5px); 
     color: #333;
     font-weight: 500;
-    padding: 12px 15px;
+    padding: 12px 15px; 
     border-radius: 8px;
     transition: background-color 0.3s;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px; 
     justify-content: flex-start;
-    width: 100%;
+    width: 100%; 
     text-align: left;
-    margin: 0;
+    margin: 0; 
 }
 
 .sidebar .nav-link.active {
@@ -33,7 +39,11 @@
     color: #68ddbd;
     font-weight: bold;
 }
-
+.icon-img {
+    width: 24px; 
+    height: 24px;
+    object-fit: contain;
+}
 .sidebar .nav-link:hover {
     background-color: #e7f4f1;
 }
@@ -47,89 +57,8 @@
     background-color: #f8d7da;
 }
 
-.profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.profile-image-label {
-    position: relative;
-    cursor: pointer;
-}
-
-.profile-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: #f3c5a8;
-    transition: opacity 0.3s ease;
-}
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.sidebar .active {
+    background-color: #68DDBD; 
     color: white;
-    font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.profile-image-label:hover .overlay {
-    opacity: 1;
-}
-
-.profile-image-label:hover .profile-image {
-    opacity: 0.7;
-}
-
-.profile-name {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #324a5e;
-    margin-top: 15px;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.form-group label {
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-}
-
-.form-group .form-control-plaintext {
-    color: #555;
-    font-size: 0.9rem;
-}
-
-
-.text-center {
-    text-align: center;
+    font-weight: bold; 
 }

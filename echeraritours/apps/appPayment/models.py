@@ -40,6 +40,12 @@ class PaymentMethod(models.Model):
     stripe_payment_method_id = models.CharField(
         max_length=255, null=True, blank=True)  # ID de Stripe
     paypal_email = models.EmailField(null=True, blank=True)  # Correo de PayPal
+    stripe_payment_method_id = models.CharField(max_length=255, blank=True, null=True)
+    card_last4 = models.CharField(max_length=4, blank=True, null=True)
+    card_brand = models.CharField(max_length=20, blank=True, null=True)
+    cardholder_name = models.CharField(max_length=100, blank=True, null=True)
+    paypal_email = models.EmailField(null=True, blank=True)  # Solo para PayPal
+    is_default = models.BooleanField(default=False)  # Indica si es predeterminado
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -50,6 +56,20 @@ class PaymentMethod(models.Model):
     def save(self, *args, **kwargs):
         self.validate_client_and_agency()
         self.validate_payment_methods()
+        
+        # Para tener default un metodo de pago
+        if self.is_default:
+            if self.client:
+                PaymentMethod.objects.filter(client=self.client, is_default=True).update(is_default=False)
+            elif self.agency:
+                PaymentMethod.objects.filter(agency=self.agency, is_default=True).update(is_default=False)
+
+        # Valida para asegurar que solo uno de stripe_payment_method_id o paypal_email
+        if self.method_type == 'credit_card' and not self.stripe_payment_method_id:
+            raise ValueError("Se requiere un ID de método de pago de Stripe para la tarjeta de crédito.")
+        if self.method_type == 'paypal' and not self.paypal_email:
+            raise ValueError("Se requiere un correo electrónico de PayPal para este método de pago.")
+        
         super().save(*args, **kwargs)
 
     def validate_client_and_agency(self):

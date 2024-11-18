@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from apps.appUser.models import Client, Agency
+from apps.appTour.models import Reviews
+from datetime import date
 
 
 class UserForm(forms.ModelForm):
@@ -19,7 +21,22 @@ class UserForm(forms.ModelForm):
         if len(phone) < 9:
             raise ValidationError(
                 'El número de teléfono debe tener al menos 9 dígitos.')
+
+        if len(phone) > 10:
+            raise ValidationError(
+                'El número de teléfono debe tener máximo 15 dígitos.')
         return phone
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+        today = date.today()
+        age = today.year - birth_date.year - \
+            ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+        if age < 18:
+            raise ValidationError('Debes ser mayor de edad para registrarte.')
+
+        return birth_date
 
 
 class UserProfileForm(forms.ModelForm):
@@ -28,8 +45,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = Client
-        fields = ['first_name', 'maternal_surname', 'paternal_surname', 'city',
-                  'phone', 'birth_date', 'zip_code', 'identification', 'profile_image'] 
+        fields = ['profile_image']
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -42,6 +58,17 @@ class UserProfileForm(forms.ModelForm):
             raise ValidationError(
                 'El número de teléfono debe tener al menos 9 dígitos.')
         return phone
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+        today = date.today()
+        age = today.year - birth_date.year - \
+            ((today.month, today.day) < (birth_date.month, birth_date.day))
+
+        if age < 18:
+            raise ValidationError('Debes ser mayor de edad para registrarte.')
+
+        return birth_date
 
 
 class AgencyForm(forms.ModelForm):

@@ -159,6 +159,7 @@ class AgencyDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tours'] = Tour.objects.filter(agency=self.object)
+        context['google_api'] = settings.GOOGLE_MAPS_API_KEY
         context['reviews'] = Reviews.objects.filter(
             reservation__tour__agency=self.object)
         return context
