@@ -20,9 +20,9 @@
             <!-- Bloque 1: Imagen -->
             <div class="col-lg-5 d-flex align-items-center justify-content-center mb-4 px-5">
                 {% if cliente.profile_image %}
-                    <img src="{{ cliente.profile_image.url }}" alt="Foto de perfil" width="300" class="img-fluid rounded-circle">
+                    <img src="{{ cliente.profile_image.url }}" alt="Foto de perfil" width="300" class="img-fluid rounded-circle logo">
                 {% else %}
-                    <img src="{% static 'img/default_profile.jpg' %}" alt="Foto de perfil" width="300" class="img-fluid rounded-circle">
+                    <img src="{% static 'img/default_profile.jpg' %}" alt="Foto de perfil" width="300" class="img-fluid rounded-circle logo">
                 {% endif %}
             </div>
     
