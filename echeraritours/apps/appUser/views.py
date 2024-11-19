@@ -188,6 +188,8 @@ def registrar_cliente(request):
                         request, 'Por favor ingresa una fecha de nacimiento válida.')
                     return redirect('registrar_cliente')
 
+                birth_date = request.POST.get('fecha_nacimiento')
+
                 request.session['first_name'] = first_name
                 request.session['paternal_surname'] = paternal_surname
                 request.session['maternal_surname'] = maternal_surname
