@@ -42,15 +42,27 @@ def seleccion_pago(request, id):
     total_price = float(request.POST.get(
         'total_price', tour.price_per_person * number_people))
 
+    user = request.user
+    if user.is_authenticated:
+        try:
+            client = Client.objects.get(user=user)
+            saved_payment_methods = PaymentMethod.objects.filter(client=client)
+        except Client.DoesNotExist:
+            saved_payment_methods = None
+    else:
+        saved_payment_methods = None
+
     context = {
         'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
         'paypal_client_id': settings.PAYPAL_CLIENT_ID,
         'tour': tour,
         'current_date': current_date,
         'total_price': total_price,
-        'number_people': number_people
+        'number_people': number_people,
+        'saved_payment_methods': saved_payment_methods,  
     }
     return render(request, 'seleccion_pago.html', context)
+
 
 
 def realizar_pago_paypal(request, id):
