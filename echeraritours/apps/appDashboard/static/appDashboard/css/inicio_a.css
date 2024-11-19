@@ -41,7 +41,7 @@
 
 .card.metodos-pago,
 .card.planes-activos {
-    height: 250px; 
+    height: 300px; 
     font-size: 0.9rem;
     display: flex; 
     flex-direction: column;
