@@ -53,7 +53,7 @@ def index(request):
         request (HttpRequest): The HTTP request object.
     Returns:
         HttpResponse: The rendered 'index.html' template with the context containing
-                      the latest 5 reviews.
+                        the latest 5 reviews.
     """
     reviews = Reviews.objects.order_by('-review_date')[:5]
     tours = Tour.objects.all()
@@ -187,6 +187,8 @@ def registrar_cliente(request):
                     messages.error(
                         request, 'Por favor ingresa una fecha de nacimiento válida.')
                     return redirect('registrar_cliente')
+
+                birth_date = request.POST.get('fecha_nacimiento')
 
                 request.session['first_name'] = first_name
                 request.session['paternal_surname'] = paternal_surname

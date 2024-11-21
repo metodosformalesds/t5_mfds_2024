@@ -22,6 +22,9 @@ from django.conf import settings
 import qrcode
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import letter
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
 
@@ -268,12 +271,15 @@ class CreateReview(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reservation_id'] = self.kwargs['reservation_id']
+        reservation = Reservation.objects.get(id=self.kwargs['reservation_id'])
+        tour = reservation.tour
+        context['reservation_id'] = reservation.id
+        context['agency_name'] = tour.agency
+        context['destination_place'] = tour.destination_place
         return context
 
     def form_valid(self, form):
-        form.instance.reservation = Reservation.objects.get(
-            id=self.kwargs['reservation_id'])
+        form.instance.reservation = Reservation.objects.get(id=self.kwargs['reservation_id'])
         return super().form_valid(form)
 
 
@@ -308,18 +314,64 @@ def payment_methods_client(request):
     return render(request, 'cliente/metodos_pago.html', {'metodos': metodos})
 
 
+@login_required
 def add_payment_method(request):
     if request.method == 'POST':
-        if request.POST.get('tipo_tarjeta') == 'Tarjeta de crédito' or request.POST.get('tipo_tarjeta') == 'Tarjeta de débito':
-            metodo = PaymentMethod(
+        stripe_payment_method_id = request.POST.get('stripe_payment_method_id')
+        cardholder_name = request.POST.get('cardholder_name')  # Obtener el nombre del titular desde el formulario
+
+        if stripe_payment_method_id:
+            customer_id = request.user.client.stripe_customer_id
+
+            payment_method = stripe.PaymentMethod.attach(
+                stripe_payment_method_id,
+                customer=customer_id,
+            )
+
+            stripe.Customer.modify(
+                customer_id,
+                invoice_settings={
+                    'default_payment_method': stripe_payment_method_id,
+                },
+            )
+
+            PaymentMethod.objects.create(
                 client=request.user.client,
                 method_type='credit_card',
-                stripe_payment_method_id=request.POST.get(
-                    'stripe_payment_method_id')
+                stripe_payment_method_id=stripe_payment_method_id,
+                card_last4=payment_method.card.last4, 
+                card_brand=payment_method.card.brand,  
+                cardholder_name=cardholder_name,  
             )
-            metodo.save()
 
-    return render(request, "cliente/agregar_metodo_pago.html")
+            return redirect('payment_methods_client')
+
+    return render(request, "cliente/agregar_metodo_pago.html", {'stripe_public_key': settings.STRIPE_PUBLIC_KEY})
+
+
+
+@login_required
+def set_default_payment_method(request, metodo_id):
+    metodo = get_object_or_404(PaymentMethod, id=metodo_id, client=request.user.client)
+
+    PaymentMethod.objects.filter(client=request.user.client).update(is_default=False)
+
+    metodo.is_default = True
+    metodo.save()
+
+    return redirect('payment_methods_client')
+
+@login_required
+def delete_payment_method(request, metodo_id):
+    metodo = get_object_or_404(PaymentMethod, id=metodo_id, client=request.user.client)
+
+    if metodo.is_default:
+        messages.error(request, "No puedes eliminar el método de pago predeterminado. Por favor, selecciona otro método predeterminado primero.")
+    else:
+        metodo.delete()
+        messages.success(request, "El método de pago ha sido eliminado exitosamente.")
+
+    return redirect('payment_methods_client')
 
 
 @ login_required(login_url='login')

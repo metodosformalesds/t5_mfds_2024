@@ -4,7 +4,6 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'appPayment/css/pago_reservacion.css' %}">
-<!-- Agrega el script de Stripe.js -->
 <script src="https://js.stripe.com/v3/"></script>
 {% endblock extra_styles %}
 
@@ -21,10 +20,10 @@
     <div class="row">
         <div class="col-md-6">
             <h5>Selección de método de pago</h5>
-            <form id="payment-form" method="post" action="{% url 'realizar_pago_paypal' tour.id %}">
+            <form id="payment-form" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="number_people" value="{{ number_people }}">
-                <input type="hidden" name="total_price" value="{{ total_price }}">
+
+                <!-- Opción de PayPal -->
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal" checked>
                     <label class="form-check-label" for="paypal">
@@ -32,26 +31,38 @@
                         <span class="text-muted">Serás redirigido al sitio web de PayPal después de enviar tu pedido.</span>
                     </label>
                 </div>
-                
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card">
-                    <label class="form-check-label" for="credit_card">
-                        Pago con tarjeta
-                        <div class="d-flex payment-icons mt-1">
-                            <img src="{% static 'appPayment/img/visa.png' %}" alt="Visa" class="payment-icon">
-                            <img src="{% static 'appPayment/img/discover.png' %}" alt="Discover" class="payment-icon">
-                            <img src="{% static 'appPayment/img/mastercard.png' %}" alt="Mastercard" class="payment-icon">
-                            <img src="{% static 'appPayment/img/mastercard2.png' %}" alt="Mastercard 2" class="payment-icon">
+
+                <!-- Métodos de pago guardados -->
+                {% if saved_payment_methods %}
+                    <h6>Métodos de pago guardados</h6>
+                    {% for metodo in saved_payment_methods %}
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="method_{{ metodo.id }}" value="{{ metodo.stripe_payment_method_id }}">
+                            <label class="form-check-label" for="method_{{ metodo.id }}">
+                                {{ metodo.card_brand|title }} (**** {{ metodo.card_last4 }})
+                            </label>
                         </div>
+                    {% endfor %}
+                    {% else %}
+                    <p>No tienes métodos de pago guardados.</p>
+                {% endif %}
+
+                <!-- Opción para añadir una nueva tarjeta -->
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="new_card" value="new_card">
+                    <label class="form-check-label" for="new_card">
+                        Añadir nueva tarjeta
                     </label>
                 </div>
 
-                <!-- Campos de tarjeta de crédito, ahora con Stripe -->
+                <!-- Campos de tarjeta de crédito con Stripe -->
                 <div id="credit-card-fields" style="display: none;">
                     <h6 class="mt-3">Detalles de la tarjeta</h6>
-                    <!-- Elemento de tarjeta de Stripe -->
-                    <div id="card-element" class="mb-3"><!-- Stripe.js inyectará el elemento de la tarjeta aquí --></div>
-                    <!-- Mostrar errores de Stripe -->
+                    <div class="form-group mb-3">
+                        <label for="cardholder-name">Nombre del Titular:</label>
+                        <input type="text" id="cardholder-name" class="form-control" placeholder="Nombre del titular">
+                    </div>
+                    <div id="card-element" class="mb-3"></div> <!-- Elemento de tarjeta de Stripe -->
                     <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                 </div>
 
@@ -63,12 +74,8 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Resumen de la compra</h5>
-                    <div class="d-flex">
-                        <div>
-                            <p class="fw-bold">{{ tour.title }}</p>
-                            <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:"d \\d\\e F \\d\\e\\l Y" }}</p>
-                        </div>
-                    </div>
+                    <p class="fw-bold">{{ tour.title }}</p>
+                    <p><i class="bi bi-calendar"></i> {{ tour.start_date|date:"d \\d\\e F \\d\\e\\l Y" }}</p>
                     <hr>
                     <h5 class="fw-bold">Precio Total <span class="text-success">${{ total_price }}</span></h5>
                     <p>Número de personas: {{ number_people }}</p>
@@ -78,25 +85,22 @@
     </div>
 </div>
 
-<!-- Scripts necesarios -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const paymentForm = document.getElementById('payment-form');
         const creditCardFields = document.getElementById('credit-card-fields');
         const cardErrors = document.getElementById('card-errors');
-    
+        
         // Inicializar Stripe
         const stripe = Stripe('{{ stripe_public_key }}');
         const elements = stripe.elements();
         const card = elements.create('card');
         let cardMounted = false;
-    
-        // Mostrar los campos de tarjeta de crédito solo si se selecciona "Pago con tarjeta"
+
+        // Mostrar campos de tarjeta de crédito solo si se selecciona "Añadir nueva tarjeta"
         paymentForm.addEventListener('change', function() {
             const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-            if (selectedMethod === 'credit_card') {
+            if (selectedMethod === 'new_card') {
                 creditCardFields.style.display = 'block';
                 if (!cardMounted) {
                     card.mount('#card-element');
@@ -107,21 +111,49 @@
                 cardErrors.textContent = ''; // Limpiar errores al cambiar de método de pago
             }
         });
-    
-        // Manejo del envío del formulario
+
+        // Enviar el formulario de pago
         paymentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
             const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-            if (selectedMethod === 'credit_card') {
-                event.preventDefault(); // Solo prevenir el envío para Stripe
+
+            if (selectedMethod === 'paypal') {
+                // Redirigir a PayPal
+                window.location.href = "{% url 'realizar_pago_paypal' tour.id %}";
+            } else if (selectedMethod !== 'new_card') {
+                // Si se seleccionó un método guardado, enviarlo al servidor
+                fetch("{% url 'process_payment' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                    body: JSON.stringify({
+                        'payment_method_id': selectedMethod,
+                        'tour_id': {{ tour.id }},
+                        'number_people': {{ number_people }},
+                        'total_price': {{ total_price|floatformat:2 }},
+                    })
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(responseJson) {
+                    if (responseJson.status == 'success') {
+                        window.location.href = "{% url 'pago_completado' %}";
+                    } else {
+                        cardErrors.textContent = responseJson.error;
+                    }
+                });
+            } else if (selectedMethod === 'new_card') {
+                // Procesar nueva tarjeta con Stripe
+                const cardholderName = document.getElementById('cardholder-name').value;
                 stripe.createPaymentMethod({
                     type: 'card',
                     card: card,
+                    billing_details: { name: cardholderName }
                 }).then(function(result) {
                     if (result.error) {
-                        // Mostrar errores en el formulario
                         cardErrors.textContent = result.error.message;
                     } else {
-                        // Enviar el PaymentMethod al servidor
                         fetch("{% url 'process_payment' %}", {
                             method: "POST",
                             headers: {

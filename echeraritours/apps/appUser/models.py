@@ -215,4 +215,4 @@ class Agency(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return f"Agencia: {self.agency_name}"
+        return self.agency_name
