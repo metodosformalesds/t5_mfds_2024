@@ -12,59 +12,59 @@
 
 .dashboard-container .perfil {
     grid-area: perfil;
-    height: 480px; 
+    height: 480px;
     padding: 10px 15px;
-    display: flex; 
-    flex-direction: column; 
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    text-align: center; 
+    text-align: center;
     padding-top: 50px;
 }
 
 .dashboard-container .perfil .profile-image {
-    width: 150px; 
+    width: 150px;
     height: 150px;
-    border-radius: 50%; 
-    object-fit: cover; 
-    margin-bottom: 15px; 
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
 }
 
 .dashboard-container .perfil h5 {
     color: #68ddbd;
     font-weight: bold;
-    margin-top: 20px; 
+    margin-top: 20px;
     margin-bottom: 5px;
 }
 
 .dashboard-container .perfil p {
-    color: #555; 
-    margin: 20px 0 0; 
+    color: #555;
+    margin: 20px 0 0;
 }
 
 .dashboard-container .planes-activos,
 .dashboard-container .favoritos,
 .dashboard-container .metodos-pago {
-    height: 150px; 
+    height: 150px;
     font-size: 0.9rem;
-    display: flex; 
+    display: flex;
     flex-direction: column;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
 }
 
 .dashboard-container .historial {
     grid-area: historial;
-    height: 150px; 
+    height: 150px;
     text-align: center;
 }
 
 .dashboard-container .card {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background:  linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);
+    background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
@@ -99,22 +99,23 @@
 }
 
 .dashboard-header h1 {
-    transform: translate(25px, 25px); 
+    transform: translate(25px, 25px);
     color: #68ddbd;
-    display: inline-block; 
+    display: inline-block;
 }
+
 .dashboard-container .historial {
     grid-area: historial;
     height: 150px;
     display: flex;
     align-items: center;
-    justify-content: space-between; 
-    padding: 10px 15px; 
+    justify-content: space-between;
+    padding: 10px 15px;
     text-align: left;
 }
 
 .dashboard-container .historial img {
-    width: 80px; 
+    width: 80px;
     height: 80px;
     object-fit: cover;
     margin-right: 550px;
@@ -122,10 +123,10 @@
 }
 
 .dashboard-container .historial .card-body {
-    flex: 1; 
+    flex: 1;
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
+    flex-direction: column;
+    justify-content: center;
     margin-left: 5px;
     margin-right: 50px;
     margin-top: -125px;
@@ -134,11 +135,11 @@
 .dashboard-container .historial h5 {
     color: #68ddbd;
     font-weight: bold;
-    margin: 0; 
+    margin: 0;
 }
 
 .dashboard-container .historial p {
     color: #555;
     margin: 0;
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
 }

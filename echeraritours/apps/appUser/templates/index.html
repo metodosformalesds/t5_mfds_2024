@@ -85,9 +85,20 @@
             {% for review in reviews %}
                 <div class="card p-3 shadow-sm border-0 mt-5">
                     <div class="card-body text-center">
-                        <img src="{% if review.reservation.client.profile_image_url %}{{ review.reservation.client.profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Perfil" class="rounded-circle mb-3" style="height: 6rem; width: 6rem;">
+                        {% comment %} <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                alt="Perfil" class="rounded-circle" style="height: 40px; width: 40px;">  {% endcomment %}
+                        <img src="{% if review.reservation.client.profile_image_url %}{{ review.reservation.client.profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Perfil" class="rounded-circle mb-3" style="height: 6rem; width: 6rem;"> 
 
                         <div class="d-flex justify-content-center mb-3">
+                        {% for i in review.rating|slice:":review.rating"|make_list %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill filled" viewBox="0 0 16 16">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.174 6.765c-.33-.314-.16-.888.282-.95l4.898-.696L8 1.223l2.646 3.896 4.898.696c.441.062.612.636.283.95l-3.522 3.356.83 4.73c.078.444-.36.791-.746.593L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                        {% endfor %}
+                       
+                        
+                                
+                            
                             <i class="star {% if review.rating >= 1 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
                             <i class="star {% if review.rating >= 2 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>
                             <i class="star {% if review.rating >= 3 %}bi-star-fill filled{% else %}bi-star{% endif %}"></i>

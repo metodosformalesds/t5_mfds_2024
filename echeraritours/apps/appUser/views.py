@@ -45,6 +45,7 @@ from django.urls import reverse_lazy
 
 def index(request):
     """
+    Author: 
     View function for the index page of the appUser application.
     This function retrieves the latest 5 reviews from the Reviews model,
     ordered by the review date in descending order, and renders the 'index.html'
