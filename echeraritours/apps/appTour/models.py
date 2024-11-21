@@ -8,6 +8,7 @@ import random
 
 class Tour(models.Model):
     """
+    Authors: Santiago Mendivil, Leonardo Ortega
     Modelo que representa un tour ofrecido por una agencia.
         Atributos:
             title (CharField): Título del tour.
@@ -56,6 +57,7 @@ class Tour(models.Model):
 
 class Reservation(models.Model):
     """
+    Authors: Santiago Mendivil, Leonardo Ortega, Hector Ramos
     Modelo que representa una reservación para un tour.
         Atributos:
             tour (ForeignKey): Referencia al tour reservado.
@@ -116,6 +118,7 @@ class Reservation(models.Model):
 
 class Reviews(models.Model):
     """
+    Authors: Hector Ramos
     Modelo que representa una reseña de un tour.
         Atributos:
             reservation (ForeignKey): Referencia a la reserva asociada a la reseña.

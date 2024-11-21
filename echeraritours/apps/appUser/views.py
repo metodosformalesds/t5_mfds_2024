@@ -45,7 +45,7 @@ from django.urls import reverse_lazy
 
 def index(request):
     """
-    Author: 
+    Author: Leonardo Ortega 
     View function for the index page of the appUser application.
     This function retrieves the latest 5 reviews from the Reviews model,
     ordered by the review date in descending order, and renders the 'index.html'
@@ -56,7 +56,7 @@ def index(request):
         HttpResponse: The rendered 'index.html' template with the context containing
                         the latest 5 reviews.
     """
-    reviews = Reviews.objects.order_by('-review_date')[:5]
+    reviews = Reviews.objects.order_by('-review_date')[:3]
     tours = Tour.objects.all()
 
     return render(request, 'index.html', {'reviews': reviews, 'tours': tours})
@@ -64,6 +64,7 @@ def index(request):
 
 def registerPage(request):
     """
+    Author: Santiago Mendivil
     Handles the user registration process.
     If the user is authenticated and has a linked Google account, pre-fills the registration form with the user's Google email.
     If the request method is POST, validates and saves the registration form, creates a new user, and redirects to the login page.
@@ -98,6 +99,7 @@ def registerPage(request):
 
 def loginPage(request):
     """
+    Author: Santiago Mendivil
     Handles the user login functionality.
     This view processes the login form submission. If the request method is POST,
     it retrieves the email and password from the request, authenticates the user,
@@ -128,6 +130,7 @@ def loginPage(request):
 
 def logoutUser(request):
     """
+    Author: Hector Ramos
     Logs out the current user and redirects them to the login page.
 
     Args:
@@ -143,13 +146,15 @@ def logoutUser(request):
 @login_required
 def registrar_cliente(request):
     """
+    Author: Santiago Mendivil
     Handles the multi-step client registration process.
     This view manages a three-step form submission process for registering a client.
     The steps are managed using the session to keep track of the current step.
     Steps:
         1. Collects first name, paternal surname, maternal surname, and birth date.
         2. Collects phone number, zip code, and city.
-        3. Uploads and saves an official identification file.
+        3. Uploads and saves an official identification file and a biometric image.
+        4. Calls the api of ID Analyzer to validate the identification and biometric images.
     Args:
         request (HttpRequest): The HTTP request object.
     Returns:
@@ -302,6 +307,7 @@ def registrar_cliente(request):
 @login_required
 def registrar_agencia(request):
     """
+    Author: Santiago Mendivil
     View for registering an authenticated user as an Agency.
     This view handles a multi-step form for agency registration. The form has two steps:
     1. Collecting basic agency information (name, address, phone, zip code).
@@ -385,6 +391,7 @@ def registrar_agencia(request):
 @login_required(login_url='login')
 def seleccion_registro(request):
     """
+    Author: Santiago Mendivil
     Renders the selection page. If the user is already part of a user type (Client or Agency), redirects to the main page.
     Args:
         request (HttpRequest): The HTTP request object.
@@ -399,6 +406,7 @@ def seleccion_registro(request):
 
 def sobre_nosotros(request):
     """
+    Author: Neida Franco
     Handles the HTTP request for the 'Sobre Nosotros' (About Us) page.
 
     Args:
@@ -412,6 +420,7 @@ def sobre_nosotros(request):
 
 def terminos_y_condiciones(request):
     """
+    Author: Neida Franco
     Handles the request to display the terms and conditions page.
 
     Args:
@@ -425,6 +434,7 @@ def terminos_y_condiciones(request):
 
 def terminos_y_condiciones2(request):
     """
+    Author: Neida Franco
     Renders the 'terminos_y_condiciones2.html' template.
 
     Args:
@@ -438,6 +448,7 @@ def terminos_y_condiciones2(request):
 
 def terminos_legales(request):
     """
+    Author: Neida Franco
     Handles the HTTP request for the 'terminos_legales' page.
 
     Args:
@@ -451,6 +462,7 @@ def terminos_legales(request):
 
 def necesitas_ayuda(request):
     """
+    Author: Neida Franco
     Handles the request to render the 'necesitas_ayuda.html' template.
 
     Args:
@@ -464,6 +476,7 @@ def necesitas_ayuda(request):
 
 def send_mail_view(request, user_id):
     """
+    Author: Neida Franco
     Sends a password recovery email to the specified user.
     Args:
         request (HttpRequest): The HTTP request object.
@@ -505,6 +518,7 @@ def send_mail_view(request, user_id):
 
 def recuperar_contra(request):
     """
+    Author: Neida Franco
     Handle password recovery process.
     This view handles the password recovery process by sending an email with a password reset link to the user.
     If the request method is POST, it retrieves the email from the request, checks if a user with that email exists,
@@ -544,6 +558,7 @@ def recuperar_contra(request):
 
 def envio_contra(request):
     """
+    Author: Neida Franco
     Handles the request to render the 'envio_contra.html' template.
 
     Args:
@@ -557,6 +572,7 @@ def envio_contra(request):
 
 def confirmar_contra(request, uidb64=None, token=None):
     """
+    Author: Neida Franco
     Handles the password reset confirmation process.
 
     This view function wraps around the PasswordResetConfirmView to provide
@@ -578,6 +594,7 @@ def confirmar_contra(request, uidb64=None, token=None):
 
 def completo_contra(request):
     """
+    Author: Neida Franco
     Handles the HTTP request to render the 'completo_contra.html' template.
 
     Args:
@@ -591,8 +608,19 @@ def completo_contra(request):
 
 def google_login(request):
     """
-    Maneja el inicio de sesión con Google.
-    Si el usuario no existe, se le registra automáticamente con un correo y redirige para completar su perfil.
+    Author: Neida Franco 
+    Handles Google login for users.
+    If the user is already authenticated, they are redirected to the index page.
+    If the user is not authenticated, the function checks if there is a social account associated with the user.
+    If a social account is found, it retrieves the email from the social account's extra data.
+    If a user with the retrieved email exists, the user is logged in and redirected to the index page.
+    If no user with the retrieved email exists, a new user is created with the email, a username derived from the email,
+    and a random password. The new user is then logged in and redirected to the profile setup page.
+    If no social account is found, the user is redirected to the login page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: A redirect to the appropriate page based on the user's authentication status and social account existence.
     """
     if request.user.is_authenticated:
         return redirect('index')
@@ -607,11 +635,11 @@ def google_login(request):
         else:
             user = User.objects.create_user(
                 email=email,
-                username=email.split('@')[0], 
+                username=email.split('@')[0],
                 password=User.objects.make_random_password(),
             )
             user.save()
             login(request, user)
-            return redirect('profile_setup')  
+            return redirect('profile_setup')
 
-    return redirect('login') 
+    return redirect('login')

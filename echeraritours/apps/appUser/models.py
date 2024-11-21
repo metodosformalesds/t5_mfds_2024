@@ -13,6 +13,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class Client(models.Model):
     """
+    Authors: Hector Ramos, Santiago Mendivil 
     Client model represents a client in the Echerari Tours application.
     Attributes:
         user (OneToOneField): A one-to-one relationship with the User model.
@@ -25,12 +26,21 @@ class Client(models.Model):
         zip_code (CharField): The zip code of the client's address.
         identification (ImageField): An image of the client's identification document.
         profile_image (ImageField): An image of the client's profile picture.
+        identificator (IntegerField): A unique identifier for the client (optional).
+        id_identificacion_oficial_url (URLField): URL to the official identification document (optional).
+        id_identificacion_biometrica_url (URLField): URL to the biometric identification document (optional).
+        profile_image (ImageField): An image of the client's profile picture (optional).
+        stripe_customer_id (CharField): The Stripe customer ID for the client (optional).
     Meta:
         verbose_name (str): The singular name for the model in the admin interface.
         verbose_name_plural (str): The plural name for the model in the admin interface.
         ordering (list): The default ordering for the model's QuerySet.
     Methods:
         __str__(): Returns the first name of the client.
+         get_profile_image_url(): Returns the URL of the client's profile image.
+        generate_identificator(): Generates a random identificator for the client.
+        save(*args, **kwargs): Saves the client instance and creates a Stripe customer if not already present.
+        delete(*args, **kwargs): Deletes the client instance and removes the associated Stripe customer.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, blank=True, null=True)
@@ -91,7 +101,9 @@ class Client(models.Model):
 
 
 class Agency(models.Model):
+
     """
+    Authors: Hector Ramos, Santiago Mendivil
     Represents an Agency model associated with a user.
     Attributes:
         user (OneToOneField): A one-to-one relationship with the User model. When the user is deleted, the agency is also deleted.
@@ -101,12 +113,21 @@ class Agency(models.Model):
         phone (CharField): The phone number of the agency with a maximum length of 15 characters.
         zip_code (CharField): The zip code of the agency with a maximum length of 10 characters.
         certificate (ImageField): An image field to upload the agency's certificate, stored in 'static/certificates/'.
+        state (CharField): The state where the agency is located, optional with a maximum length of 255 characters.
+        suburb (CharField): The suburb where the agency is located, optional with a maximum length of 255 characters.
+        town (CharField): The town where the agency is located, optional with a maximum length of 255 characters.
+        profile_image (ImageField): An image field to upload the agency's profile image, stored in 'profile_images/', optional.
+        stripe_agency_id (CharField): The Stripe account ID associated with the agency, optional with a maximum length of 255 characters.
     Meta:
         verbose_name (str): The singular name for the model in the admin interface.
         verbose_name_plural (str): The plural name for the model in the admin interface.
         ordering (list): The default ordering for the model, ordered by descending id.
     Methods:
         __str__(): Returns a string representation of the agency, displaying the agency name.
+        get_profile_image_url(): Returns the URL of the profile image or a default image if not set.
+        create_stripe_account_for_agency(): Creates a Stripe account for the agency and saves the Stripe account ID.
+        save(*args, **kwargs): Overrides the save method to create a Stripe account if it doesn't exist.
+        delete(*args, **kwargs): Overrides the delete method to delete the associated Stripe account.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     agency_name = models.CharField(max_length=255)
