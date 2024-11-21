@@ -37,6 +37,7 @@
                             <th>Tour</th>
                             <th>Fecha de Compra</th>
                             <th>Fecha del Tour</th>
+                            <th>Numero de personas</th>
                             <th>Total Pagado</th>
                             <th>Acciones</th>
                         </tr>
@@ -48,6 +49,7 @@
                             <td>{{ reservacion.tour.title }}</td>
                             <td>{{ reservacion.reservation_date|date:"d M Y" }}</td>
                             <td>{{ reservacion.tour.start_date|date:"d M Y" }} a {{ reservacion.tour.end_date|date:"d M Y" }}</td>
+                            <td>{{ reservacion.number_people }}</td>
                             <td>MXN${{ reservacion.calculate_total_price }}</td>
                             <td>
                                 {% with review=reservacion|get_review:reviews %}

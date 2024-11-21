@@ -109,10 +109,11 @@
     height: 150px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 10px 15px;
     text-align: left;
 }
+
 
 .dashboard-container .historial img {
     width: 80px;
