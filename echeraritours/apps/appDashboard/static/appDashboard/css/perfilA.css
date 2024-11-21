@@ -7,7 +7,7 @@ main {
 }
 
 article.card {
-    max-width: 100%; 
+    max-width: 900px; 
     width: 100%; 
     margin: auto; 
     padding: 20px;
@@ -16,7 +16,6 @@ article.card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 55px;
 }
-ec
 .card-header {
     background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0); 
     color: #68ddbd;

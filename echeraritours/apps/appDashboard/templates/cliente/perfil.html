@@ -29,61 +29,66 @@
                     <div class="row form-container">
 
                         <!-- Formulario -->
-                        <!-- Formulario -->
-                    <div class="col-md-8 mt-4 form-content">
-                        <form action="{% url 'client_profile' %}" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="col-md-6 profile-containe text-center">
-                                <label for="profileImageInput" class="profile-image-label">
-                                    <img id="profileImagePreview" 
-                                    src="{% if cliente.profile_image %}{{ cliente.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Foto de perfil"                                         alt="Foto de perfil" 
-                                        width="50" 
-                                        height="50"
-                                        class="rounded-circle profile-image">
-                                    <div class="overlay">
-                                        Haz clic aquí para cambiar la foto
+                        <div class="col-md-8 mt-4 form-content">
+                            <form action="{% url 'client_profile' %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="d-flex">
+                                    <div class="profile-containe text-center mr-4">
+                                        <label for="profileImageInput" class="profile-image-label">
+                                            <img id="profileImagePreview" 
+                                                 src="{% if cliente.profile_image %}{{ cliente.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                                 alt="Foto de perfil" 
+                                                 width="100" 
+                                                 height="100" 
+                                                 class="rounded-circle profile-image">
+                                            <div class="overlay">
+                                                Haz clic aquí para cambiar la foto
+                                            </div>
+                                        </label>
+                                        <input type="file" id="profileImageInput" name="profile_image" accept="image/*" style="display: none;">
                                     </div>
-                                </label>
-                                <input type="file" id="profileImageInput" name="profile_image" accept="image/*" style="display: none;">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="id_first_name">Nombre</label>
-                                    {{ user_form.first_name }}
+                                    <div class="flex-grow-1" style="margin-left: -20px;">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="id_first_name">Nombre</label>
+                                                {{ user_form.first_name }}
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="id_paternal_surname">Apellidos</label>
+                                                {{ user_form.paternal_surname }}
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="id_phone">Número de teléfono</label>
+                                                {{ user_form.phone }}
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="id_city">Estado</label>
+                                                <input type="text" id="id_city" name="city" list="city-datalist" class="form-control" value="{{ user_form.city.value }}">
+                                                <datalist id="city-datalist">
+                                                    {% for state in valid_states %}
+                                                        <option value="{{ state|title }}"></option>
+                                                    {% endfor %}
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="id_zip_code">Código postal</label>
+                                                {{ user_form.zip_code }}
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="id_birth_date">Fecha de nacimiento</label>
+                                                {{ user_form.birth_date }}
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Actualizar información</button>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="id_paternal_surname">Apellidos</label>
-                                    {{ user_form.paternal_surname }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="id_phone">Número de teléfono</label>
-                                    {{ user_form.phone }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="id_city">Estado</label>
-                                    <input type="text" id="id_city" name="city" list="city-datalist" class="form-control" value="{{ user_form.city.value }}">
-                                    <datalist id="city-datalist">
-                                        {% for state in valid_states %}
-                                            <option value="{{ state|title }}"></option>
-                                        {% endfor %}
-                                    </datalist>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="id_zip_code">Código postal</label>
-                                    {{ user_form.zip_code }}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="id_birth_date">Fecha de nacimiento</label>
-                                    {{ user_form.birth_date }}
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Actualizar información</button>
-                        </form>
-                    </div>
+                            </form>
+                        </div>
+                        
                 </div>                    
                 <footer class="card-footer">
                 </footer>
