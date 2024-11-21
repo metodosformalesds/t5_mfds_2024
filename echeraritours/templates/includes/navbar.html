@@ -1,14 +1,14 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light fixed-top mb-5" style="background-color: #2b2d42;">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+        <a class="navbar-brand  align-items-center" href="{% url 'index' %}">
             <img src="{% static 'img/logo_eheraritours.png' %}" alt="Echérari Tours" style="height: 40px;" class="mr-2">
             <h5 class="mb-0" style="color: #68ddbd; font-weight: bold;">Echérari Tours</h5>
         </a>
         <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle align-items-center" href="#" id="userMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <!-- Mostrar la imagen de perfil del usuario o una predeterminada -->
                         <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
                                 alt="Perfil" class="rounded-circle" style="height: 40px; width: 40px;">

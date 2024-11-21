@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hola {{ user.username }}
+
+Por favor activa tu cuenta dando click en el siguiente enlace:
+
+{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Bienvenido a Echerari Tours!
+
+{% endautoescape %}

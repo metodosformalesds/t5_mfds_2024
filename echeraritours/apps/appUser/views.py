@@ -45,6 +45,7 @@ from django.urls import reverse_lazy
 
 def index(request):
     """
+    Author: 
     View function for the index page of the appUser application.
     This function retrieves the latest 5 reviews from the Reviews model,
     ordered by the review date in descending order, and renders the 'index.html'
@@ -591,18 +592,26 @@ def completo_contra(request):
 def google_login(request):
     """
     Maneja el inicio de sesión con Google.
-    Verifica si el usuario ya tiene una cuenta. Si no, lo redirige a la página de registro
-    con el correo electrónico ya ingresado.
+    Si el usuario no existe, se le registra automáticamente con un correo y redirige para completar su perfil.
     """
     if request.user.is_authenticated:
         return redirect('index')
 
-    if request.method == 'POST':
-        email = request.POST.get('email')
+    social_account = SocialAccount.objects.filter(user=request.user).first()
+    if social_account:
+        email = social_account.extra_data.get('email')
         if User.objects.filter(email=email).exists():
-            user = authenticate(request, email=email)
+            user = User.objects.get(email=email)
             login(request, user)
             return redirect('index')
         else:
-            return redirect('register', email=email)
-    return render(request, 'index')
+            user = User.objects.create_user(
+                email=email,
+                username=email.split('@')[0], 
+                password=User.objects.make_random_password(),
+            )
+            user.save()
+            login(request, user)
+            return redirect('profile_setup')  
+
+    return redirect('login') 

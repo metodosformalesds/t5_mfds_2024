@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'appDashboard/css/add_pago.css' %}">
-<link rel="stylesheet" href="{% static 'appDashboard/css/cliente/metodos_pago.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/met_pago.css' %}">
 {% endblock extra_styles %}
 
 {% block content %}
@@ -16,7 +16,7 @@
         {% include "client_sidebar.html" %}
     </div>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 metodos_pago">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h2 class="h4">Métodos de Pago</h2>
             <a href="{% url 'add_payment_method' %}" class="btn btn-primary">Agregar Método de Pago</a>
