@@ -48,7 +48,6 @@ class Client(models.Model):
         max_length=500, blank=True, null=True)
     id_identificacion_biometrica_url = models.URLField(
         max_length=500, blank=True, null=True)
-
     profile_image = models.ImageField(
         upload_to='profile_images/', null=True, blank=True)
 
