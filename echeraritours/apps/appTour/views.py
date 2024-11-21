@@ -11,6 +11,7 @@ from echeraritours import settings
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect
+from .models import models
 
 # Create your views here.
 
@@ -162,6 +163,9 @@ class AgencyDetailView(DetailView):
         context['google_api'] = settings.GOOGLE_MAPS_API_KEY
         context['reviews'] = Reviews.objects.filter(
             reservation__tour__agency=self.object)
+        context['rating'] = Reviews.objects.filter(
+            reservation__tour__agency=self.object).aggregate(models.Avg('rating'))['rating__avg']
+        context['mail'] = Agency.objects.get(id=self.object.id).user.email
         return context
 
 

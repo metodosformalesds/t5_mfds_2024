@@ -141,5 +141,8 @@ class Reviews(models.Model):
         verbose_name_plural = 'Reseñas'
         ordering = ['review_date']
 
+    def get_stars(self):
+        return [1 if i <= self.rating else 0 for i in range(1, 6)]
+
     def __str__(self):
         return f"Reseña de {self.reservation.client.first_name} {self.reservation.client.paternal_surname} para {self.reservation.tour.title}"
