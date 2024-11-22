@@ -1,0 +1,281 @@
+/* Contenedor de métodos de pago */
+.payment-method-container {
+    border: 1px solid #dee2e6; /* Borde gris claro */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+    margin-bottom: 20px; /* Separación con otros elementos */
+}
+
+/* Encabezado de métodos de pago */
+.payment-method-container h5 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Estilo de las opciones de método de pago */
+.payment-method-container .form-check {
+    border: 1px solid #ced4da; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px;
+    background-color: #f8f9fa; /* Fondo gris claro */
+    margin-bottom: 10px; /* Espaciado entre opciones */
+    transition: all 0.3s ease; /* Suaviza los efectos */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre íconos y texto */
+}
+
+/* Cambia el estilo al seleccionar */
+.payment-method-container .form-check-input:checked + .form-check-label {
+    color: #28a745; /* Verde */
+    font-weight: bold; /* Texto más destacado */
+    background-color: #d4edda; /* Fondo verde claro */
+    border: 1px solid #28a745; /* Borde verde */
+}
+
+/* Estilo de texto de las opciones */
+.payment-method-container .form-check-label {
+    font-size: 1rem;
+    color: #495057; /* Texto gris oscuro */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Botón de pago */
+.payment-method-container .btn {
+    width: 100%; /* Botón ancho completo */
+    margin-top: 20px; /* Espaciado superior */
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 25px; /* Botones redondeados */
+    padding: 12px;
+    background-color: #68ddbd;
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.payment-method-container .btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.container.mt-5 {
+    margin-top: 5rem; /* Asegura suficiente espacio */
+}
+
+/* Inputs de Formulario */
+input[type="text"],
+input[disabled] {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    color: #495057;
+}
+
+input[disabled] {
+    cursor: not-allowed;
+}
+
+/* Botones */
+.btn {
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    width: 100%;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo del Formulario */
+form {
+    margin-top: 30px;
+}
+
+.form-check-label {
+    font-size: 1rem;
+    color: #495057;
+}
+
+.form-check-input:checked + .form-check-label {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Resumen de la Compra */
+.card {
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card img {
+    border-radius: 10px;
+    margin: 15px auto;
+    max-height: 200px;
+    max-width: 90%; 
+    object-fit: cover; 
+    display: block; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.6rem;
+    color: #343a40;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.card-body {
+    font-size: 1rem;
+    color: #495057;
+    line-height: 1.6;
+    padding: 0;
+}
+
+.card .text-success {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.card .fw-bold {
+    font-size: 1.3rem;
+}
+
+@media (max-width: 992px) {
+    .progressbar {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .progressbar li {
+        font-size: 12px;
+    }
+
+    .progressbar li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+
+    .progressbar li p {
+        font-size: 10px;
+    }
+
+    .btn-success {
+        padding: 10px 25px;
+        font-size: 16px;
+    }
+
+    .tour-image {
+        width: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .progressbar {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .progressbar li {
+        text-align: left;
+        width: 100%;
+        font-size: 11px;
+        margin-bottom: 15px;
+    }
+
+    .progressbar li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .progressbar li p {
+        font-size: 9px;
+    }
+
+    .btn-success {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .tour-image {
+        width: 60px;
+    }
+}
+
+@media (max-width: 576px) {
+    .progressbar {
+        width: 100%;
+    }
+
+    .progressbar li {
+        font-size: 10px;
+    }
+
+    .progressbar li::before {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+
+    .progressbar li p {
+        font-size: 8px;
+    }
+
+    .btn-success {
+        padding: 6px 15px;
+        font-size: 12px;
+        border-radius: 25px;
+    }
+
+    .tour-image {
+        width: 50px;
+    }
+}
+
+@media (max-width: 576px) {
+    .progressbar {
+        flex-direction: column;
+        align-items: flex-start; /* Alinea correctamente */
+        gap: 15px; /* Agrega espacio entre pasos */
+    }
+}
