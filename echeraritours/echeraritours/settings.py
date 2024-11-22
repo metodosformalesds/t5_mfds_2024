@@ -172,8 +172,10 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': {
             'profile',
             'email'},
-        'OAUTH_PARAMS': {'access_type': 'online'},
-        'AUTH_PKCE_ENABLED': True,
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+            'prompt': 'select_account',  
+        },
         'METHOD': 'oauth2',
         'VERIFIED_EMAIL': True,
         'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),

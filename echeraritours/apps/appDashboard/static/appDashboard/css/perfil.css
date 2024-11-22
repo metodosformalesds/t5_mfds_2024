@@ -200,3 +200,126 @@ article.card {
     flex: 1;
     margin-left: 20px;
 }
+
+@media (max-width: 992px) {
+    main {
+        max-width: 800px;
+        padding: 0 10px;
+    }
+
+    article.card {
+        max-width: 700px;
+        margin-top: 40px;
+    }
+
+    .form-grid {
+        gap: 15px;
+    }
+
+    .form-control {
+        max-width: 100%;
+        padding: 7px 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .profile-container {
+        width: 120px;
+    }
+
+    .profile-image,
+    .cover-image {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    article.card {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .card-header {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .form-control {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+    }
+
+    .btn-primary {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    .profile-container {
+        width: 100px;
+    }
+
+    .profile-image,
+    .cover-image {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 576px) {
+    main {
+        padding: 0 5px;
+    }
+
+    article.card {
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .card-header {
+        font-size: 1rem;
+    }
+
+    .form-grid {
+        gap: 8px;
+    }
+
+    .form-control {
+        padding: 5px 7px;
+        font-size: 0.8rem;
+    }
+
+    .btn-primary {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .profile-container {
+        width: 80px;
+    }
+
+    .profile-image,
+    .cover-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .overlay {
+        font-size: 12px;
+    }
+}

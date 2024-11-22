@@ -144,3 +144,109 @@
     margin: 0;
     font-size: 0.9rem;
 }
+
+@media (max-width: 992px) {
+    .dashboard-container .card-grid {
+        grid-template-areas:
+            "perfil planes-activos"
+            "perfil favoritos"
+            "perfil metodos-pago"
+            "historial historial";
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .dashboard-container .perfil {
+        height: auto;
+        padding-top: 30px;
+    }
+
+    .dashboard-container .perfil .profile-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .dashboard-container .planes-activos,
+    .dashboard-container .favoritos,
+    .dashboard-container .metodos-pago {
+        height: auto;
+    }
+
+    .dashboard-container .historial {
+        height: auto;
+        padding: 10px;
+    }
+
+    .dashboard-container .historial img {
+        margin-right: 20px;
+        margin-top: 0;
+    }
+
+    .dashboard-container .historial .card-body {
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container .card-grid {
+        grid-template-areas:
+            "perfil"
+            "planes-activos"
+            "favoritos"
+            "metodos-pago"
+            "historial";
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .dashboard-container .perfil .profile-image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .dashboard-container .planes-activos,
+    .dashboard-container .favoritos,
+    .dashboard-container .metodos-pago {
+        font-size: 0.85rem;
+    }
+
+    .dashboard-container .historial img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-container .perfil {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .dashboard-container .perfil .profile-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .dashboard-container .card {
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-container .historial {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .dashboard-container .historial img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-container .historial .card-body {
+        margin: 0;
+    }
+}

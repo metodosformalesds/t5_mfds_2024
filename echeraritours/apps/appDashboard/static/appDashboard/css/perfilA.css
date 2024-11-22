@@ -39,45 +39,112 @@ article.card {
     text-align: left;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+    main {
+        margin-top: 5px;
+        padding: 0 10px;
+    }
+
+    article.card {
+        max-width: 800px;
+        padding: 15px;
+        margin-top: 40px;
+    }
+
+    .card-header h2 {
+        font-size: 1.5rem;
+    }
+
     .form-grid {
-        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+
+    .form-control {
+        padding: 7px 8px;
+        font-size: 0.95rem;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 0.9rem;
     }
 }
 
-.form-group {
-    margin-bottom: 10px; 
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: flex-start; 
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 0 8px;
+    }
+
+    article.card {
+        max-width: 100%;
+        padding: 10px;
+        margin-top: 30px;
+    }
+
+    .card-header {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .card-header h2 {
+        font-size: 1.3rem;
+        margin-top: 10px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .form-control {
+        padding: 6px 8px;
+        font-size: 0.85rem;
+    }
+
+    .btn-primary {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
 }
 
-.form-control {
-    margin-bottom: 15px; 
-    padding: 8px 10px;
-    font-size: 1rem; 
-    width: 100%; 
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
+@media (max-width: 576px) {
+    main {
+        justify-content: flex-start;
+        margin: 0;
+    }
 
-.btn-primary {
-    background-color: #68ddbd;
-    border-color: #68ddbd;
-    color: white;
-    transition: background-color 0.3s ease;
-    width: auto; 
-    padding: 12px 30px; 
-    font-size: 1rem;
-    border-radius: 6px;
-    margin-top: 20px;
-}
+    article.card {
+        max-width: 100%;
+        padding: 8px;
+        margin-top: 20px;
+    }
 
-.card-footer {
-    display: none; 
+    .card-header {
+        padding: 8px;
+        text-align: center;
+    }
+
+    .card-header h2 {
+        font-size: 1.2rem;
+        margin-top: 5px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .form-control {
+        padding: 5px 7px;
+        font-size: 0.8rem;
+    }
+
+    .btn-primary {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        margin-top: 15px;
+    }
 }
 
 .btn-stripe {

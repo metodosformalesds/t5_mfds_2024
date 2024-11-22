@@ -3,11 +3,17 @@
 {% block title %}Pago Reservación - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'appPayment/css/pago_reservacion.css' %}">
+<link rel="stylesheet" href="{% static 'appPayment/css/detalles_reservacion.css' %}">
+<link rel="stylesheet" href="{% static 'appPayment/css/seleccion_pago.css' %}">
 <script src="https://js.stripe.com/v3/"></script>
 {% endblock extra_styles %}
 
 {% block content %}
+
+<header>
+    <img src="{% static 'appPayment/img/logo.png' %}" alt="Echérari Tours Logo">
+</header>
+
 <div class="container mt-5">
     <div class="d-flex justify-content-center mb-4">
         <ul class="progressbar">
@@ -18,39 +24,40 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="payment-method-container">
             <h5>Selección de método de pago</h5>
             
             <!-- Formulario de PayPal -->
-            <form id="paypal-form" method="post" action="{% url 'realizar_pago_paypal' tour.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="number_people" value="{{ number_people }}">
-                <button type="submit" class="btn btn-primary mt-3">
-                    Pagar con PayPal
-                </button>
-            </form>
+                <form id="paypal-form" method="post" action="{% url 'realizar_pago_paypal' tour.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="number_people" value="{{ number_people }}">
+                    <button type="submit" class="btn btn-paypal mt-3">
+                        Pagar con PayPal
+                        <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height: 20px; margin-left: 10px;">
+                    </button>
+                </form>
 
             <!-- Formulario de otros métodos de pago -->
             <form id="payment-form" method="post">
                 {% csrf_token %}
                 
-                <!-- Métodos de pago guardados -->
-                {% if saved_payment_methods %}
+            <!-- Métodos de pago guardados -->
+            {% if saved_payment_methods %}
                 <h6>Métodos de pago guardados</h6>
                 {% for metodo in saved_payment_methods %}
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="payment_method" id="method_{{ metodo.id }}" value="{{ metodo.stripe_payment_method_id }}">
-                        <label class="form-check-label" for="method_{{ metodo.id }}">
-                            {{ metodo.card_brand|title }} (**** {{ metodo.card_last4 }})
-                        </label>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="payment_method" id="method_{{ metodo.id }}" value="{{ metodo.stripe_payment_method_id }}">
+                    <label class="form-check-label" for="method_{{ metodo.id }}">
+                        {{ metodo.card_brand|title }} (**** {{ metodo.card_last4 }})
+                    </label>
+                </div>
                 {% endfor %}
-                {% else %}
+            {% else %}
                 <p>No tienes métodos de pago guardados.</p>
             {% endif %}
                 
                 <!-- Opción para añadir una nueva tarjeta -->
-                <div class="form-check mb-3">
+                <div class="form-check">
                     <input class="form-check-input" type="radio" name="payment_method" id="new_card" value="new_card">
                     <label class="form-check-label" for="new_card">
                         Añadir nueva tarjeta
@@ -68,12 +75,13 @@
                     <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                 </div>
 
-                <button type="submit" class="btn btn-success">Continuar con el pago</button>
+                <button type="submit" class="btn btn-success btn-pago">Continuar con el pago</button>
             </form>
         </div>
 
         <div class="col-md-5 offset-md-1">
             <div class="card">
+                <img src="{{ tour.tour_image.url }}" alt="{{ tour.title }}" class="card-img-top img-fluid"> <!-- Imagen aquí -->
                 <div class="card-body">
                     <h5 class="card-title">Resumen de la compra</h5>
                     <p class="fw-bold">{{ tour.title }}</p>

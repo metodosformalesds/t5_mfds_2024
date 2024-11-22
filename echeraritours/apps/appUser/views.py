@@ -384,19 +384,6 @@ def terminos_y_condiciones(request):
     return render(request, 'terminos_y_condiciones.html')
 
 
-def terminos_y_condiciones2(request):
-    """
-    Author: Neida Franco
-    Renders the 'terminos_y_condiciones2.html' template.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The rendered 'terminos_y_condiciones2.html' template.
-    """
-    return render(request, 'terminos_y_condiciones2.html')
-
 
 def terminos_legales(request):
     """
@@ -429,8 +416,9 @@ def necesitas_ayuda(request):
 def solicitar_correo(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+
         try:
-            usuario = User.objects.get(email=email)
+            usuario = User.objects.filter(email=email).first()
             codigo = generar_codigo()
 
             if hasattr(usuario, 'client'):
@@ -443,6 +431,9 @@ def solicitar_correo(request):
                 messages.error(
                     request, 'El usuario no tiene un perfil válido.')
                 return redirect('solicitar_correo')
+
+            request.session['email'] = email
+            request.session['codigo'] = codigo
 
             send_mail(
                 'Código de recuperación',
@@ -550,17 +541,10 @@ def google_login(request):
     if social_account:
         email = social_account.extra_data.get('email')
         if User.objects.filter(email=email).exists():
-            user = User.objects.get(email=email)
+            user = authenticate(request, email=email)
             login(request, user)
             return redirect('index')
         else:
-            user = User.objects.create_user(
-                email=email,
-                username=email.split('@')[0],
-                password=User.objects.make_random_password(),
-            )
-            user.save()
-            login(request, user)
-            return redirect('profile_setup')
+            return redirect('register', email=email)
 
-    return redirect('login')
+    return redirect('index')

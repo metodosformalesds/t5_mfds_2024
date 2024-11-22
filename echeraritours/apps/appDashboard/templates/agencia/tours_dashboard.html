@@ -16,9 +16,14 @@
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="dashboard-header d-flex justify-content-between align-items-center pt-3 pb-2 mb-3">
+        <div class="dashboard-header d-flex justify-content-between align-items-center border-bottom pb-2 mb-3" style="margin-top: 40px;">
             <h1 class="dashboard-title" style="color: #68ddbd; font-size: 2rem; font-weight: 500; margin-top: 40px; margin-left: 20px;">Planes activos</h1>
+            <a href="{% url 'create_tour' %}" class="btn mt-3" 
+               style="background-color: #68ddbd; color: white; font-weight: bold; border: none; margin-top: 55px;">
+               Crear tour
+            </a>
         </div>
+       
         <div class="container my-4">
             {% if tours %}
             <div class="row">
