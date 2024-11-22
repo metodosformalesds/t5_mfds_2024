@@ -40,6 +40,7 @@ VALID_STATES = [
 @login_required(login_url='login')
 def dashboard(request):
     """
+    Author: Santiago Mendivil, Neida Franco
     Redirects the user to the appropriate dashboard based on their role.
     This view checks if the logged-in user is associated with a Client or an Agency.
     If the user is a Client, they are redirected to the client dashboard.
@@ -66,6 +67,7 @@ def dashboard(request):
 @login_required(login_url='login')
 def client_dashboard(request):
     """
+    Author: Leonardo Ortega
     Renders the client dashboard page.
 
     Args:
@@ -79,6 +81,17 @@ def client_dashboard(request):
 
 @login_required(login_url='login')
 def client_active_plans(request):
+    """
+    Authors: Neida Franco, Santiago Mendivil
+    View function to retrieve and display the active plans of the logged-in client.
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata about the request.
+    Returns:
+        HttpResponse: The rendered HTML page displaying the client's active plans.
+    The function filters the Reservation objects to get the reservations of the logged-in client
+    where the tour's end date is greater than the current time. The filtered reservations are then
+    passed to the 'cliente/planes_activos.html' template for rendering.
+    """
     current_time = timezone.now()
     reservaciones = Reservation.objects.filter(
         client=request.user.client, tour__end_date__gt=current_time)
@@ -88,6 +101,7 @@ def client_active_plans(request):
 
 class PlanDetailView(DetailView):
     """
+    Author: Hector Ramos
     A view to display the details of a specific plan.
 
     Attributes:
@@ -101,8 +115,10 @@ class PlanDetailView(DetailView):
     pk_url_kwarg = 'reservation_pk'
 
 
+@login_required(login_url='login')
 def ticket(request, reservation_pk):
     """
+    Author: Santiago Mendivil
     Generates a PDF ticket for a specific reservation.
 
     Args:
@@ -182,6 +198,18 @@ def ticket(request, reservation_pk):
 
 @ login_required(login_url='login')
 def client_profile(request):
+    """
+    Author: Santiago Mendivil
+    Handle the client profile view.
+    This view allows a client to view and update their profile information.
+    It handles both GET and POST requests. On GET requests, it displays the
+    profile forms with the current client information. On POST requests, it
+    validates and saves the updated profile information.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered client profile page with the profile forms.
+    """
     cliente = get_object_or_404(Client, user=request.user)
 
     if request.method == 'POST':
@@ -213,6 +241,20 @@ def client_profile(request):
 
 @ login_required(login_url='login')
 def favorites(request):
+    """
+    Author: Santiago Mendivil, Hector Ramos
+    View function to display the user's favorite tours.
+    If the user is authenticated, retrieves the list of favorite tours for the
+    current user and renders the 'cliente/favoritos.html' template with the list
+    of tours. If the user is not authenticated, displays an error message and
+    redirects to the login page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered 'cliente/favoritos.html' template with the
+        list of favorite tours if the user is authenticated, or a redirect to
+        the login page if the user is not authenticated.
+    """
     if request.user.is_authenticated:
         favorite_list = FavoriteList.objects.filter(
             client=request.user.client).first()
@@ -230,6 +272,21 @@ def favorites(request):
 
 @ login_required(login_url='login')
 def delete_favorite(request, tour_id):
+    """
+    Author: Leonardo Ortega
+    Remove a tour from the user's favorite list.
+    Args:
+        request (HttpRequest): The HTTP request object containing user information.
+        tour_id (int): The ID of the tour to be removed from the favorite list.
+    Returns:
+        HttpResponseRedirect: Redirects to the 'favorites' page after removing the tour.
+    Raises:
+        Http404: If the tour with the given ID does not exist.
+    Side Effects:
+        - Removes the specified tour from the user's favorite list.
+        - Saves the updated favorite list.
+        - Adds a success message to the request.
+    """
     favorite_list = FavoriteList.objects.filter(
         client=request.user.client).first()
     tour = get_object_or_404(Tour, id=tour_id)
@@ -243,6 +300,16 @@ def delete_favorite(request, tour_id):
 
 @ login_required(login_url='login')
 def client_purchases(request):
+    """
+    Author: Neida Franco
+    Handles the client purchases view.
+    This view retrieves all reservations made by the logged-in client and the reviews associated with those reservations.
+    It then renders the 'cliente/historial.html' template with the retrieved data.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered 'cliente/historial.html' template with the context containing the client's reservations and reviews.
+    """
     reservaciones = Reservation.objects.filter(client=request.user.client)
     reviews = Reviews.objects.filter(reservation__in=reservaciones)
 
@@ -256,6 +323,7 @@ def client_purchases(request):
 
 class CreateReview(CreateView):
     """
+    Author: Santiago Mendivil
     A view to create a new Review object.
 
     Attributes:
@@ -279,12 +347,14 @@ class CreateReview(CreateView):
         return context
 
     def form_valid(self, form):
-        form.instance.reservation = Reservation.objects.get(id=self.kwargs['reservation_id'])
+        form.instance.reservation = Reservation.objects.get(
+            id=self.kwargs['reservation_id'])
         return super().form_valid(form)
 
 
 class DeleteReview(DeleteView):
     """
+    Author: Santiago Mendivil
     A view to delete a Review object.
 
     Attributes:
@@ -309,6 +379,19 @@ class DeleteReview(DeleteView):
 
 @ login_required(login_url='login')
 def payment_methods_client(request):
+    """
+    Author: Hector Ramos
+    Handles the request to display the payment methods for a client.
+    This view function retrieves the payment methods associated with the 
+    currently logged-in client and renders them in the 'metodos_pago.html' 
+    template.
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata 
+        about the request.
+    Returns:
+        HttpResponse: The rendered 'metodos_pago.html' template with the 
+        client's payment methods.
+    """
     metodos = PaymentMethod.objects.filter(client=request.user.client)
 
     return render(request, 'cliente/metodos_pago.html', {'metodos': metodos})
@@ -316,9 +399,28 @@ def payment_methods_client(request):
 
 @login_required
 def add_payment_method(request):
+    """
+    Author: Hector Ramos
+    Handles the addition of a new payment method for the logged-in user.
+    This view processes a POST request to attach a new Stripe payment method to the user's Stripe customer account,
+    sets it as the default payment method for future invoices, and saves the payment method details in the database.
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata about the request.
+    Returns:
+        HttpResponse: Redirects to the 'payment_methods_client' view if the payment method is successfully added.
+        Otherwise, renders the 'cliente/agregar_metodo_pago.html' template with the Stripe public key.
+    POST Parameters:
+        stripe_payment_method_id (str): The ID of the Stripe payment method to be attached.
+        cardholder_name (str): The name of the cardholder as provided in the form.
+    Template:
+        cliente/agregar_metodo_pago.html: The template rendered if the request method is not POST or if the payment method ID is not provided.
+    Context:
+        stripe_public_key (str): The public key for Stripe, used in the template for client-side Stripe operations.
+    """
     if request.method == 'POST':
         stripe_payment_method_id = request.POST.get('stripe_payment_method_id')
-        cardholder_name = request.POST.get('cardholder_name')  # Obtener el nombre del titular desde el formulario
+        # Obtener el nombre del titular desde el formulario
+        cardholder_name = request.POST.get('cardholder_name')
 
         if stripe_payment_method_id:
             customer_id = request.user.client.stripe_customer_id
@@ -339,9 +441,9 @@ def add_payment_method(request):
                 client=request.user.client,
                 method_type='credit_card',
                 stripe_payment_method_id=stripe_payment_method_id,
-                card_last4=payment_method.card.last4, 
-                card_brand=payment_method.card.brand,  
-                cardholder_name=cardholder_name,  
+                card_last4=payment_method.card.last4,
+                card_brand=payment_method.card.brand,
+                cardholder_name=cardholder_name,
             )
 
             return redirect('payment_methods_client')
@@ -349,34 +451,68 @@ def add_payment_method(request):
     return render(request, "cliente/agregar_metodo_pago.html", {'stripe_public_key': settings.STRIPE_PUBLIC_KEY})
 
 
-
 @login_required
 def set_default_payment_method(request, metodo_id):
-    metodo = get_object_or_404(PaymentMethod, id=metodo_id, client=request.user.client)
+    """
+    Author: Hector Ramos
+    Sets the specified payment method as the default for the current user.
+    This function retrieves the payment method specified by `metodo_id` for the
+    current user, sets all other payment methods for the user to non-default,
+    and then sets the specified payment method as the default.
+    Args:
+        request (HttpRequest): The HTTP request object containing the current user.
+        metodo_id (int): The ID of the payment method to set as default.
+    Returns:
+        HttpResponseRedirect: A redirect to the 'payment_methods_client' view.
+    Raises:
+        Http404: If the payment method with the given ID does not exist for the current user.
+    """
+    metodo = get_object_or_404(
+        PaymentMethod, id=metodo_id, client=request.user.client)
 
-    PaymentMethod.objects.filter(client=request.user.client).update(is_default=False)
+    PaymentMethod.objects.filter(
+        client=request.user.client).update(is_default=False)
 
     metodo.is_default = True
     metodo.save()
 
     return redirect('payment_methods_client')
 
+
 @login_required
 def delete_payment_method(request, metodo_id):
-    metodo = get_object_or_404(PaymentMethod, id=metodo_id, client=request.user.client)
+    """
+    Author: Hector Ramos, Leonardo Ortega
+    Deletes a payment method for the current user.
+    Args:
+        request (HttpRequest): The HTTP request object containing user information.
+        metodo_id (int): The ID of the payment method to be deleted.
+    Returns:
+        HttpResponse: A redirect to the 'payment_methods_client' view.
+    Raises:
+        Http404: If the payment method does not exist or does not belong to the current user.
+    Notes:
+        - If the payment method is the default method, it cannot be deleted and an error message is shown.
+        - If the payment method is successfully deleted, a success message is shown.
+    """
+    metodo = get_object_or_404(
+        PaymentMethod, id=metodo_id, client=request.user.client)
 
     if metodo.is_default:
-        messages.error(request, "No puedes eliminar el método de pago predeterminado. Por favor, selecciona otro método predeterminado primero.")
+        messages.error(
+            request, "No puedes eliminar el método de pago predeterminado. Por favor, selecciona otro método predeterminado primero.")
     else:
         metodo.delete()
-        messages.success(request, "El método de pago ha sido eliminado exitosamente.")
+        messages.success(
+            request, "El método de pago ha sido eliminado exitosamente.")
 
     return redirect('payment_methods_client')
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def agency_dashboard(request):
     """
+    Author: Santiago Mendivil
     Renders the agency dashboard page.
 
     Args:
@@ -388,8 +524,27 @@ def agency_dashboard(request):
     return render(request, 'agency_dashboard.html')
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def agency_profile(request):
+    """
+    Author: Santiago Mendivil
+    Handle the agency profile view.
+    This view allows an agency to update its profile information. If the request
+    method is POST, it processes the submitted forms for updating the agency's
+    profile and saves the changes if the forms are valid. If the request method
+    is GET, it initializes the forms with the current agency's information.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: The rendered agency profile page with the forms and context data.
+    Context:
+        agency_form (AgencyForm): The form for updating the agency's basic information.
+        agency_profile_form (AgencyProfileForm): The form for updating the agency's profile details.
+        agencia (Agency): The agency object associated with the current user.
+        valid_states (list): A list of valid states for the agency profile.
+    Templates:
+        agencia/perfil.html: The template for rendering the agency profile page.
+    """
     agencia = get_object_or_404(Agency, user=request.user)
 
     if request.method == 'POST':
@@ -416,8 +571,20 @@ def agency_profile(request):
     return render(request, 'agencia/perfil.html', context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def reports(request):
+    """
+    Author: Neida Franco
+    Generates a report view for the tours associated with the agency of the logged-in user.
+    This view filters the tours based on the agency of the current user and renders the 
+    'agencia/reportes.html' template with the filtered tours.
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata about the request.
+    Returns:
+        HttpResponse: The rendered 'agencia/reportes.html' template with the context containing 
+                      the filtered tours.
+
+    """
     agency_tours = Tour.objects.filter(agency=request.user.agency)
 
     context = {
@@ -427,8 +594,32 @@ def reports(request):
     return render(request, 'agencia/reportes.html', context)
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def generate_report(request, tour_id):
+    """
+    Author: Santiago Mendivil
+    Generates a PDF report for a specific tour and returns it as an HTTP response.
+    Args:
+        request (HttpRequest): The HTTP request object.
+        tour_id (int): The ID of the tour for which the report is to be generated.
+    Returns:
+        HttpResponse: An HTTP response with the generated PDF report as its content.
+    Raises:
+        Http404: If the tour with the given ID does not exist.
+    The report includes the following information about the tour:
+        - Title
+        - Description
+        - Lodging place
+        - Price per person
+        - Capacity
+        - Total bookings
+        - Start date
+        - End date
+        - Place of origin
+        - Destination place
+        - Total clients
+        - Total earnings
+    """
     tour = get_object_or_404(Tour, id=tour_id)
 
     report, created = Reports.objects.get_or_create(
@@ -469,9 +660,10 @@ def generate_report(request, tour_id):
     return HttpResponse(buffer, content_type='application/pdf')
 
 
-@ login_required(login_url='login')
+@login_required(login_url='login')
 def tours_dashboard(request):
     """
+    Author: Neida Franco
     Renders the tours dashboard page.
 
     Args:
@@ -490,14 +682,24 @@ def tours_dashboard(request):
 
 
 class CreateTour(CreateView):
+
     """
-    A view to create a new Tour object.
+    A view to create a new Tour object. This view handles the creation of a new Tour object, including form validation
+    to ensure that the start date is before the end date and that both dates are in the future.
 
     Attributes:
         model (Tour): The model associated with this view.
         fields (list): The fields to be displayed in the form.
         template_name (str): The name of the template to be rendered.
         success_url (str): The URL to redirect to upon successful form submission.
+
+    MethodsL
+        form_valid(form):
+            Validates the form data, ensuring that the start date is before the end date
+            and that both dates are in the future. Adds errors to the form if validation fails.
+            Sets the total bookings to 0 and assigns the agency to the current user.
+            Returns the result of the parent class's form_valid method if validation passes.
+
     """
     model = Tour
     fields = ['title', 'description', 'lodging_place', 'price_per_person', 'capacity',
@@ -530,6 +732,14 @@ class CreateTour(CreateView):
 
 
 def payment_methods_agency(request):
+    """
+    Author: Hector Ramos
+    Handles the request to display payment methods for the agency associated with the current user.
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata about the request.
+    Returns:
+        HttpResponse: The rendered HTML page displaying the payment methods for the agency.
+    """
     metodos = PaymentMethod.objects.filter(agency=request.user.agency)
 
     return render(request, 'agencia/metodos_pago.html', {'metodos': metodos})

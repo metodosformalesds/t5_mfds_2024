@@ -93,3 +93,14 @@ a {
     font-size: 0.875rem;
     color: #999;
 }
+
+.star {
+    font-size: 24px;
+    color: #ccc;
+    /* Color de estrella vacía */
+}
+
+.star.filled {
+    color: gold;
+    /* Color de estrella llena */
+}

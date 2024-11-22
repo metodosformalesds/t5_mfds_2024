@@ -8,6 +8,7 @@ import random
 
 class Tour(models.Model):
     """
+    Authors: Santiago Mendivil, Leonardo Ortega
     Modelo que representa un tour ofrecido por una agencia.
         Atributos:
             title (CharField): Título del tour.
@@ -56,6 +57,7 @@ class Tour(models.Model):
 
 class Reservation(models.Model):
     """
+    Authors: Santiago Mendivil, Leonardo Ortega, Hector Ramos
     Modelo que representa una reservación para un tour.
         Atributos:
             tour (ForeignKey): Referencia al tour reservado.
@@ -116,6 +118,7 @@ class Reservation(models.Model):
 
 class Reviews(models.Model):
     """
+    Authors: Hector Ramos
     Modelo que representa una reseña de un tour.
         Atributos:
             reservation (ForeignKey): Referencia a la reserva asociada a la reseña.
@@ -140,6 +143,9 @@ class Reviews(models.Model):
         verbose_name = 'Reseña'
         verbose_name_plural = 'Reseñas'
         ordering = ['review_date']
+
+    def get_stars(self):
+        return [1 if i <= self.rating else 0 for i in range(1, 6)]
 
     def __str__(self):
         return f"Reseña de {self.reservation.client.first_name} {self.reservation.client.paternal_surname} para {self.reservation.tour.title}"

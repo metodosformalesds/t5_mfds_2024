@@ -1,10 +1,9 @@
-
 .btn-add-payment {
-    background-color: #68ddbd; 
-    border-color: #68ddbd; 
+    background-color: #68ddbd;
+    border-color: #68ddbd;
     color: white;
     font-weight: bold;
-    display: inline-flex; 
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 10px 15px;
@@ -16,13 +15,16 @@
 }
 
 .btn-add-payment:hover {
-    background-color: #57BFA0; 
+    background-color: #57BFA0;
     border-color: #57BFA0;
     text-decoration: none;
 }
 
 .btn-add-payment i {
-    font-size: 1rem; 
-    color: white; 
+    font-size: 1rem;
+    color: white;
 }
 
+.metodos_pago {
+    padding-top: 50px;
+}

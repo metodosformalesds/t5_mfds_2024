@@ -207,15 +207,14 @@ LOGIN_REDIRECT_URL = 'index'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Lo que hace aqui es que agarra valores predeterminados del repositorio personal
-load_dotenv()
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.tu-servidor.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'correo@ejemplo.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'contraseña')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '7eaf98007@smtp-brevo.com' 
+EMAIL_HOST_PASSWORD = '6EjCZQAv3PGsz780'  
+DEFAULT_FROM_EMAIL = 'echeraritours@gmail.com'
+
 
 # Llamadas a APIs desde el archivo .env
 env = environ.Env()

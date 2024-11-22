@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Correo Enviado - EcherariTours{% endblock title %}
+
+{% block extra_styles %} 
+<link rel="stylesheet" href="{% static 'appUser/css/verificar.css' %}"> 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="login-container mt-5 mb-5">
+    <div class="login-box">
+        <img src="{% static 'appUser/img/cancun.jpg' %}" alt="Imagen de cancun">
+
+        <form method="post">
+            {% if messages %}
+            <div class="notification-container">
+                {% for message in messages %}
+                <div class="notification {{ message.tags }}">
+                    <span class="material-icons notification-icon">
+                        {% if message.tags == "success" %}{% else %}{% endif %}
+                    </span>
+                    <p>{{ message }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% csrf_token %}
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" name="email" value="{{ email }}" readonly> 
+
+            <label for="codigo">Código de Recuperación:</label>
+            <div class="codigo-input-container">
+                <input type="text" name="codigo_1" maxlength="1" pattern="[0-9]" inputmode="numeric" required oninput="this.nextElementSibling && this.nextElementSibling.focus();">
+                <input type="text" name="codigo_2" maxlength="1" pattern="[0-9]" inputmode="numeric" required oninput="this.nextElementSibling && this.nextElementSibling.focus();">
+                <input type="text" name="codigo_3" maxlength="1" pattern="[0-9]" inputmode="numeric" required oninput="this.nextElementSibling && this.nextElementSibling.focus();">
+                <input type="text" name="codigo_4" maxlength="1" pattern="[0-9]" inputmode="numeric" required oninput="this.nextElementSibling && this.nextElementSibling.focus();">
+                <input type="text" name="codigo_5" maxlength="1" pattern="[0-9]" inputmode="numeric" required oninput="this.nextElementSibling && this.nextElementSibling.focus();">
+                <input type="text" name="codigo_6" maxlength="1" pattern="[0-9]" inputmode="numeric" required>
+            </div>
+            
+            <button type="submit">Validar Código</button>
+
+            
+            <a href="{% url 'solicitar_correo' %}" class="resend-link">
+                <span class="material-icons resend-icon"></span> 
+                Volver a mandar código
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll(".codigo-input-container input");
+    
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", (e) => {
+                if (e.target.value.length === 1) {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+            });
+    
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && e.target.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    
+        document.querySelector(".codigo-input-container").addEventListener("paste", (e) => {
+            const data = e.clipboardData.getData("text").replace(/\D/g, "");
+            const pastedData = data.split("").slice(0, inputs.length);
+    
+            inputs.forEach((input, i) => {
+                input.value = pastedData[i] || "";
+                if (i < pastedData.length - 1) {
+                    inputs[i + 1].focus();
+                }
+            });
+    
+            e.preventDefault();
+        });
+    });
+    </script>

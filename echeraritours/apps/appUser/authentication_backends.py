@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 class EmailBackend(ModelBackend):
     """
+    Author: Santiago Mendivil 
     Custom authentication backend that allows users to log in using their email address.
 
     Methods
@@ -28,6 +29,7 @@ class EmailBackend(ModelBackend):
         Returns the authenticated user if the email and password are correct.
         Returns None if the user does not exist or the password is incorrect.
     """
+
     def authenticate(self, request, email=None, password=None, **kwargs):
         UserModel = get_user_model()
         try:

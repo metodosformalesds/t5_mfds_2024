@@ -40,12 +40,15 @@ from django.core.mail import send_mail
 from .models import User
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.urls import reverse_lazy
+import random
+
 
 # Create your views here.
 
 
 def index(request):
     """
+    Author: Leonardo Ortega 
     View function for the index page of the appUser application.
     This function retrieves the latest 5 reviews from the Reviews model,
     ordered by the review date in descending order, and renders the 'index.html'
@@ -56,7 +59,7 @@ def index(request):
         HttpResponse: The rendered 'index.html' template with the context containing
                         the latest 5 reviews.
     """
-    reviews = Reviews.objects.order_by('-review_date')[:5]
+    reviews = Reviews.objects.order_by('-review_date')[:3]
     tours = Tour.objects.all()
 
     return render(request, 'index.html', {'reviews': reviews, 'tours': tours})
@@ -64,6 +67,7 @@ def index(request):
 
 def registerPage(request):
     """
+    Author: Santiago Mendivil
     Handles the user registration process.
     If the user is authenticated and has a linked Google account, pre-fills the registration form with the user's Google email.
     If the request method is POST, validates and saves the registration form, creates a new user, and redirects to the login page.
@@ -98,6 +102,7 @@ def registerPage(request):
 
 def loginPage(request):
     """
+    Author: Santiago Mendivil
     Handles the user login functionality.
     This view processes the login form submission. If the request method is POST,
     it retrieves the email and password from the request, authenticates the user,
@@ -128,6 +133,7 @@ def loginPage(request):
 
 def logoutUser(request):
     """
+    Author: Hector Ramos
     Logs out the current user and redirects them to the login page.
 
     Args:
@@ -143,13 +149,15 @@ def logoutUser(request):
 @login_required
 def registrar_cliente(request):
     """
+    Author: Santiago Mendivil
     Handles the multi-step client registration process.
     This view manages a three-step form submission process for registering a client.
     The steps are managed using the session to keep track of the current step.
     Steps:
         1. Collects first name, paternal surname, maternal surname, and birth date.
         2. Collects phone number, zip code, and city.
-        3. Uploads and saves an official identification file.
+        3. Uploads and saves an official identification file and a biometric image.
+        4. Calls the api of ID Analyzer to validate the identification and biometric images.
     Args:
         request (HttpRequest): The HTTP request object.
     Returns:
@@ -302,6 +310,7 @@ def registrar_cliente(request):
 @login_required
 def registrar_agencia(request):
     """
+    Author: Santiago Mendivil
     View for registering an authenticated user as an Agency.
     This view handles a multi-step form for agency registration. The form has two steps:
     1. Collecting basic agency information (name, address, phone, zip code).
@@ -385,6 +394,7 @@ def registrar_agencia(request):
 @login_required(login_url='login')
 def seleccion_registro(request):
     """
+    Author: Santiago Mendivil
     Renders the selection page. If the user is already part of a user type (Client or Agency), redirects to the main page.
     Args:
         request (HttpRequest): The HTTP request object.
@@ -399,6 +409,7 @@ def seleccion_registro(request):
 
 def sobre_nosotros(request):
     """
+    Author: Neida Franco
     Handles the HTTP request for the 'Sobre Nosotros' (About Us) page.
 
     Args:
@@ -412,6 +423,7 @@ def sobre_nosotros(request):
 
 def terminos_y_condiciones(request):
     """
+    Author: Neida Franco
     Handles the request to display the terms and conditions page.
 
     Args:
@@ -425,6 +437,7 @@ def terminos_y_condiciones(request):
 
 def terminos_y_condiciones2(request):
     """
+    Author: Neida Franco
     Renders the 'terminos_y_condiciones2.html' template.
 
     Args:
@@ -438,6 +451,7 @@ def terminos_y_condiciones2(request):
 
 def terminos_legales(request):
     """
+    Author: Neida Franco
     Handles the HTTP request for the 'terminos_legales' page.
 
     Args:
@@ -451,6 +465,7 @@ def terminos_legales(request):
 
 def necesitas_ayuda(request):
     """
+    Author: Neida Franco
     Handles the request to render the 'necesitas_ayuda.html' template.
 
     Args:
@@ -462,174 +477,141 @@ def necesitas_ayuda(request):
     return render(request, 'necesitas_ayuda.html')
 
 
-def send_mail_view(request, user_id):
-    """
-    Sends a password recovery email to the specified user.
-    Args:
-        request (HttpRequest): The HTTP request object.
-        user_id (int): The ID of the user to send the email to.
-    Returns:
-        HttpResponse: An HTTP response indicating that the email was sent.
-    Raises:
-        Http404: If the user with the specified ID does not exist.
-    This view function performs the following steps:
-    1. Retrieves the user by their ID.
-    2. Generates a password recovery link.
-    3. Renders the HTML content of the email using a template.
-    4. Creates an email message with the rendered HTML content.
-    5. Sends the email to the user's email address.
-    """
-    user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
-    # Aquí deberías generar el link de recuperación
-    link = 'http://tusitio.com/recovery-link'
-
-    # Renderiza el HTML del correo utilizando el template
-    template = render_to_string('correo_recuperacion.html', {'link': link})
-
-    subject = 'Recuperación de Contraseña'
-
-    message = EmailMultiAlternatives(
-        subject,
-        # El cuerpo de texto plano (puedes dejarlo vacío si solo usas HTML)
-        '',
-        settings.EMAIL_HOST_USER,
-        [user.email]
-    )
-
-    # Adjunta el HTML como alternativa
-    message.attach_alternative(template, "text/html")
-    message.send(fail_silently=False)
-
-    return HttpResponse("Correo enviado")
-
-
-def recuperar_contra(request):
-    """
-    Handle password recovery process.
-    This view handles the password recovery process by sending an email with a password reset link to the user.
-    If the request method is POST, it retrieves the email from the request, checks if a user with that email exists,
-    generates a password reset link, and sends it to the user's email in a separate thread.
-    Args:
-        request (HttpRequest): The HTTP request object.
-    Returns:
-        HttpResponse: Renders the password recovery page or redirects to the password reset email sent confirmation page.
-    Raises:
-        User.DoesNotExist: If no user with the provided email exists.
-    Templates:
-        recuperar_contra.html: The template for the password recovery page.
-    Messages:
-        success: If the email with the password reset link is sent successfully.
-        error: If no user with the provided email exists.
-    """
+def solicitar_correo(request):
     if request.method == 'POST':
-        email = request.POST.get['email']
+        email = request.POST.get('email')
         try:
-            user = User.objects.get(email=email)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            link = request.build_absolute_uri(
-                f'/confirmar_contra/{uid}/{token}/')
+            usuario = User.objects.get(email=email)
+            codigo = generar_codigo()
 
-            thread = threading.Thread(target=send_mail_view, args=(user, link))
-            thread.start()
+            if hasattr(usuario, 'client'):
+                usuario.client.codigo_recuperacion = codigo
+                usuario.client.save()
+            elif hasattr(usuario, 'agency'):
+                usuario.agency.codigo_recuperacion = codigo
+                usuario.agency.save()
+            else:
+                messages.error(
+                    request, 'El usuario no tiene un perfil válido.')
+                return redirect('solicitar_correo')
 
+            send_mail(
+                'Código de recuperación',
+                f'Tu código de recuperación es: {codigo}',
+                'echeraritours@gmail.com',
+                [email],
+                fail_silently=False,
+            )
             messages.success(
-                request, 'Se ha enviado un correo con instrucciones para restablecer la contraseña.')
-            return redirect('envio_contra')
+                request, 'El código de recuperación ha sido enviado.')
+            return redirect('verificar_codigo')
         except User.DoesNotExist:
             messages.error(
-                request, 'El correo ingresado no está asociado a ningún usuario.')
-    return render(request, 'recuperar_contra.html')
+                request, 'El correo no está asociado a ninguna cuenta.')
+    return render(request, 'solicitar_correo.html')
 
 
-def envio_contra(request):
-    """
-    Handles the request to render the 'envio_contra.html' template.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The rendered 'envio_contra.html' template.
-    """
-    return render(request, 'envio_contra.html')
+def generar_codigo():
+    return random.randint(100000, 999999)
 
 
-def confirmar_contra(request, uidb64=None, token=None):
-    """
-    Handles the password reset confirmation process.
+def verificar_codigo(request):
+    email = request.session.get('email')
 
-    This view function wraps around the PasswordResetConfirmView to provide
-    a custom template and success URL for the password reset confirmation.
+    if request.method == 'POST':
 
-    Args:
-        request (HttpRequest): The HTTP request object.
-        uidb64 (str, optional): The base64 encoded user ID. Defaults to None.
-        token (str, optional): The password reset token. Defaults to None.
+        codigo = ''.join([
+            request.POST.get(f'codigo_{i}', '') for i in range(1, 7)
+        ])
 
-    Returns:
-        HttpResponse: The HTTP response object generated by the PasswordResetConfirmView.
-    """
-    return PasswordResetConfirmView.as_view(
-        template_name='recuperar_contra.html',
-        success_url=reverse_lazy('completo_contra')
-    )(request, uidb64=uidb64, token=token)
+        try:
+            usuario = User.objects.get(email=email)
+            if hasattr(usuario, 'client') and str(usuario.client.codigo_recuperacion) == codigo:
+                request.session['email'] = email
+                return redirect('restablecer_contrasena')
+            elif hasattr(usuario, 'agency') and str(usuario.agency.codigo_recuperacion) == codigo:
+                request.session['email'] = email
+                return redirect('restablecer_contrasena')
+            else:
+                messages.error(request, 'El código ingresado es incorrecto.')
+        except User.DoesNotExist:
+            messages.error(
+                request, 'El correo no está asociado a ninguna cuenta.')
+    return render(request, 'verificar_codigo.html', {'email': email})
 
 
-def completo_contra(request):
-    """
-    Handles the HTTP request to render the 'completo_contra.html' template.
+def restablecer_contrasena(request):
+    if request.method == 'POST':
+        nueva_password = request.POST.get('password')
+        confirmar_password = request.POST.get('confirm_password')
 
-    Args:
-        request (HttpRequest): The HTTP request object.
+        if nueva_password != confirmar_password:
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return redirect('restablecer_contrasena')
 
-    Returns:
-        HttpResponse: The rendered 'completo_contra.html' template.
-    """
-    return render(request, 'completo_contra.html')
+        email = request.session.get('email')
+        if not email:
+            messages.error(request, 'Ocurrió un error, intenta nuevamente.')
+            return redirect('verificar_codigo')
+
+        try:
+            usuario = User.objects.get(email=email)
+
+            usuario.set_password(nueva_password)
+            usuario.save()
+
+            if hasattr(usuario, 'client'):
+                usuario.client.codigo_recuperacion = None
+                usuario.client.save()
+            elif hasattr(usuario, 'agency'):
+                usuario.agency.codigo_recuperacion = None
+                usuario.agency.save()
+
+            messages.success(
+                request, 'Tu contraseña ha sido restablecida con éxito.')
+            return redirect('login')
+        except User.DoesNotExist:
+            messages.error(
+                request, 'El correo no está asociado a ninguna cuenta.')
+            return redirect('verificar_codigo')
+
+    return render(request, 'restablecer_contrasena.html')
 
 
 def google_login(request):
     """
-    Maneja el inicio de sesión con Google.
-    Verifica si el usuario ya tiene una cuenta. Si no, lo redirige a la página de registro
-    con el correo electrónico ya ingresado.
+    Author: Neida Franco 
+    Handles Google login for users.
+    If the user is already authenticated, they are redirected to the index page.
+    If the user is not authenticated, the function checks if there is a social account associated with the user.
+    If a social account is found, it retrieves the email from the social account's extra data.
+    If a user with the retrieved email exists, the user is logged in and redirected to the index page.
+    If no user with the retrieved email exists, a new user is created with the email, a username derived from the email,
+    and a random password. The new user is then logged in and redirected to the profile setup page.
+    If no social account is found, the user is redirected to the login page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+    Returns:
+        HttpResponse: A redirect to the appropriate page based on the user's authentication status and social account existence.
     """
     if request.user.is_authenticated:
         return redirect('index')
 
-    if request.method == 'POST':
-        email = request.POST.get('email')
+    social_account = SocialAccount.objects.filter(user=request.user).first()
+    if social_account:
+        email = social_account.extra_data.get('email')
         if User.objects.filter(email=email).exists():
-            user = authenticate(request, email=email)
+            user = User.objects.get(email=email)
             login(request, user)
             return redirect('index')
         else:
-            return redirect('register', email=email)
-    return render(request, 'index')
+            user = User.objects.create_user(
+                email=email,
+                username=email.split('@')[0],
+                password=User.objects.make_random_password(),
+            )
+            user.save()
+            login(request, user)
+            return redirect('profile_setup')
 
-
-def generar_qr(requests):
-    #Url que se usara para abrir el QR
-    url = "https://echeraritours.live/registrar_cliente"
-    
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(url)
-    qr.make(fit=True)
-
-    # Generar la imagen del QR
-    img = qr.make_image(fill="black", back_color="white")
-    
-    # Retornar como respuesta HTTP
-    response = HttpResponse(content_type="image/png")
-    img.save(response, "PNG")
-    return response
-
-def captura_foto(request):
-    return render(request, "captura_foto.html")
-    
+    return redirect('login')

@@ -5,7 +5,7 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
-
+<link rel="stylesheet" href="{% static 'appDashboard/css/perfilA.css' %}">
 {% endblock extra_styles %}
 
 {% block content %}
@@ -34,58 +34,91 @@
                         <div class="col-md-8">
                             <form action="{% url 'agency_profile' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                {% if messages %}
-                                    <div class="alert alert-success" role="alert">
-                                        {% for message in messages %}
-                                            {{ message }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
                                 <div class="row">
-                                    
+                                    <div class="col-md-4 text-center">
+                                    </div>
                                     <div class="col-md-8">
-                                        <!-- Campos del formulario -->
-                                        <div class="form-group">
-                                            <label for="id_agency_name">Nombre de la Agencia</label>
-                                            {{ agency_form.agency_name }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_agency_description">Descripción de la Agencia</label>
-                                            {{ agency_form.agency_description }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_state">Estado</label>
-                                            {{ agency_form.state }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_address">Dirección</label>
-                                            {{ agency_form.address }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_suburb">Colonia</label>
-                                            {{ agency_form.suburb }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_town">Municipio</label>
-                                            {{ agency_form.town }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_phone">Número de Teléfono</label>
-                                            {{ agency_form.phone }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_zip_code">Código Postal</label>
-                                            {{ agency_form.zip_code }}
-                                        </div>
-                                        <button type="submit" class="btn btn-primary mt-3">Actualizar Perfil</button>
+                                        <form action="{% url 'agency_profile' %}" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="profile-containe text-center mr-4">
+                                                    <label for="profileImageInput" class="profile-image-label">
+                                                        <img id="profileImagePreview" 
+                                                             src="{% if agencia.profile_image %}{{ agencia.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                                             alt="Foto de perfil" 
+                                                             width="100" 
+                                                             height="100" 
+                                                             class="rounded-circle profile-image">
+                                                        <div class="overlay">
+                                                            Haz clic aquí para cambiar la foto
+                                                        </div>
+                                                    </label>
+                                                    <input type="file" id="coverPhotoInput" name="cover_photo" accept="image/*" style="display: none;">
+                                                </div>
+                                                <div class="profile-containe text-center mr-4">
+                                                    <label for="coverPhotoInput" class="cover_photo_label">
+                                                        <img id="coverPhotoPreview" 
+                                                             src="{% if agencia.cover_photo %}{{ agencia.cover_photo.url }}{% else %}{% static 'img/cover_default.png' %}{% endif %}" 
+                                                             alt="Foto de portada" 
+                                                             width="100" 
+                                                             height="100" 
+                                                             class="profile-image">
+                                                        <div class="overlay">
+                                                            Haz clic aquí para cambiar la foto de portada
+                                                        </div>
+                                                    </label>
+                                                    <input type="file" id="coverPhotoInput" name="cover_photo" accept="image/*" style="display: none;">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="id_agency_name">Nombre de la Agencia</label>
+                                                        {{ agency_form.agency_name }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="id_state">Estado</label>
+                                                        {{ agency_form.state }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="id_suburb">Colonia</label>
+                                                        {{ agency_form.suburb }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="id_phone">Número de Teléfono</label>
+                                                        {{ agency_form.phone }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="id_address">Dirección</label>
+                                                        {{ agency_form.address }}
+                                                    </div> 
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="id_town">Municipio</label>
+                                                        {{ agency_form.town }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="id_zip_code">Código Postal</label>
+                                                        {{ agency_form.zip_code }}
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="id_agency_description">Descripción de la Agencia</label>
+                                                        {{ agency_form.agency_description }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 text-center" style="transform: translateX(-200px);">
+                                                    <button type="submit" class="btn btn-primary mt-3">Actualizar Perfil</button>
+                                                </div>
+                                            </div>
+                                        </form>                        
                                     </div>
                                 </div>
-                            </form>                        
+                            </form>
                         </div>
                     </div>
                 </div>
-                <footer class="card-footer">
-                </footer>
             </div>
         </article>
     </main>

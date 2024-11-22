@@ -1,12 +1,10 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import (recuperar_contra,
-                    envio_contra,
-                    completo_contra,
-                    confirmar_contra,
+from .views import (solicitar_correo,
+                    verificar_codigo,
+                    restablecer_contrasena,
                     )
-from .views import send_mail_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,16 +22,11 @@ urlpatterns = [
     # Registro especifico
     path('registrar_cliente/', views.registrar_cliente, name='registrar_cliente'),
     path('registrar_agencia/', views.registrar_agencia, name='registrar_agencia'),
-
-    # Recuperación de contraseña
-    path('recuperar_contra/', recuperar_contra, name='recuperar_contra'),
-    path('envio_contra/', views.envio_contra, name='envio_contra'),
-    path('confirmar_contra/<uidb64>/<token>/',
-         views.confirmar_contra, name='confirmar_contra'),
-    path('completo_contra/', views.completo_contra,
-         name='recuperar_contra_completo'),
-    path('send_mail/<int:user_id>/', send_mail_view,
-         name='send_mail'),  # Agrega el parámetro user_id
+    
+    #recuperacion de contraseña
+    path('solicitar_correo/', views.solicitar_correo, name='solicitar_correo'),
+    path('verificar_codigo/', views.verificar_codigo, name='verificar_codigo'),
+    path('restablecer_contrasena/', views.restablecer_contrasena, name='restablecer_contrasena'),
 
     # Reglas de negocio
     path('sobre_nosotros/', views.sobre_nosotros, name='sobre_nosotros'),
