@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% load review_filters %}
+
+{% block title %}Historial de compras - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+      {% include "client_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center my-5">Historial de compras</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Tour</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Cantidad de tickets</th>
+                                <th scope="col">Total pagado</th>
+                                <th scope="col">Dejar reseña</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservacion in reservaciones %}
+                            <tr>
+                                <th scope="row">{{ reservacion.tour.title }}</th>
+                                <td scope="row">{{ reservacion.reservation_date|date:"d/m/Y" }}</td>
+                                <td>{{ reservacion.number_people }}</td>
+                                <td>{{ reservacion.total_price }}</td>
+                                <td>
+                                    {% with review=reservacion|get_review:reviews %}
+                                    {% if review %}
+                                    <a href="{% url 'delete_review' review.id %}" class="btn btn-secondary">Eliminar reseña</a>
+                                    {% else %}
+                                    <a href="{% url 'create_review' reservacion.id %}" class="btn btn-primary">Reseña</a>
+                                    {% endif %}
+                                    {% endwith %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

@@ -1,7 +1,9 @@
 body {
+    display: flex;
+    flex-direction: column;
     min-height: 80vh;
     margin: 0;
-    background: url("../img/montanas.jpg") no-repeat center center fixed;            
+    background: url("../img/montanas.jpg") no-repeat center center fixed;
     background-size: cover;
     background-position: center;
     justify-content: center;
@@ -26,18 +28,21 @@ a {
     color: inherit;
 }
 
-.container {
+
+.registro-box {
     background-color: rgba(255, 255, 255, 0.95);
     display: flex;
+    align-items: center;
     justify-content: center;
     border-radius: 20px;
     text-align: center;
-    padding: 30px 20px;
+    padding: 10px 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    max-width: 60%;
+    max-width: 80%;
+    min-height: calc(80vh - 46px);
+    margin-top: 56px;
+    margin-bottom: 56px;
 }
 
 .options-container {
@@ -91,11 +96,55 @@ button:hover {
     height: 210px;
 }
 
-.registro-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(80vh - 46px);
-    margin-top: 56px;
-    margin-bottom: 56px;
+@media (max-width: 768px) {
+    .registro-box {
+        max-width: 95%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .options-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .option {
+        margin: 20px 0;
+        max-width: 80%;
+    }
+
+    button {
+        font-size: 16px;
+    }
+
+    .divider {
+        height: 100px;
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    .option img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .option {
+        margin: 15px 0;
+        max-width: 80%;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    .divider {
+        height: 70px;
+        width: 80%;
+    }
 }

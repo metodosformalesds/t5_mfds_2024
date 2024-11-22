@@ -1,0 +1,288 @@
+body {
+    background: url("../img/montanas.jpg") no-repeat center center fixed;
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(144, 238, 144, 0.4);
+    z-index: -1; 
+    pointer-events: none;
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-box img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.login-box form label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555555;
+    display: block;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.login-box form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.login-box form button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #68ddbd;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-box form button:hover {
+    background-color: #56c7a5;
+}
+
+.notification-container {
+    margin-top: 15px;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.notification.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.notification.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.notification .notification-icon {
+    font-size: 20px;
+}
+
+.resend-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    color: #888888; 
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.resend-link:hover {
+    text-decoration: underline;
+}
+
+.resend-link .resend-icon {
+    font-size: 20px;
+    margin-right: 8px;
+    color: #888888;
+}
+
+.codigo-input-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.codigo-input-container input {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.codigo-input-container input:focus {
+    border-color: #68ddbd;
+    box-shadow: 0 0 5px rgba(104, 221, 189, 0.5);
+}
+
+@media (max-width: 992px) {
+    body {
+        background-size: cover;
+    }
+
+    .login-container {
+        padding: 10px;
+    }
+
+    .login-box {
+        padding: 20px;
+        max-width: 350px;
+    }
+
+    .login-box img {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .login-box form label {
+        font-size: 0.8rem;
+    }
+
+    .login-box form input,
+    .login-box form button {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .notification {
+        font-size: 0.8rem;
+    }
+
+    .resend-link {
+        font-size: 0.8rem;
+    }
+
+    .codigo-input-container input {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background-size: cover;
+    }
+
+    .login-container {
+        padding: 5px;
+    }
+
+    .login-box {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .login-box img {
+        width: 80%;
+        margin-bottom: 10px;
+    }
+
+    .login-box form label {
+        font-size: 0.75rem;
+    }
+
+    .login-box form input,
+    .login-box form button {
+        font-size: 0.85rem;
+        padding: 6px;
+    }
+
+    .notification {
+        font-size: 0.75rem;
+    }
+
+    .resend-link {
+        font-size: 0.75rem;
+    }
+
+    .codigo-input-container input {
+        width: 25px;
+        height: 25px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        background-size: cover;
+    }
+
+    .login-container {
+        padding: 5px;
+    }
+
+    .login-box {
+        padding: 10px;
+        width: 100%;
+    }
+
+    .login-box img {
+        width: 70%;
+        margin-bottom: 8px;
+    }
+
+    .login-box form label {
+        font-size: 0.7rem;
+    }
+
+    .login-box form input,
+    .login-box form button {
+        font-size: 0.8rem;
+        padding: 5px;
+    }
+
+    .notification {
+        font-size: 0.7rem;
+    }
+
+    .resend-link {
+        font-size: 0.7rem;
+    }
+
+    .codigo-input-container input {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+}
+

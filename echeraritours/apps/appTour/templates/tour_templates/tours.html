@@ -7,23 +7,40 @@
 {% endblock extra_styles %}
 
 {% block content %}
-
-<form method="get" class="container mt-4">
-    <h1>Encuentra el viaje que quieres</h1>
-    <div class="form-row mb-3">
-        <div class="col">
-            <label for="precio">Precio máximo:</label>
-            <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" required>
+<div class="container-fluid col-xl-10 col-xxl-8 px-4 py-5" 
+     style="background: linear-gradient(-180deg, #ffffff, #f0f4f8, #bceae0); 
+            border-radius: 15px; 
+            margin-top: 10px; 
+            width: 1200px; 
+            height: 320px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="row align-items-center g-lg-5 py-5" >
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 mb-3" style="color: #68ddbd; margin-bottom: 5px; font-size: 1.5 rem;">Encuentra el viaje que quieres.</h1>
+            <p class="col-lg-10 fs-4" style="color: #4B4B4B;">Ingresa el lugar al que quieres ir o el presupuesto que tienes, o ambos! Encontrarás viajes perfectos para ti.</p>
         </div>
-        <div class="col">
-            <label for="lugar">Lugar:</label>
-            <input type="text" name="lugar" id="lugar" placeholder="Lugar" class="form-control" required>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form method="get" action="{% url 'tours' %}" class="container mt-4">
+                <h2 style="color: #68ddbd;">Filtrar viajes</h2>
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <label for="destination_place"  style="color: #4B4B4B;">Lugar de destino:</label>
+                        <input type="text" name="destination_place" id="destination_place" placeholder="Lugar de destino" class="form-control" value="{{ request.GET.destination_place }}">
+                    </div>
+                    <div class="col">
+                        <label for="precio"  style="color: #4B4B4B;">Precio máximo:</label>
+                        <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" value="{{ request.GET.precio }}">
+                    </div>
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-light btn-lg" style="background-color: #68ddbd; color: #ffffff; border: none; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);">Filtrar</button>
+                    </div>                    
+                </div>
+            </form>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-</form>
+</div>
 
-<section class="tours-section">
+<section class="tours-section" >
     <div class="container my-4">
         {% if tours %}
         <div class="row">
@@ -48,41 +65,76 @@
                                 <div class="price-section">
                                     <p class="precio"><span class="span-echerari">MXN ${{ tour.price_per_person }}</span> por persona</p>
                                 </div>
-                                <p class="span-echerari">Empresa: {{ tour.agency.agency_name }}</p>
+                                <p>Empresa: <span class="span-echerari">{{ tour.agency.agency_name }}</span></p>
                             </div>
                         </div>
                     </a>
                 </div>
             {% endfor %}
         </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if tours.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ tours.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for num in tours.paginator.page_range %}
+                <li class="page-item {% if tours.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if tours.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ tours.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>  
         {% else %}
         <div class="alert alert-warning" role="alert">
             No hay tours disponibles.
         </div>
         {% endif %}
-    </div>    
+    </div>  
 </section>
 
-<section class="reviews-section">
-    <div class="container-fluid py-5 fondo-verde-claro">
-        <h3 class="text-center mb-4">Últimas reseñas</h3>
-        {% if reviews %}
+<div class="container-fluid py-5 fondo-verde-claro">
+    <h3 class="text-center mb-5">Últimas reseñas</h3>
+    {% if reviews %}
         <div class="card-columns">  
             {% for review in reviews %}
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ review.reservation.tour.title }}</h5>
-                    <p class="card-text"> {{ review.review_text }}</p>
-                    <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
-                </div>
-            </div>
+                <div class="card p-3 shadow-sm border-0 mt-5">
+                    <div class="card-body text-center">
+                        {% comment %} <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                alt="Perfil" class="rounded-circle" style="height: 40px; width: 40px;">  {% endcomment %}
+                        <img src="{% if review.reservation.client.profile_image.url %}{{ review.reservation.client.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Perfil" class="rounded-circle mb-3" style="height: 6rem; width: 6rem;"> 
+
+                        <div class="d-flex justify-content-center mb-3">
+                            {% for star in review.get_stars %}
+                            <span class="star {% if star == 1 %}filled{% endif %}">★</span>
+                            {% endfor %}
+                        </div>                            
+
+                        <h5 class="card-title font-weight-bold mb-2"> {{ review.reservation.tour.title }} </h5>
+                        <p class="card-text">"{{ review.review_text }}"</p>
+
+                        <p class="card-text font-weight-bold">
+                            Por: {{ review.reservation.client.first_name }} - {{ review.review_date }}
+                        </p>
+                    </div>
+                </div>        
             {% endfor %}
         </div>
-        {% else %}
-        <div class="alert alert-warning" role="alert">
-            No hay reseñas disponibles.    
+    {% else %}
+        <div class="text-center" role="alert">
+            No hay reseñas disponibles
         </div>
-        {% endif %}
-    </div>
-</section>
+    {% endif %}
+</div>
+
 {% endblock content %}

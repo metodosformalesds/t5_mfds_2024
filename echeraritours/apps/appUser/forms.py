@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 
 class CreateUserForm(UserCreationForm):
     """
+    Author: Santiago Mendivil
     A form for creating new users. Inherits from Django's UserCreationForm.
     Attributes:
         Meta:

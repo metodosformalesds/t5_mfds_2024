@@ -1,0 +1,14 @@
+<!-- templates/qr_code.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Continuar en móvil</title>
+</head>
+<body>
+    <h2>Continuar registro en dispositivo móvil</h2>
+    <p>Escanea el código QR con tu teléfono para continuar el registro:</p>
+    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+    <p>O abre este enlace en tu dispositivo móvil:</p>
+    <a href="{{ continuation_url }}">{{ continuation_url }}</a>
+</body>
+</html>

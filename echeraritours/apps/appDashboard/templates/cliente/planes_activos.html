@@ -4,6 +4,8 @@
 
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/plan.css' %}">
+<link rel="stylesheet" href="{% static 'appTour/css/tours.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock extra_styles %}
 
@@ -14,19 +16,25 @@
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
+        <div class="dashboard-header d-flex justify-content-between align-items-center pt-3 pb-2 mb-3">
+            <h1 class="dashboard-title" style="color: #68ddbd; font-size: 2rem; font-weight: 500; margin-top: 25px;">Planes activos</h1>
         </div>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
         {% if reservaciones %}
-        {% for reservacion in reservaciones %}
         <div class="row">
+        {% for reservacion in reservaciones %}
             <div class="col-md-4 mb-4">
-                <a href="{% url 'detalle_tour' reservacion.tour.id %}" class="card-link" style="text-decoration: none;">
-                    <div class="card">
-                        <img src="{{ reservacion.tour.tour_image.url }}" class="card-img-top" alt="{{ plan.titulo }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ reservacion.tour.title }}</h5>
-                            <p class="card-text">{{ reservacion.tour.descripcion }}</p>
+                <a href="{% url 'plan_detail' reservacion.id %}" class="card-link text-decoration-none">
+                    <div class="card shadow-sm border-0 h-100">
+                        <img src="{{ reservacion.tour.tour_image.url }}" class="card-img-top rounded-top" alt="{{ reservacion.tour.title }}">
+                        <div class="card-body d-flex flex-column" style="background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);">
+                            <h5 class="card-title font-weight-bold">{{ reservacion.tour.title }}</h5>
                             <p class="card-text"><strong>Agencia:</strong> {{ reservacion.tour.agency.agency_name }}</p>
                             <p class="card-text"><strong>Total Pagado:</strong> MXN${{ reservacion.calculate_total_price }}</p>
                             <p class="card-text"><strong>Fecha del Tour:</strong> {{ reservacion.tour.start_date|date:"d M Y" }} a {{ reservacion.tour.end_date|date:"d M Y" }}</p>
@@ -34,14 +42,19 @@
                     </div>
                 </a>
             </div>
-        </div>
         {% endfor %}
+        </div>
         {% else %}
-        <div class="alert alert-warning" role="alert">
-            No tienes planes activos.  
+        <div class="no-plans-container">
+            <div class="no-plans-message">
+                <i class="fas fa-calendar-times fa-3x"></i>
+                <h3>¡Ups! No tienes planes activos</h3>
+                <p>Parece que aún no tienes planes reservados. Explora nuestros tours y encuentra el próximo destino de tus sueños.</p>
+                <a href="{% url 'tours' %}" class="btn btn-primary explore-btn">Ver tours</a>
+            </div>
         </div>
         {% endif %}
-        
+
     </main>
 </div>
 {% endblock content %}

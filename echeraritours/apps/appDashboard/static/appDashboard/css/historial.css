@@ -1,0 +1,181 @@
+.historial-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    max-width: 1000px;
+    margin: 0 auto; 
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.no-purchases-message {
+    max-width: 600px;
+}
+
+.no-purchases-message i {
+    color: #68ddbd;
+    margin-bottom: 15px;
+}
+
+.no-purchases-message h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.no-purchases-message p {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.no-purchases-message .btn-primary {
+    background-color: #68ddbd;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border: none;
+    box-shadow: none;
+}
+
+.no-purchases-message .btn-primary:hover {
+    background-color: #34b9a0;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #ddd;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.dashboard-header h1 {
+    margin-top: 15px;
+    margin-left: 0;
+    font-size: 1.8rem;
+    color: #333;
+}
+@media (max-width: 992px) {
+    .historial-container {
+        padding: 20px;
+        min-height: 300px;
+        max-width: 800px;
+    }
+
+    .no-purchases-message {
+        max-width: 500px;
+    }
+
+    .no-purchases-message h3 {
+        font-size: 1.5rem;
+    }
+
+    .no-purchases-message p {
+        font-size: 0.9rem;
+    }
+
+    .no-purchases-message .btn-primary {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .table {
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .historial-container {
+        padding: 15px;
+        min-height: 250px;
+        max-width: 600px;
+    }
+
+    .no-purchases-message {
+        max-width: 400px;
+    }
+
+    .no-purchases-message h3 {
+        font-size: 1.3rem;
+    }
+
+    .no-purchases-message p {
+        font-size: 0.85rem;
+    }
+
+    .no-purchases-message .btn-primary {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .table {
+        margin-bottom: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 576px) {
+    .historial-container {
+        padding: 10px;
+        min-height: 200px;
+        max-width: 100%;
+    }
+
+    .no-purchases-message {
+        max-width: 300px;
+    }
+
+    .no-purchases-message i {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .no-purchases-message h3 {
+        font-size: 1.1rem;
+    }
+
+    .no-purchases-message p {
+        font-size: 0.8rem;
+    }
+
+    .no-purchases-message .btn-primary {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .table {
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+}

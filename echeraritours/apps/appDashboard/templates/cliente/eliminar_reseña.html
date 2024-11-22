@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Eliminar Reseña - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        {% include "client_sidebar.html" %}
+    </div>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center my-5">Eliminar Reseña</h1>
+                    <p>¿Estás seguro de que deseas eliminar esta reseña?</p>
+                    <h3>{{ reviews.reservation.tour.title }}</h3>
+                    <p>Calificación: {{ reviews.rating }}💫</p>
+                    {% if reviews.review_text %}
+                    <p>Reseña: {{ reviews.review_text }}</p>
+                    {% else %}
+                    <p>Reseña: Sin reseña</p>
+                    {% endif %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                        <a href="{% url 'client_purchases' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

@@ -25,9 +25,23 @@
 
         <!-- Descripción y detalles -->
         <div class="col-lg-6 mb-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <h3 class="font-weight-bold">Desde <span class="text-success">$ {{ tour.price_per_person }}</span> por persona </h3>
-            <p class="text-muted my-0">Fecha que inicia: <span class="font-weight-bold">{{ tour.start_date }}</span></p>
-            <p class="text-muted my-0">Fecha de termina: <span class="font-weight-bold">{{ tour.end_date }}</span></p>
+            <p class="text-muted my-0">Fecha que inicia: <span class="font-weight-bold">{{ tour.start_date|date:"Y-m-d" }}</span></p>
+            <p class="text-muted my-0">Fecha de termina: <span class="font-weight-bold">{{ tour.end_date|date:"Y-m-d" }}</span></p>
+            {% if show_booking_button %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'add_favorite' tour.id %}" class="btn btn-reservar me-3">Agregar a favoritos</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-reservar me-3">Agregar a favoritos</a>
+                {% endif %}
+            {% endif %}
             <h4 class="mt-4">¿De qué es el tour?</h4>
             <p>{{ tour.description }}</p>
             <div class="col-lg-12 row">
@@ -36,17 +50,22 @@
                     {% if show_booking_button %}
                         {% if user.is_authenticated %}
                             <a href="{% url 'detalles_reservacion' tour.id %}" class="btn btn-reservar me-3">Reservar ahora</a>
+                            {% if available_bookings <= total_capacity %}
+                                <div class="alert alert-danger font-weight-bold text-center mt-2">
+                                    ¡Solo quedan {{ available_bookings }} lugares!
+                                </div>
+                            {% endif %}
                         {% else %}
                             <a href="{% url 'register' %}" class="btn btn-reservar me-3">Reservar ahora</a>
+                            {% if available_bookings <= total_capacity %}
+                                <div class="alert alert-danger font-weight-bold text-center mt-2">
+                                    ¡Solo quedan {{ available_bookings }} lugares!
+                                </div>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </div>
                 <div class="col-lg-6">
-                    {% if available_bookings <= total_capacity %}
-                        <div class="alert alert-danger font-weight-bold text-center mt-2">
-                            ¡Solo quedan {{ available_bookings }} lugares!
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -84,6 +103,39 @@
             </div>
         </div>
     </div>
+</div>
+<div class="container-fluid py-5 fondo-verde-claro">
+    <h3 class="text-center mb-5">Últimas reseñas</h3>
+    {% if reviews %}
+        <div class="row">
+            {% for review in reviews %}
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card-reviews p-3 shadow-sm border-0">
+                        <div class="card-body-reviews text-center">
+                            <img src="{% if review.reservation.client.profile_image.url %}{{ review.reservation.client.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Perfil" class="rounded-circle mb-3" style="height: 6rem; width: 6rem;"> 
+
+                            <div class="d-flex justify-content-center mb-3">
+                                {% for star in review.get_stars %}
+                                <span class="star {% if star == 1 %}filled{% endif %}">★</span>
+                                {% endfor %}
+                            </div>                            
+
+                            <h5 class="card-title-reviews font-weight-bold mb-2">{{ review.reservation.tour.title }}</h5>
+                            <p class="card-text-reviews">"{{ review.review_text }}"</p>
+
+                            <p class="card-text-reviews font-weight-bold">
+                                Por: {{ review.reservation.client.first_name }} - {{ review.review_date }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center" role="alert">
+            No hay reseñas disponibles
+        </div>
+    {% endif %}
 </div>
 {% endblock content %}
 

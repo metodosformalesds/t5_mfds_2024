@@ -9,10 +9,10 @@
     width: 15rem;
     height: 15rem;
     border: 3px solid #1B1C1E;
-    position: relative; 
-    margin-top: -10rem; 
+    position: relative;
+    margin-top: -10rem;
     z-index: 1;
-    background-color: #68DDBD; 
+    background-color: #68DDBD;
 }
 
 .divider {
@@ -25,7 +25,10 @@
     font-weight: bold;
 }
 
-h5, h2, p, a {
+h5,
+h2,
+p,
+a {
     color: #1B1C1E;
 }
 
@@ -41,14 +44,14 @@ h5, h2, p, a {
 
 .card-link {
     display: block;
-    color: inherit; 
-    text-decoration: none; 
+    color: inherit;
+    text-decoration: none;
 }
 
 .card-link:hover .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05); 
-    transition: transform 0.3s ease; 
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
 }
 
 .card {
@@ -56,16 +59,140 @@ h5, h2, p, a {
     transition: transform 0.3s ease;
 }
 
+.fondo-verde-claro {
+    background-color: #CDFFDD;
+}
 
-/* Responsividad para móviles */
+.card-reviews {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    background-color: #fff;
+}
+
+.card-body-reviews {
+    text-align: center;
+    background-color: #fff;
+}
+
+.card-reviews img {
+    border: 3px solid #1B1C1E;
+    margin-top: -5rem;
+    height: 6rem;
+    width: 6rem;
+    object-fit: cover;
+}
+
+.card-title-reviews {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.card-text-reviews {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.star {
+    font-size: 2rem; 
+    color: #d3d3d3; 
+    transition: color 0.2s ease;
+}
+
+.star.filled {
+    color: #FFD700;
+}
+
+.d-flex {
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+/* Responsividad  */
+@media (max-width: 992px) {
+    .full-width-image {
+        max-height: 350px;
+    }
+
+    .logo {
+        width: 12rem;
+        height: 12rem;
+        margin-top: -8rem;
+    }
+
+    .divider {
+        width: 85%;
+    }
+
+    h5,
+    h2,
+    p,
+    a {
+        font-size: 0.95rem;
+    }
+
+    .card {
+        margin-bottom: 15px;
+    }
+}
+
 @media (max-width: 768px) {
+    .full-width-image {
+        max-height: 300px;
+    }
+
     .logo {
         width: 10rem;
         height: 10rem;
-        margin-top: -5rem; 
+        margin-top: -5rem;
     }
 
     .divider {
         width: 90%;
+    }
+
+    h5,
+    h2,
+    p,
+    a {
+        font-size: 0.85rem;
+    }
+
+    .card {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .full-width-image {
+        max-height: 250px;
+    }
+
+    .logo {
+        width: 8rem;
+        height: 8rem;
+        margin-top: -4rem;
+    }
+
+    .divider {
+        width: 95%;
+    }
+
+    h5,
+    h2,
+    p,
+    a {
+        font-size: 0.75rem;
+    }
+
+    .card {
+        margin-bottom: 5px;
     }
 }

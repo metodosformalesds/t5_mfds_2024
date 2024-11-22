@@ -3,7 +3,7 @@
 {% block title %}Registro - EcherariTours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appUser/css/registro.css" %}">  
+<link rel="stylesheet" href="{% static 'appUser/css/registro.css' %}">  
 
 {% endblock extra_styles %}
 
@@ -44,8 +44,8 @@
             <p>Estos términos se rigen por las leyes vigentes en México. Cualquier disputa relacionada con el uso de EchérariTours será resuelta en los tribunales de México.</p>
         </div>
         <div class="d-flex justify-content-end mt-4">
-            <button type="button" class="btn btn-custom" id="acceptButton" disabled>Aceptar</button>
-        </div>
+            <a href="{% url 'registrar_cliente' %}" class="btn btn-custom">Aceptar</a>
+        </div>        
     </div>
 </div>
 

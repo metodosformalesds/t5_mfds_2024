@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'echeraritours.wsgi.application'
 
 # La base de datos debe ser cambiada segun sea el entorno de desarrollo o produccion
 # Database
-#https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -172,14 +172,17 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': {
             'profile',
             'email'},
-        'OAUTH_PARAMS': {'access_type': 'online'},
-        'AUTH_PKCE_ENABLED': True,
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+            'prompt': 'select_account',  
+        },
         'METHOD': 'oauth2',
         'VERIFIED_EMAIL': True,
         'CLIENT_ID': os.getenv('GOOGLE_CLIENT_ID'),
         'SECRET': os.getenv('GOOGLE_SECRET'),
     }
 }
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
@@ -187,6 +190,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 LOGIN_REDIRECT_URL = 'index'
+
 
 # Esta seccion la modifique por mientras para que cualquiera
 # pueda abrir el repo sin necesidad de tener que hacer el archivo .env
@@ -205,15 +209,14 @@ LOGIN_REDIRECT_URL = 'index'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Lo que hace aqui es que agarra valores predeterminados del repositorio personal
-load_dotenv()
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.tu-servidor.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'correo@ejemplo.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'contraseña')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '7eaf98007@smtp-brevo.com' 
+EMAIL_HOST_PASSWORD = '6EjCZQAv3PGsz780'  
+DEFAULT_FROM_EMAIL = 'echeraritours@gmail.com'
+
 
 # Llamadas a APIs desde el archivo .env
 env = environ.Env()

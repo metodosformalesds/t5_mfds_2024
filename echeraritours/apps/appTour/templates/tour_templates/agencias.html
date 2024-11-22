@@ -3,7 +3,7 @@
 {% block title %}Tours - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appTour/css/agencias.css" %}"> 
+<link rel="stylesheet" href="{% static 'appTour/css/agencias.css' %}"> 
 {% endblock extra_styles %}
 
 {% block content %}
@@ -14,14 +14,17 @@
     {% if agencias %}
     <div class="row">
         {% for agencia in agencias %}
-        <div class="col-lg-4 col-md-6 mb-4">
-            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none">
+        <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch">
+            <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none card-link w-100">
                 <div class="card h-100">
-                    <img src="{% static 'img/cancun.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
                     <div class="card-body text-center">
-                        <h5 class="card-title">{{ agencia.agency_name }}</h5>
-                        <hr class="divider">
-                        <p class="card-text mt-3"> {% if agencia.agency_description %} {{ agencia.agency_description }}{% else %} Sin descripcion  {% endif %} </p>
+                        <img src="{% if agencia.cover_photo %}{{ agencia.cover_photo.url }}{% else %}{% static 'img/cover_default.png' %}{% endif %}" class="card-img-top img-fluid" alt="{{ agencia.agency_name }} portada" style="height: 200px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title span-echerari">{{ agencia.agency_name }}</h5>
+                            <hr class="divider">
+                            <p class="card-text mt-3"> {% if agencia.agency_description %} {{ agencia.agency_description }}{% else %} Sin descripcion  {% endif %} </p>
+                            <p class="card-text"> <strong>Ubicación:</strong> {{ agencia.state }}, {{ agencia.address }}, {{ agencia.suburb }}, {{ agencia.town }}</p>
+                        </div>
                     </div>
                 </div>
             </a>
@@ -32,7 +35,7 @@
     <div class="alert alert-warning" role="alert">
         No hay agencias registradas.
     </div>
-    {% endif %} 
+    {% endif %}
 </div>
 
 

@@ -19,7 +19,7 @@
             <h3 class="mt-4 mb-3">Iniciar sesión</h3>
             
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <p class="alert alert-info">{{ message }}</p>
             {% endfor %}
             <div class="mb-4">
                 <label class="form-label" for="email">Email</label>
@@ -40,10 +40,8 @@
         </form>              
         
         <div class="mt-4">
-            <a href="#">¿Olvidaste tu contraseña?</a>
+            <a href="{% url 'solicitar_correo' %}">¿Olvidaste tu contraseña?</a>
         </div>
-
-        <div class="divider"><span>o</span></div>
 
        <div class="social-btn">
             <a href="{% provider_login_url 'google' %}">

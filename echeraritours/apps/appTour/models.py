@@ -1,12 +1,14 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from apps.appUser.models import Client, Agency
+import random
 
 # Create your models here.
 
 
 class Tour(models.Model):
     """
+    Authors: Santiago Mendivil, Leonardo Ortega
     Modelo que representa un tour ofrecido por una agencia.
         Atributos:
             title (CharField): Título del tour.
@@ -31,7 +33,7 @@ class Tour(models.Model):
     title = models.CharField(max_length=100)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     description = models.TextField(max_length=500)
-    lodging_place = models.CharField(max_length=30)
+    lodging_place = models.CharField(max_length=100)  # Lugar de hospedaje
     price_per_person = models.DecimalField(
         validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
@@ -39,7 +41,8 @@ class Tour(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     place_of_origin = models.CharField(max_length=100, null=True, blank=True)
-    destination_place = models.CharField(max_length=100, null=True, blank=True)
+    destination_place = models.CharField(
+        max_length=100, null=True, blank=True)  # Ciudad o estado
     tour_image = models.ImageField(
         upload_to='media/tours/', null=True, blank=True)
 
@@ -54,6 +57,7 @@ class Tour(models.Model):
 
 class Reservation(models.Model):
     """
+    Authors: Santiago Mendivil, Leonardo Ortega, Hector Ramos
     Modelo que representa una reservación para un tour.
         Atributos:
             tour (ForeignKey): Referencia al tour reservado.
@@ -77,8 +81,9 @@ class Reservation(models.Model):
     number_people = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
     total_price = models.DecimalField(
-        max_digits=10, decimal_places=2, editable=False, blank=True, null=True)
+        max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=0)
     reservation_date = models.DateTimeField(auto_now_add=True)
+    folio = models.IntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'Reservación'
@@ -88,11 +93,15 @@ class Reservation(models.Model):
     def calculate_total_price(self):
         return self.tour.price_per_person * self.number_people
 
+    def generate_random_folio(self):
+        self.folio = random.randint(100000, 999999)
+
     def save(self, *args, **kwargs):
         if self.tour.total_bookings + self.number_people > self.tour.capacity:
             raise ValueError(
                 "No se puede reservar más personas que la capacidad del tour."
             )
+        self.generate_random_folio()
         self.total_price = self.calculate_total_price()
         self.tour.total_bookings += self.number_people
         self.tour.save()
@@ -109,6 +118,7 @@ class Reservation(models.Model):
 
 class Reviews(models.Model):
     """
+    Authors: Hector Ramos
     Modelo que representa una reseña de un tour.
         Atributos:
             reservation (ForeignKey): Referencia a la reserva asociada a la reseña.
@@ -133,6 +143,9 @@ class Reviews(models.Model):
         verbose_name = 'Reseña'
         verbose_name_plural = 'Reseñas'
         ordering = ['review_date']
+
+    def get_stars(self):
+        return [1 if i <= self.rating else 0 for i in range(1, 6)]
 
     def __str__(self):
         return f"Reseña de {self.reservation.client.first_name} {self.reservation.client.paternal_surname} para {self.reservation.tour.title}"

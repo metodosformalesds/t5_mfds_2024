@@ -8,6 +8,7 @@ from apps.appTour.models import Reservation
 
 class PaymentMethod(models.Model):
     """
+    Authors: Leonardo Ortega, Santiago Mendivil, Hector Ramos
     Modelo que representa un método de pago en el sistema.
     Atributos:
         PAYMENT_CHOICES (list): Opciones de tipos de métodos de pago disponibles.
@@ -17,6 +18,11 @@ class PaymentMethod(models.Model):
         stripe_payment_id (CharField): ID de Stripe para la tarjeta de crédito/débito.
         paypal_email (EmailField): Correo electrónico asociado con la cuenta de PayPal.
         created_at (DateTimeField): Fecha y hora en que se creó el método de pago.
+        stripe_payment_method_id (CharField): ID de Stripe para la tarjeta de crédito/débito.
+        card_last4 (CharField): Últimos 4 dígitos de la tarjeta.
+        card_brand (CharField): Marca de la tarjeta.
+        cardholder_name (CharField): Nombre del titular de la tarjeta.
+        is_default (BooleanField): Indica si el método de pago es el predeterminado.
     Meta:
         verbose_name (str): Nombre singular del modelo en la interfaz de administración.
         verbose_name_plural (str): Nombre plural del modelo en la interfaz de administración.
@@ -40,6 +46,15 @@ class PaymentMethod(models.Model):
     stripe_payment_method_id = models.CharField(
         max_length=255, null=True, blank=True)  # ID de Stripe
     paypal_email = models.EmailField(null=True, blank=True)  # Correo de PayPal
+    stripe_payment_method_id = models.CharField(
+        max_length=255, blank=True, null=True)
+    card_last4 = models.CharField(max_length=4, blank=True, null=True)
+    card_brand = models.CharField(max_length=20, blank=True, null=True)
+    cardholder_name = models.CharField(max_length=100, blank=True, null=True)
+    transfer_number = models.IntegerField(blank=True, null=True)
+    paypal_email = models.EmailField(null=True, blank=True)  # Solo para PayPal
+    is_default = models.BooleanField(
+        default=False)  # Indica si es predeterminado
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -50,6 +65,24 @@ class PaymentMethod(models.Model):
     def save(self, *args, **kwargs):
         self.validate_client_and_agency()
         self.validate_payment_methods()
+
+        # Para tener default un metodo de pago
+        if self.is_default:
+            if self.client:
+                PaymentMethod.objects.filter(
+                    client=self.client, is_default=True).update(is_default=False)
+            elif self.agency:
+                PaymentMethod.objects.filter(
+                    agency=self.agency, is_default=True).update(is_default=False)
+
+        # Valida para asegurar que solo uno de stripe_payment_method_id o paypal_email
+        if self.method_type == 'credit_card' and not self.stripe_payment_method_id:
+            raise ValueError(
+                "Se requiere un ID de método de pago de Stripe para la tarjeta de crédito.")
+        if self.method_type == 'paypal' and not self.paypal_email:
+            raise ValueError(
+                "Se requiere un correo electrónico de PayPal para este método de pago.")
+
         super().save(*args, **kwargs)
 
     def validate_client_and_agency(self):
@@ -66,7 +99,7 @@ class PaymentMethod(models.Model):
                 "Solo se puede ingresar un metodo de pago a la vez")
         if not self.stripe_payment_id and not self.paypal_email:
             raise ValueError("Se debe especificar al menos un metodo de pago")
-        
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
@@ -88,13 +121,15 @@ class Payments(models.Model):
         payment_method (ForeignKey): A foreign key to the PaymentMethod model, representing the method used for the payment.
         amount (FloatField): The amount of money paid, validated to be a non-negative value.
         status (CharField): The status of the payment, with choices defined in STATUS_CHOICES and a default value of 'pendiente'.
+        payment_intent_id (CharField): An optional field to store the payment intent ID, which can be blank or null.
+
     Meta:
         verbose_name (str): The singular name for the model in the admin interface.
         verbose_name_plural (str): The plural name for the model in the admin interface.
         ordering (list): The default ordering for the model, set to order by payment_date.
     Methods:
         save(self, *args, **kwargs): Custom save method to validate the payment details before saving.
-        __str__(self): Returns a string representation of the payment, including the client's full name, agency's name, and the amount paid.
+        __str__(self): Returns a string representation of the payment, including the client's first name, agency's name, and the amount paid.
     """
     STATUS_CHOICES = [
         ('pendiente', 'Pendiente'),
@@ -118,7 +153,8 @@ class Payments(models.Model):
     amount = models.FloatField(validators=[MinValueValidator(0)])
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='pendiente')
-    payment_intent_id = models.CharField(max_length=255, blank=True, null=True) # Hola soy nuevo
+    payment_intent_id = models.CharField(
+        max_length=255, blank=True, null=True)  # Hola soy nuevo
 
     class Meta:
         verbose_name = 'Pago'

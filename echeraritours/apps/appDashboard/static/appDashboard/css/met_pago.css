@@ -1,0 +1,77 @@
+.btn-add-payment {
+    background-color: #68ddbd;
+    border-color: #68ddbd;
+    color: white;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 8px;
+}
+
+.btn-add-payment:hover {
+    background-color: #57BFA0;
+    border-color: #57BFA0;
+    text-decoration: none;
+}
+
+.btn-add-payment i {
+    font-size: 1rem;
+    color: white;
+}
+
+.metodos_pago {
+    padding-top: 50px;
+}
+@media (max-width: 992px) {
+    .btn-add-payment {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+
+    .btn-add-payment i {
+        font-size: 0.9rem;
+    }
+
+    .metodos_pago {
+        padding-top: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-add-payment {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        gap: 5px;
+    }
+
+    .btn-add-payment i {
+        font-size: 0.85rem;
+    }
+
+    .metodos_pago {
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-add-payment {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+
+    .btn-add-payment i {
+        font-size: 0.8rem;
+    }
+
+    .metodos_pago {
+        padding-top: 20px;
+    }
+}

@@ -29,8 +29,13 @@ body {
 }
 
 h1.titulo {
-    font-size: 4rem;
-    color: #68ddbd;
+    font-size: 3.7rem;
+    font-weight: bold;
+    margin: 0%;
+}
+
+h2.titulo {
+    font-size: 2rem;
     font-weight: bold;
 }
 
@@ -86,6 +91,143 @@ h1.titulo {
 }
 
 
-.review-card {
-    margin-bottom: 20px;
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+    border: 3px solid #1B1C1E;
+    margin-top: -5rem;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.card-text {
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.bi-star-fill {
+    font-size: 1.2rem;
+}
+
+.card-body {
+    background-color: #fff;
+}
+
+.star {
+    font-size: 2rem; 
+    color: #d3d3d3; 
+    transition: color 0.2s ease;
+}
+
+.star.filled {
+    color: #FFD700;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .blur-background::before {
+        background: linear-gradient(rgba(54, 148, 242, 0.247), rgba(125, 248, 191, 0.389)), 
+                    url("../img/montanas.jpg") no-repeat center center fixed;
+        background-size: cover;
+        filter: blur(2px);
+        z-index: -1;
+    }
+
+    .titulo {
+        font-size: 2.5rem;
+    }
+
+    .search-section {
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .search-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .carousel-inner img {
+        max-height: 300px;
+    }
+
+    .logo {
+        font-size: 2rem;
+    }
+
+    .card img {
+        margin-top: -3rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-text {
+        font-size: 0.8rem;
+    }
+
+    .star {
+        font-size: 1.5rem;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .blur-background::before {
+        background: linear-gradient(rgba(54, 148, 242, 0.247), rgba(125, 248, 191, 0.389)), 
+                    url("../img/montanas.jpg") no-repeat center center fixed;
+        background-size: cover;
+        filter: blur(2px);
+        z-index: -1;
+    }
+
+    .titulo {
+        font-size: 2rem;
+    }
+
+    .search-section {
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .search-section h2 {
+        font-size: 1.2rem;
+    }
+
+    .carousel-inner img {
+        max-height: 250px;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+    }
+
+    .card img {
+        margin-top: -2.5rem;
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+    }
+
+    .card-text {
+        font-size: 0.8rem;
+    }
+
+    .star {
+        font-size: 1.5rem;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
 }
