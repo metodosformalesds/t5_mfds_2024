@@ -8,6 +8,7 @@ import boto3
 import idanalyzer
 import io
 import base64
+import qrcode
 
 # Para los formularios
 from django.contrib.auth.forms import UserCreationForm
@@ -606,3 +607,29 @@ def google_login(request):
         else:
             return redirect('register', email=email)
     return render(request, 'index')
+
+
+def generar_qr(requests):
+    #Url que se usara para abrir el QR
+    url = "https://echeraritours.live/registrar_cliente"
+    
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
+
+    # Generar la imagen del QR
+    img = qr.make_image(fill="black", back_color="white")
+    
+    # Retornar como respuesta HTTP
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response
+
+def captura_foto(request):
+    return render(request, "captura_foto.html")
+    

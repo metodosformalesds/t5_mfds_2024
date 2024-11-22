@@ -1,0 +1,58 @@
+.container-review {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.rating-message {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #68ddbd;
+    margin: 0;
+}
+
+.stars {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.stars .star {
+    font-size: 3rem;
+    cursor: pointer;
+    color: #d3d3d3; 
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.stars .star.filled {
+    color: #FFD700;
+    transform: scale(1.1); 
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.highlighted-text {
+    font-style: italic;
+    font-weight: bold;
+    color: #68ddbd;
+}
+
+.btn-primary {
+    background-color: #68ddbd;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #34b9a0;
+}
