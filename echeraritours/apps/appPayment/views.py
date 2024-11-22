@@ -17,7 +17,6 @@ import json
 # Configurar Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
 def detalles_reservacion(request, id):
     """
     Author: Neida Franco 
