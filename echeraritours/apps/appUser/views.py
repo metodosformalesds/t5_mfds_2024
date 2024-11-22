@@ -480,8 +480,9 @@ def necesitas_ayuda(request):
 def solicitar_correo(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+
         try:
-            usuario = User.objects.get(email=email)
+            usuario = User.objects.filter(email=email).first()
             codigo = generar_codigo()
 
             if hasattr(usuario, 'client'):
@@ -494,6 +495,9 @@ def solicitar_correo(request):
                 messages.error(
                     request, 'El usuario no tiene un perfil válido.')
                 return redirect('solicitar_correo')
+
+            request.session['email'] = email
+            request.session['codigo'] = codigo
 
             send_mail(
                 'Código de recuperación',
