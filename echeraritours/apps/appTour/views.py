@@ -30,7 +30,7 @@ def tours(request):
     """
     tours_list = Tour.objects.all()
     reviews = Reviews.objects.filter(
-        reservation__tour__in=tours_list).order_by('-review_date')[:5]
+        reservation__tour__in=tours_list).order_by('-review_date')[:3]
 
     max_price = request.GET.get('precio')
     if max_price:
@@ -41,7 +41,7 @@ def tours(request):
         tours_list = tours_list.filter(
             destination_place__icontains=destination_place)
 
-    paginator = Paginator(tours_list, 10)  # Show 10 tours per page
+    paginator = Paginator(tours_list, 6)  # Show 8 tours per page
     page_number = request.GET.get('page')
     tours = paginator.get_page(page_number)
     reviews = Reviews.objects.order_by('-review_date')[:5]
