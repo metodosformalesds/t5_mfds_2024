@@ -66,35 +66,69 @@
                 </div>
             {% endfor %}
         </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if tours.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ tours.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for num in tours.paginator.page_range %}
+                <li class="page-item {% if tours.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if tours.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ tours.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>  
         {% else %}
         <div class="alert alert-warning" role="alert">
             No hay tours disponibles.
         </div>
         {% endif %}
-    </div>    
+    </div>  
 </section>
 
-<section class="reviews-section">
-    <div class="container-fluid py-5 fondo-verde-claro">
-        <h3 class="text-center mb-4">Últimas reseñas</h3>
-        {% if reviews %}
+<div class="container-fluid py-5 fondo-verde-claro">
+    <h3 class="text-center mb-5">Últimas reseñas</h3>
+    {% if reviews %}
         <div class="card-columns">  
             {% for review in reviews %}
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ review.reservation.tour.title }}</h5>
-                    <p class="card-text"> {{ review.review_text }}</p>
-                    <p class="card-text"><small class="text-muted"> Por: {{ review.reservation.client.first_name }} - {{ review.review_date }} </small></p>
-                </div>
-            </div>
+                <div class="card p-3 shadow-sm border-0 mt-5">
+                    <div class="card-body text-center">
+                        {% comment %} <img src="{% if profile_image_url %}{{ profile_image_url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" 
+                                alt="Perfil" class="rounded-circle" style="height: 40px; width: 40px;">  {% endcomment %}
+                        <img src="{% if review.reservation.client.profile_image.url %}{{ review.reservation.client.profile_image.url }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="Perfil" class="rounded-circle mb-3" style="height: 6rem; width: 6rem;"> 
+
+                        <div class="d-flex justify-content-center mb-3">
+                            {% for star in review.get_stars %}
+                            <span class="star {% if star == 1 %}filled{% endif %}">★</span>
+                            {% endfor %}
+                        </div>                            
+
+                        <h5 class="card-title font-weight-bold mb-2"> {{ review.reservation.tour.title }} </h5>
+                        <p class="card-text">"{{ review.review_text }}"</p>
+
+                        <p class="card-text font-weight-bold">
+                            Por: {{ review.reservation.client.first_name }} - {{ review.review_date }}
+                        </p>
+                    </div>
+                </div>        
             {% endfor %}
         </div>
-        {% else %}
-        <div class="alert alert-warning" role="alert">
-            No hay reseñas disponibles.    
+    {% else %}
+        <div class="text-center" role="alert">
+            No hay reseñas disponibles
         </div>
-        {% endif %}
-    </div>
-</section>
+    {% endif %}
+</div>
 
 {% endblock content %}

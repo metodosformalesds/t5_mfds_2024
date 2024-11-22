@@ -7,6 +7,7 @@ from apps.appTour.models import Tour
 
 class Reports(models.Model):
     """
+    Authors: Hector Ramos, Leonardo Ortega, Neida Franco
     Represents a report for a specific tour and agency.
     Attributes:
         agency (ForeignKey): The agency associated with the report.
@@ -54,6 +55,7 @@ class Reports(models.Model):
 
 class FavoriteList(models.Model):
     """
+    Author: Neida Franco
     Represents a list of favorite tours for a specific agency.
     Attributes:
         client (ForeignKey): The client associated with the favorite list.
