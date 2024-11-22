@@ -17,7 +17,6 @@ import json
 # Configurar Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
 def detalles_reservacion(request, id):
     """
     Author: Neida Franco 
@@ -115,10 +114,8 @@ def realizar_pago_paypal(request, id):
         # Obtener el tour y los valores enviados por el formulario
         tour = get_object_or_404(Tour, id=id)
         number_people = int(request.POST.get('number_people', 1))
-        price_per_person = Decimal(
-            tour.price_per_person).quantize(Decimal('0.01'))
-        total_price = (price_per_person * Decimal(number_people)
-                       ).quantize(Decimal('0.01'))
+        price_per_person = Decimal(tour.price_per_person).quantize(Decimal('0.01'))
+        total_price = (price_per_person * Decimal(number_people)).quantize(Decimal('0.01'))
 
         # Crear un objeto de pago con PayPal usando los datos del contexto
         payment = Payment({
