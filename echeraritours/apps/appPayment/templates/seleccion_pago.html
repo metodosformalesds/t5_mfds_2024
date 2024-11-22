@@ -28,13 +28,14 @@
             <h5>Selección de método de pago</h5>
             
             <!-- Formulario de PayPal -->
-            <form id="paypal-form" method="post" action="{% url 'realizar_pago_paypal' tour.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="number_people" value="{{ number_people }}">
-                <button type="submit" class="btn btn-primary mt-3">
-                    Pagar con PayPal
-                </button>
-            </form>
+                <form id="paypal-form" method="post" action="{% url 'realizar_pago_paypal' tour.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="number_people" value="{{ number_people }}">
+                    <button type="submit" class="btn btn-paypal mt-3">
+                        Pagar con PayPal
+                        <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" style="height: 20px; margin-left: 10px;">
+                    </button>
+                </form>
 
             <!-- Formulario de otros métodos de pago -->
             <form id="payment-form" method="post">
@@ -74,7 +75,7 @@
                     <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                 </div>
 
-                <button type="submit" class="btn btn-success">Continuar con el pago</button>
+                <button type="submit" class="btn btn-success btn-pago">Continuar con el pago</button>
             </form>
         </div>
 
