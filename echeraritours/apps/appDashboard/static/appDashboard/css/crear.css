@@ -1,0 +1,63 @@
+.card-header {
+    background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0); 
+    color: #68ddbd;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    text-align: left;
+    font-weight: bold;
+}
+.card-header h2 {
+    margin-top: 15px;
+    margin-bottom: 0; 
+}
+.custom-form {
+    background-color: #ffffff; 
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
+    max-width: calc(100% - 50px); 
+    margin: 0 auto; 
+}
+.custom-input {
+    border: 1px solid #dcdcdc; 
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    box-shadow: none;
+    transition: border-color 0.3s ease;
+}
+
+.custom-input:focus {
+    border-color: #68ddbd;
+    box-shadow: 0 2px 6px rgba(104, 221, 189, 0.3);
+    outline: none;
+}
+
+
+.custom-btn {
+    background-color: #68ddbd;
+    border-color: #68ddbd;
+    color: #ffffff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-transform: uppercase;
+}
+
+.custom-btn:hover {
+    background-color: #56c3a7;
+    border-color: #56c3a7;
+}
+
+
+.row .col-md-6 {
+    padding: 0 15px;
+}
+.custom-form-container {
+    margin: 0 auto; 
+    max-width: 700px; 
+    padding: 0 25px;
+}
