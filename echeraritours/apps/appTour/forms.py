@@ -4,6 +4,7 @@ from .models import Tour
 
 class TourFilterForm(forms.Form):
     """
+    Author: Leonardo Ortega
     TourFilterForm is a Django form used to filter tours based on the place of origin, 
     destination place, and start date.
 

@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
-""" Esto se trabajara en el sprint 4 cuando estemos utilizando vistas especificas """
+""" En proceso de analisis"""
 
 
 def unauthenticated_user(view_func):

@@ -11,12 +11,14 @@ from echeraritours import settings
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect
+from .models import models
 
 # Create your views here.
 
 
 def tours(request):
     """
+    Author: Leonardo Ortega 
     Handles the retrieval and filtering of tour objects based on query parameters.
     Args:
         request (HttpRequest): The HTTP request object containing GET parameters for filtering.
@@ -28,7 +30,7 @@ def tours(request):
     """
     tours_list = Tour.objects.all()
     reviews = Reviews.objects.filter(
-        reservation__tour__in=tours_list).order_by('-review_date')[:5]
+        reservation__tour__in=tours_list).order_by('-review_date')[:3]
 
     max_price = request.GET.get('precio')
     if max_price:
@@ -39,7 +41,7 @@ def tours(request):
         tours_list = tours_list.filter(
             destination_place__icontains=destination_place)
 
-    paginator = Paginator(tours_list, 10)  # Show 10 tours per page
+    paginator = Paginator(tours_list, 6)  # Show 8 tours per page
     page_number = request.GET.get('page')
     tours = paginator.get_page(page_number)
     reviews = Reviews.objects.order_by('-review_date')[:5]
@@ -49,6 +51,7 @@ def tours(request):
 
 class TourDetailView(DetailView):
     """
+    Authors: Hector Ramos, Santiago Mendivil
     A view that displays the details of a specific tour.
     Attributes:
         model (Model): The model that this view will operate on, which is the Tour model.
@@ -105,6 +108,24 @@ class TourDetailView(DetailView):
 
 
 def add_favorite(request, pk):
+    """
+    Author: Santiago Mendivil
+    Adds a tour to the user's list of favorite tours.
+    If the user is authenticated, the function retrieves the tour specified by the primary key (pk)
+    and the user's client profile. It then checks if the tour is already in the user's favorite list.
+    If not, the tour is added to the list and a success message is displayed. If the tour is already
+    in the favorite list, an informational message is displayed. The user is then redirected to the
+    tour detail page.
+    If the user is not authenticated, an error message is displayed and the user is redirected to the
+    login page.
+    Args:
+        request (HttpRequest): The HTTP request object.
+        pk (int): The primary key of the tour to be added to favorites.
+    Returns:
+        HttpResponse: A redirect to the tour detail page if the user is authenticated, or to the login
+        page if the user is not authenticated.
+    """
+
     if request.user.is_authenticated:
         tour = get_object_or_404(Tour, pk=pk)
         client = request.user.client
@@ -126,6 +147,7 @@ def add_favorite(request, pk):
 
 def agencias(request):
     """
+    Author: Leonardo Ortega
     Handles the request to display a list of all agencies.
 
     This view function retrieves all Agency objects from the database and renders
@@ -143,6 +165,7 @@ def agencias(request):
 
 class AgencyDetailView(DetailView):
     """
+    Author: Santiago Mendivil
     A view that displays the details of a specific travel agency.
     Attributes:
         model (Agency): The model that this view will operate on.
@@ -162,11 +185,15 @@ class AgencyDetailView(DetailView):
         context['google_api'] = settings.GOOGLE_MAPS_API_KEY
         context['reviews'] = Reviews.objects.filter(
             reservation__tour__agency=self.object)
+        context['rating'] = Reviews.objects.filter(
+            reservation__tour__agency=self.object).aggregate(models.Avg('rating'))['rating__avg']
+        context['mail'] = Agency.objects.get(id=self.object.id).user.email
         return context
 
 
 def filtro_tour(request):
     """
+    Author: Leonardo Ortega
     Handles the retrieval and filtering of tour objects based on query parameters.
     Args:
         request (HttpRequest): The HTTP request object containing GET parameters for filtering.

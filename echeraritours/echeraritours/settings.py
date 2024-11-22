@@ -96,23 +96,23 @@ WSGI_APPLICATION = 'echeraritours.wsgi.application'
 
 # La base de datos debe ser cambiada segun sea el entorno de desarrollo o produccion
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databas
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
-         'USER': 'Leonardo',  # Nombre de usuario de la base de datos
-         'PASSWORD': 'echeraritours',  # La contraseña que creaste
-         # El endpoint de la base de datos
-         'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',
-         'PORT': '3306',  # Puerto por defecto de MySQL
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'echeraritoursDB',  # Nombre de la base de datos en MySQL
+        'USER': 'Leonardo',  # Nombre de usuario de la base de datos
+        'PASSWORD': 'echeraritours',  # La contraseña que creaste
+        # El endpoint de la base de datos
+        'HOST': 'ls-d79a6da0aff3438baefae126ba22bb1cb9329666.cvya6wuiewji.us-west-2.rds.amazonaws.com',
+        'PORT': '3306',  # Puerto por defecto de MySQL
+    }
 }
 
 # Password validation
