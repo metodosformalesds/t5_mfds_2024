@@ -435,19 +435,6 @@ def terminos_y_condiciones(request):
     return render(request, 'terminos_y_condiciones.html')
 
 
-def terminos_y_condiciones2(request):
-    """
-    Author: Neida Franco
-    Renders the 'terminos_y_condiciones2.html' template.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The rendered 'terminos_y_condiciones2.html' template.
-    """
-    return render(request, 'terminos_y_condiciones2.html')
-
 
 def terminos_legales(request):
     """
