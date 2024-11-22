@@ -130,7 +130,7 @@ class AgencyForm(forms.ModelForm):
         model = Agency
         fields = [
             'agency_name', 'agency_description', 'state', 'address',
-            'suburb', 'town', 'phone', 'zip_code', 'certificate', 'profile_image'
+            'suburb', 'town', 'phone', 'zip_code', 'profile_image', 'cover_photo'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -169,11 +169,13 @@ class AgencyProfileForm(forms.ModelForm):
     """
     profile_image = forms.ImageField(required=False, error_messages={
                                      'invalid': 'Solo archivos para imagenes'}, widget=forms.FileInput)
+    cover_photo = forms.ImageField(required=False, error_messages={
+                                   'invalid': 'Solo archivos para imagenes'}, widget=forms.FileInput)
 
     class Meta:
         model = Agency
         fields = ['agency_name', 'agency_description', 'state', 'address',
-                  'suburb', 'town', 'phone', 'zip_code', 'profile_image']
+                  'suburb', 'town', 'phone', 'zip_code', 'profile_image', 'cover_photo']
 
     def __init__(self, *args, **kwargs):
         super(AgencyProfileForm, self).__init__(*args, **kwargs)

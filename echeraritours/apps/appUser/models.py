@@ -142,6 +142,8 @@ class Agency(models.Model):
     certificate = models.ImageField(upload_to='static/certificates/')
     profile_image = models.ImageField(
         upload_to='profile_images/', null=True, blank=True)
+    cover_photo = models.ImageField(
+        upload_to='cover_photos/', null=True, blank=True)
 
     def get_profile_image_url(self):
         if self.profile_image:
