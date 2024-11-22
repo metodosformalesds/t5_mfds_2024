@@ -56,3 +56,63 @@
 .btn-primary:hover {
     background-color: #34b9a0;
 }
+
+@media (max-width: 992px) {
+    .container-review {
+        padding: 15px;
+    }
+
+    .rating-message {
+        font-size: 1.5rem;
+    }
+
+    .stars .star {
+        font-size: 2.5rem;
+        gap: 4px;
+    }
+
+    .btn-primary {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-review {
+        padding: 10px;
+    }
+
+    .rating-message {
+        font-size: 1.3rem;
+    }
+
+    .stars .star {
+        font-size: 2rem;
+        gap: 3px;
+    }
+
+    .btn-primary {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-review {
+        padding: 8px;
+    }
+
+    .rating-message {
+        font-size: 1.2rem;
+    }
+
+    .stars .star {
+        font-size: 1.8rem;
+        gap: 2px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+}

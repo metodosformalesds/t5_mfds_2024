@@ -59,16 +59,90 @@ h2 {
 }
 
 /* Responsivo */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+    .container {
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+
     .empty-favorites-container {
-        padding: 20px;
+        padding: 30px;
+        margin-top: 15px;
     }
 
     .empty-favorites-container h3 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .empty-favorites-container p {
+        font-size: 0.95rem;
+    }
+
+    .empty-favorites-container .btn-primary {
+        padding: 8px 15px;
         font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .empty-favorites-container {
+        padding: 20px;
+        margin-top: 10px;
+    }
+
+    .empty-favorites-container h3 {
+        font-size: 1.4rem;
+    }
+
+    .empty-favorites-container p {
+        font-size: 0.85rem;
+    }
+
+    .empty-favorites-container .btn-primary {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 8px;
+        margin-top: 10px;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+    }
+
+    .empty-favorites-container {
+        padding: 15px;
+    }
+
+    .empty-favorites-container h3 {
+        font-size: 1.2rem;
+    }
+
+    .empty-favorites-container p {
+        font-size: 0.8rem;
+    }
+
+    .empty-favorites-container .btn-primary {
+        padding: 5px 10px;
+        font-size: 0.8rem;
     }
 }

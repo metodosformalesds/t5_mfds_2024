@@ -78,3 +78,118 @@
 }
 
 
+@media (max-width: 992px) {
+    .dashboard-agency-container {
+        grid-template-areas:
+            "perfil planes-activos"
+            "perfil metodos-pago"
+            "reportes reportes";
+        grid-template-columns: 1fr 1fr;
+        margin-left: 0;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .card.perfil {
+        height: auto;
+        min-height: 300px;
+    }
+
+    .card.metodos-pago,
+    .card.planes-activos {
+        height: 250px;
+        font-size: 0.85rem;
+    }
+
+    .card h5 {
+        font-size: 1.1rem;
+    }
+
+    .card p {
+        font-size: 0.85rem;
+    }
+
+    .card .btn-primary {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-agency-container {
+        grid-template-areas:
+            "perfil"
+            "planes-activos"
+            "metodos-pago"
+            "reportes";
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .card.perfil {
+        height: auto;
+        min-height: 250px;
+    }
+
+    .card.metodos-pago,
+    .card.planes-activos {
+        height: auto;
+        padding: 15px;
+        font-size: 0.8rem;
+    }
+
+    .card h5 {
+        font-size: 1rem;
+    }
+
+    .card p {
+        font-size: 0.8rem;
+    }
+
+    .card .btn-primary {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-agency-container {
+        grid-template-areas:
+            "perfil"
+            "planes-activos"
+            "metodos-pago"
+            "reportes";
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .card {
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card.perfil {
+        height: auto;
+        min-height: 200px;
+    }
+
+    .card.metodos-pago,
+    .card.planes-activos {
+        height: auto;
+        font-size: 0.75rem;
+    }
+
+    .card h5 {
+        font-size: 0.9rem;
+    }
+
+    .card p {
+        font-size: 0.75rem;
+    }
+
+    .card .btn-primary {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+}

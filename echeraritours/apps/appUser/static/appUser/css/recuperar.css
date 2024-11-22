@@ -115,3 +115,66 @@ body::before {
 .login-box a:hover {
     text-decoration: underline;
 }
+/* Responsivo */
+@media (max-width: 768px) {
+    .login-box {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .fondo-imagen {
+        padding: 15px;
+    }
+
+    .login-box h3 {
+        font-size: 1.2rem;
+    }
+
+    .login-box form label {
+        font-size: 0.8rem;
+    }
+
+    .login-box form input {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    .login-box form button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-box {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .fondo-imagen {
+        padding: 10px;
+    }
+
+    .login-box h3 {
+        font-size: 1rem;
+    }
+
+    .login-box form label {
+        font-size: 0.75rem;
+    }
+
+    .login-box form input {
+        font-size: 0.75rem;
+        padding: 7px;
+    }
+
+    .login-box form button {
+        font-size: 0.8rem;
+        padding: 7px 10px;
+    }
+
+    .login-box img {
+        width: 100%;
+        border-radius: 8px;
+    }
+}
