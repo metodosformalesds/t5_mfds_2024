@@ -8,6 +8,7 @@ import boto3
 import idanalyzer
 import io
 import base64
+import qrcode
 
 # Para los formularios
 from django.contrib.auth.forms import UserCreationForm
