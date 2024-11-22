@@ -605,17 +605,10 @@ def google_login(request):
     if social_account:
         email = social_account.extra_data.get('email')
         if User.objects.filter(email=email).exists():
-            user = User.objects.get(email=email)
+            user = authenticate(request, email=email)
             login(request, user)
             return redirect('index')
         else:
-            user = User.objects.create_user(
-                email=email,
-                username=email.split('@')[0],
-                password=User.objects.make_random_password(),
-            )
-            user.save()
-            login(request, user)
-            return redirect('profile_setup')
+            return redirect('register', email=email)
 
-    return redirect('login')
+    return redirect('index')
