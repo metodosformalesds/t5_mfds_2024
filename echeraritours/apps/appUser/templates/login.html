@@ -40,10 +40,8 @@
         </form>              
         
         <div class="mt-4">
-            <a href="#">¿Olvidaste tu contraseña?</a>
+            <a href="{% url 'solicitar_correo' %}">¿Olvidaste tu contraseña?</a>
         </div>
-
-        <div class="divider"><span>o</span></div>
 
        <div class="social-btn">
             <a href="{% provider_login_url 'google' %}">

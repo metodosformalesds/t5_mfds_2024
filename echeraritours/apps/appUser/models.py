@@ -51,6 +51,7 @@ class Client(models.Model):
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
     identificator = models.IntegerField(blank=True, null=True, unique=True)
+    codigo_recuperacion = models.IntegerField(null=True, blank=True)
 
     identification = models.ImageField(upload_to='static/identifications/')
 
@@ -142,6 +143,8 @@ class Agency(models.Model):
     certificate = models.ImageField(upload_to='static/certificates/')
     profile_image = models.ImageField(
         upload_to='profile_images/', null=True, blank=True)
+
+    codigo_recuperacion = models.IntegerField(null=True, blank=True)
     cover_photo = models.ImageField(
         upload_to='cover_photos/', null=True, blank=True)
 

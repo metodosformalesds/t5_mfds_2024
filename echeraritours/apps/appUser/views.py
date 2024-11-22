@@ -39,6 +39,8 @@ from django.core.mail import send_mail
 from .models import User
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.urls import reverse_lazy
+import random
+
 
 # Create your views here.
 
@@ -474,136 +476,105 @@ def necesitas_ayuda(request):
     return render(request, 'necesitas_ayuda.html')
 
 
-def send_mail_view(request, user_id):
-    """
-    Author: Neida Franco
-    Sends a password recovery email to the specified user.
-    Args:
-        request (HttpRequest): The HTTP request object.
-        user_id (int): The ID of the user to send the email to.
-    Returns:
-        HttpResponse: An HTTP response indicating that the email was sent.
-    Raises:
-        Http404: If the user with the specified ID does not exist.
-    This view function performs the following steps:
-    1. Retrieves the user by their ID.
-    2. Generates a password recovery link.
-    3. Renders the HTML content of the email using a template.
-    4. Creates an email message with the rendered HTML content.
-    5. Sends the email to the user's email address.
-    """
-    user = get_object_or_404(User, id=user_id)  # Obtiene el usuario por ID
-    # Aquí deberías generar el link de recuperación
-    link = 'http://tusitio.com/recovery-link'
-
-    # Renderiza el HTML del correo utilizando el template
-    template = render_to_string('correo_recuperacion.html', {'link': link})
-
-    subject = 'Recuperación de Contraseña'
-
-    message = EmailMultiAlternatives(
-        subject,
-        # El cuerpo de texto plano (puedes dejarlo vacío si solo usas HTML)
-        '',
-        settings.EMAIL_HOST_USER,
-        [user.email]
-    )
-
-    # Adjunta el HTML como alternativa
-    message.attach_alternative(template, "text/html")
-    message.send(fail_silently=False)
-
-    return HttpResponse("Correo enviado")
-
-
-def recuperar_contra(request):
-    """
-    Author: Neida Franco
-    Handle password recovery process.
-    This view handles the password recovery process by sending an email with a password reset link to the user.
-    If the request method is POST, it retrieves the email from the request, checks if a user with that email exists,
-    generates a password reset link, and sends it to the user's email in a separate thread.
-    Args:
-        request (HttpRequest): The HTTP request object.
-    Returns:
-        HttpResponse: Renders the password recovery page or redirects to the password reset email sent confirmation page.
-    Raises:
-        User.DoesNotExist: If no user with the provided email exists.
-    Templates:
-        recuperar_contra.html: The template for the password recovery page.
-    Messages:
-        success: If the email with the password reset link is sent successfully.
-        error: If no user with the provided email exists.
-    """
+def solicitar_correo(request):
     if request.method == 'POST':
-        email = request.POST.get['email']
+        email = request.POST.get('email')
         try:
-            user = User.objects.get(email=email)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            link = request.build_absolute_uri(
-                f'/confirmar_contra/{uid}/{token}/')
+            usuario = User.objects.get(email=email)
+            codigo = generar_codigo()
 
-            thread = threading.Thread(target=send_mail_view, args=(user, link))
-            thread.start()
+            if hasattr(usuario, 'client'):
+                usuario.client.codigo_recuperacion = codigo
+                usuario.client.save()
+            elif hasattr(usuario, 'agency'):
+                usuario.agency.codigo_recuperacion = codigo
+                usuario.agency.save()
+            else:
+                messages.error(
+                    request, 'El usuario no tiene un perfil válido.')
+                return redirect('solicitar_correo')
 
+            send_mail(
+                'Código de recuperación',
+                f'Tu código de recuperación es: {codigo}',
+                'echeraritours@gmail.com',
+                [email],
+                fail_silently=False,
+            )
             messages.success(
-                request, 'Se ha enviado un correo con instrucciones para restablecer la contraseña.')
-            return redirect('envio_contra')
+                request, 'El código de recuperación ha sido enviado.')
+            return redirect('verificar_codigo')
         except User.DoesNotExist:
             messages.error(
-                request, 'El correo ingresado no está asociado a ningún usuario.')
-    return render(request, 'recuperar_contra.html')
+                request, 'El correo no está asociado a ninguna cuenta.')
+    return render(request, 'solicitar_correo.html')
 
 
-def envio_contra(request):
-    """
-    Author: Neida Franco
-    Handles the request to render the 'envio_contra.html' template.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        HttpResponse: The rendered 'envio_contra.html' template.
-    """
-    return render(request, 'envio_contra.html')
+def generar_codigo():
+    return random.randint(100000, 999999)
 
 
-def confirmar_contra(request, uidb64=None, token=None):
-    """
-    Author: Neida Franco
-    Handles the password reset confirmation process.
+def verificar_codigo(request):
+    email = request.session.get('email')
 
-    This view function wraps around the PasswordResetConfirmView to provide
-    a custom template and success URL for the password reset confirmation.
+    if request.method == 'POST':
 
-    Args:
-        request (HttpRequest): The HTTP request object.
-        uidb64 (str, optional): The base64 encoded user ID. Defaults to None.
-        token (str, optional): The password reset token. Defaults to None.
+        codigo = ''.join([
+            request.POST.get(f'codigo_{i}', '') for i in range(1, 7)
+        ])
 
-    Returns:
-        HttpResponse: The HTTP response object generated by the PasswordResetConfirmView.
-    """
-    return PasswordResetConfirmView.as_view(
-        template_name='recuperar_contra.html',
-        success_url=reverse_lazy('completo_contra')
-    )(request, uidb64=uidb64, token=token)
+        try:
+            usuario = User.objects.get(email=email)
+            if hasattr(usuario, 'client') and str(usuario.client.codigo_recuperacion) == codigo:
+                request.session['email'] = email
+                return redirect('restablecer_contrasena')
+            elif hasattr(usuario, 'agency') and str(usuario.agency.codigo_recuperacion) == codigo:
+                request.session['email'] = email
+                return redirect('restablecer_contrasena')
+            else:
+                messages.error(request, 'El código ingresado es incorrecto.')
+        except User.DoesNotExist:
+            messages.error(
+                request, 'El correo no está asociado a ninguna cuenta.')
+    return render(request, 'verificar_codigo.html', {'email': email})
 
 
-def completo_contra(request):
-    """
-    Author: Neida Franco
-    Handles the HTTP request to render the 'completo_contra.html' template.
+def restablecer_contrasena(request):
+    if request.method == 'POST':
+        nueva_password = request.POST.get('password')
+        confirmar_password = request.POST.get('confirm_password')
 
-    Args:
-        request (HttpRequest): The HTTP request object.
+        if nueva_password != confirmar_password:
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return redirect('restablecer_contrasena')
 
-    Returns:
-        HttpResponse: The rendered 'completo_contra.html' template.
-    """
-    return render(request, 'completo_contra.html')
+        email = request.session.get('email')
+        if not email:
+            messages.error(request, 'Ocurrió un error, intenta nuevamente.')
+            return redirect('verificar_codigo')
+
+        try:
+            usuario = User.objects.get(email=email)
+
+            usuario.set_password(nueva_password)
+            usuario.save()
+
+            if hasattr(usuario, 'client'):
+                usuario.client.codigo_recuperacion = None
+                usuario.client.save()
+            elif hasattr(usuario, 'agency'):
+                usuario.agency.codigo_recuperacion = None
+                usuario.agency.save()
+
+            messages.success(
+                request, 'Tu contraseña ha sido restablecida con éxito.')
+            return redirect('login')
+        except User.DoesNotExist:
+            messages.error(
+                request, 'El correo no está asociado a ninguna cuenta.')
+            return redirect('verificar_codigo')
+
+    return render(request, 'restablecer_contrasena.html')
 
 
 def google_login(request):
