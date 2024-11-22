@@ -42,8 +42,8 @@
 
 .card {
     background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0); 
-    height: 300px; 
-    width: 300px; 
+    height: 500px; 
+    width: 500px; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;

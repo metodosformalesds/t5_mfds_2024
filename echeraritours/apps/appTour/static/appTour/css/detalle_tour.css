@@ -40,6 +40,8 @@
 
 .fondo-echerari {
     background-color: #a6f6e1;
+<<<<<<< HEAD
+=======
 }
 
 @media (max-width: 992px) {
@@ -118,4 +120,5 @@
     .fondo-echerari {
         padding: 8px;
     }
+>>>>>>> 234a823f2c820cdc7ead4f0acf45162b1f8684a7
 }
