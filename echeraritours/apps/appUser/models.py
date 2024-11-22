@@ -53,7 +53,8 @@ class Client(models.Model):
     identificator = models.IntegerField(blank=True, null=True, unique=True)
     codigo_recuperacion = models.IntegerField(null=True, blank=True)
 
-    identification = models.ImageField(upload_to='static/identifications/')
+    identification = models.ImageField(
+        upload_to='static/identifications/', null=True, blank=True)
 
     id_identificacion_oficial_url = models.URLField(
         max_length=500, blank=True, null=True)
@@ -140,7 +141,8 @@ class Agency(models.Model):
     town = models.CharField(max_length=255, blank=True, null=True)  # Municipio
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
-    certificate = models.ImageField(upload_to='static/certificates/', null=True, blank=True)
+    certificate = models.ImageField(
+        upload_to='static/certificates/', null=True, blank=True)
     profile_image = models.ImageField(
         upload_to='profile_images/', null=True, blank=True)
 

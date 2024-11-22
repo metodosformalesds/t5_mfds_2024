@@ -39,7 +39,7 @@
                             <th>Fecha del Tour</th>
                             <th>Numero de personas</th>
                             <th>Total Pagado</th>
-                            <th>Acciones</th>
+                            <th>Reseñas</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,9 +54,9 @@
                             <td>
                                 {% with review=reservacion|get_review:reviews %}
                                 {% if review %}
-                                <a href="{% url 'delete_review' review.id %}" class="btn btn-secondary">Eliminar reseña</a>
+                                <a href="{% url 'delete_review' review.id %}" class="btn btn-secondary" style="background-color: #d9534f; color: #ffffff; border: none; padding: 10px 15px; border-radius: 5px; text-decoration: none;">Eliminar</a>
                                 {% else %}
-                                <a href="{% url 'create_review' reservacion.id %}" class="btn btn-primary">Reseña</a>
+                                <a href="{% url 'create_review' reservacion.id %}" class="btn btn-primary" style="background-color: #68ddbd; color: #ffffff; border: none; padding: 10px 15px; border-radius: 5px; text-decoration: none;width: 90px;">Crear</a>
                                 {% endif %}
                                 {% endwith %}
                             </td>

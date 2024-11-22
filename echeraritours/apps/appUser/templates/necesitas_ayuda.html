@@ -1,104 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Nosotros - EchérariTours</title>
     <style>
         body {
-            font-family: Oswald, Merriweather;
+            font-family: 'Oswald', sans-serif;
             background-color: #ffffff;
             color: #000000;
             margin: 0;
             padding: 0;
         }
-        header {
-            background-color: #ffffff;
-            padding: 5px 20px;
+        nav.navbar {
+            background-color: #2b2d42;
+            height: 100px; 
             border-bottom: 1px solid #ccc;
             display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            padding: 0 40px; 
+            margin: 0;
+        }
+        .navbar .logo-container {
+            display: flex; 
+            align-items: center;
+            justify-content: flex-start; 
+            gap: 8px; 
+            position: relative;
+            top: 10px;
+            left: -100px;
+        }
+        nav .container {
+            display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 0;
+            align-items: center;
         }
-        .logo-container {
-            display: flex; 
-            align-items: flex-end; 
+        .navbar img {
+            height: 65px;
+            margin-right: 10px;
+            
         }
-        header img {
-            width: 110px;
-            margin-right: 10px; 
-            padding-bottom: 5px; 
-        }
-        header h1 {
-            margin: 0; 
+        .navbar h5 {
+            margin: 0;
             color: #68ddbd;
-            padding-bottom: 5px; 
+            font-weight: bold;
+            font-size: 1.5rem;
         }
-        nav {
-            text-align: right;
-            display: flex; 
-            align-items: flex-end; 
-        }
-        nav a {
-            margin-right: 20px; 
+        .navbar .nav-link {
+            margin-right: 20px;
+            color: #68ddbd;
             text-decoration: none;
-            color: #68ddbd;
-            padding: 10px 0;
+            font-size: 0.8rem;
+            font-weight: bold; 
+            position: relative;
+            left: 150px; 
+            top: 10px;
         }
-        nav a:last-child {
-            margin-right: 0; 
+        .navbar .nav-link.active {
+            background-color: #68ddbd;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 5px;
         }
-        nav a.active {
-            background-color: #68ddbd; 
-            color: #ffffff; 
-            padding: 10px 10px; 
-            border-radius: 5px 5px 0 0; 
-            position: relative; 
-            top: 1px;
-            margin-bottom: -1px; 
-            line-height: 1; 
+        .navbar .nav-item {
+            list-style: none;
+        }
+        .navbar .dropdown-menu a {
+            color: #333333;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+            font-size: 1rem;
+        }
+        .navbar .dropdown-menu a:hover {
+            background-color: #68ddbd;
+            color: #ffffff;
         }
         .container {
-            max-width: 70%; 
-            margin: 0 auto;
-            padding: 25px;
-        }
-        h2 {
-            color: #68ddbd;
-            border-bottom: 1px solid #68ddbd;
-            padding-bottom: 5px;
+            max-width: 80%;
+            margin: 50px auto;
+            padding: 20px;
         }
         h3 {
             color: #68ddbd;
             margin-top: 30px;
             border-bottom: 1px solid #68ddbd;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
+            font-size: 1.5rem;
+        }
+        p, ul {
+            font-size: 1rem;
+            line-height: 1.5;
         }
         ul {
-            list-style: none;
-            padding: 0;
+            padding-left: 20px;
         }
         ul li {
             margin-bottom: 10px;
         }
     </style>
-    {% load static %}
 </head>
 <body>
-
-    <header>
-        <div class="logo-container">
-            <img src="{% static 'img/logo_eheraritours.png' %}" alt="Logo de EchérariTours"> 
-            <h1>EchérariTours</h1>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <div class="logo-container">
+                <img src="{% static 'img/logo_eheraritours.png' %}" alt="Logo de Echérari Tours">
+                <h5 style="position: relative; top: 5px; color: #68ddbd; font-weight: bold; font-size: 1.5rem; margin: 0;">
+                    Echérari Tours
+                </h5>
+            </div>            
+            <div class="d-flex align-items-center">
+                <a href="{% url 'index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">Inicio</a>
+                <a href="{% url 'sobre_nosotros' %}" class="nav-link {% if request.resolver_match.url_name == 'sobre_nosotros' %}active{% endif %}">Sobre Nosotros</a>
+                <a href="{% url 'terminos_legales' %}" class="nav-link {% if request.resolver_match.url_name == 'terminos_legales' %}active{% endif %}">Términos legales y privacidad</a>
+                <a href="{% url 'necesitas_ayuda' %}" class="nav-link {% if request.resolver_match.url_name == 'necesitas_ayuda' %}active{% endif %}">¿Necesitas Ayuda?</a>
+            </div>
         </div>
-        <nav>
-            <a href="{% url 'index' %}">Inicio</a>
-            <a href="{% url 'sobre_nosotros' %}" >Sobre Nosotros</a>
-            <a href="{% url 'terminos_legales' %}">Términos legales y privacidad</a>
-            <a href="{% url 'necesitas_ayuda' %}"class="active">¿Necesitas Ayuda?</a>
-        </nav>
-    </header>
+    </nav>
 
     <div class="container">
         <h2>Preguntas Frecuentes</h2>
