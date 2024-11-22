@@ -79,3 +79,22 @@ article.card {
 .card-footer {
     display: none; 
 }
+
+.btn-stripe {
+    background: linear-gradient(135deg, #6772e5, #9e7bf7);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-stripe:hover {
+    background: linear-gradient(135deg, #5469d4, #8e68e7);
+}
+.btn-standard {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 6px;
+}

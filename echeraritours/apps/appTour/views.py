@@ -79,6 +79,9 @@ class TourDetailView(DetailView):
         else:
             context['show_booking_button'] = True
 
+        context['reviews'] = Reviews.objects.filter(reservation__tour=self.object)
+        context['rating'] = Reviews.objects.filter(reservation__tour=self.object).aggregate(models.Avg('rating'))['rating__avg']
+
         # Lo puse para poder jalar info del hotel que ponga la agencia
         place_url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json"
         params = {

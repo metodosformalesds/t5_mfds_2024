@@ -51,6 +51,7 @@ class PaymentMethod(models.Model):
     card_last4 = models.CharField(max_length=4, blank=True, null=True)
     card_brand = models.CharField(max_length=20, blank=True, null=True)
     cardholder_name = models.CharField(max_length=100, blank=True, null=True)
+    transfer_number = models.IntegerField(blank=True, null=True)
     paypal_email = models.EmailField(null=True, blank=True)  # Solo para PayPal
     is_default = models.BooleanField(
         default=False)  # Indica si es predeterminado
