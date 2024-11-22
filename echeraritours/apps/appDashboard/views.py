@@ -10,7 +10,8 @@ from django.views.generic.edit import CreateView, DeleteView
 from .forms import UserForm, UserProfileForm, AgencyForm, AgencyProfileForm
 from django.contrib import messages
 from .models import Reports
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.db import IntegrityError
 import os
 from echeraritours import settings
 from .models import FavoriteList
@@ -582,7 +583,7 @@ def reports(request):
         request (HttpRequest): The HTTP request object containing metadata about the request.
     Returns:
         HttpResponse: The rendered 'agencia/reportes.html' template with the context containing 
-                      the filtered tours.
+                        the filtered tours.
 
     """
     agency_tours = Tour.objects.filter(agency=request.user.agency)
@@ -693,7 +694,10 @@ class CreateTour(CreateView):
         template_name (str): The name of the template to be rendered.
         success_url (str): The URL to redirect to upon successful form submission.
 
-    MethodsL
+    Methods:
+        dispatch():
+            Checks if the agency has at least one payment method before allowing access to the view.
+            Redirects to the payment method creation page if no payment method is found.
         form_valid(form):
             Validates the form data, ensuring that the start date is before the end date
             and that both dates are in the future. Adds errors to the form if validation fails.
@@ -703,9 +707,16 @@ class CreateTour(CreateView):
     """
     model = Tour
     fields = ['title', 'description', 'lodging_place', 'price_per_person', 'capacity',
-              'start_date', 'end_date', 'place_of_origin', 'destination_place', 'tour_image']
+                'start_date', 'end_date', 'place_of_origin', 'destination_place', 'tour_image']
     template_name = 'agencia/crear_tour.html'
     success_url = reverse_lazy('tours_dashboard')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not PaymentMethod.objects.filter(agency=request.user.agency).exists():
+            messages.error(request, "Debes agregar un método de pago antes de poder crear un tour.")
+            return redirect(reverse('payment_methods_agency'))
+
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         start_date = form.cleaned_data.get('start_date')
@@ -742,4 +753,55 @@ def payment_methods_agency(request):
     """
     metodos = PaymentMethod.objects.filter(agency=request.user.agency)
 
-    return render(request, 'agencia/metodos_pago.html', {'metodos': metodos})
+    # Generar el enlace del dashboard de Stripe a partir del account ID de Stripe
+    stripe_agency_id = request.user.agency.stripe_agency_id if hasattr(request.user.agency, 'stripe_agency_id') else None
+    stripe_dashboard_link = f"https://dashboard.stripe.com/{stripe_agency_id}/overview" if stripe_agency_id else None
+
+    return render(request, 'agencia/metodos_pago.html', {
+        'metodos': metodos,
+        'stripe_dashboard_link': stripe_dashboard_link
+    })
+
+
+
+def add_payment_methods_agency(request):
+    """
+    Author: Hector Ramos
+    Handles the request to display payment methods for the agency associated with the current user.
+    Args:
+        request (HttpRequest): The HTTP request object containing metadata about the request.
+    Returns:
+        HttpResponse: The rendered HTML page displaying the payment methods for the agency.
+    """
+    if request.method == 'POST':
+        transfer_number = request.POST.get('transfer_number')
+        if transfer_number:
+            if PaymentMethod.objects.filter(agency=request.user.agency, transfer_number=transfer_number).exists():
+                messages.error(request, "Este número de transferencia ya está registrado.")
+            else:
+                try:
+                    PaymentMethod.objects.create(agency=request.user.agency, transfer_number=transfer_number)
+                    messages.success(request, "Método de pago agregado exitosamente.")
+                except IntegrityError:
+                    messages.error(request, "Error al guardar el método de pago.")
+            return redirect('payment_methods_agency')
+        else:
+            messages.error(request, "Por favor, ingresa un número de transferencia válido.")
+
+    metodos = PaymentMethod.objects.filter(agency=request.user.agency)
+    return render(request, 'agencia/agregar_metodos_pago.html', {'metodos': metodos})
+
+def delete_payment_method(request, metodo_id):
+    """
+    Handles the request to delete a specific payment method for the agency.
+    Args:
+        request (HttpRequest): The HTTP request object.
+        metodo_id (int): The ID of the payment method to delete.
+    Returns:
+        HttpResponse: Redirects to the payment methods page with a success or error message.
+    """
+    metodo = get_object_or_404(PaymentMethod, id=metodo_id, agency=request.user.agency)
+    
+    metodo.delete()
+    messages.success(request, "Método de pago eliminado exitosamente.")
+    return redirect('payment_methods_agency')

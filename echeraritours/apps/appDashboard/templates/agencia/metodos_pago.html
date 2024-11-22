@@ -11,16 +11,50 @@
 {% block content %}
 <div class="row">
     <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-      {% include "agency_sidebar.html" %}
+        {% include "agency_sidebar.html" %}
     </div>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning my-3">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <article class="card">
-            <header class="card-header">
+            <header class="card-header d-flex justify-content-between align-items-center">
                 <h2 class="card-title">Métodos de pago</h2>
-                <a href="#" class="btn btn-primary">Agregar método de pago</a>
+                <div>
+                    <a href="{% url 'add_payment_methods_agency' %}" class="btn btn-primary">Agregar método de pago</a>
+                </div>
             </header>
-            
+            <div class="card-body">
+                {% if metodos %}
+                    <ul class="list-group">
+                        {% for metodo in metodos %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Número de Transferencia:</strong> {{ metodo.transfer_number }}
+                                </div>
+                                <div>
+                                    <!-- Botón para ver en Stripe -->
+                                    {% if stripe_dashboard_link %}
+                                        <a href="{{ stripe_dashboard_link }}" class="btn btn-secondary" target="_blank">Ver Dashboard de Stripe</a>
+                                    {% endif %}
+                                    <!-- Botón para eliminar método de pago -->
+                                    <form action="{% url 'delete_payment_method' metodo.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No se han agregado métodos de pago aún.</p>
+                {% endif %}
+            </div>
         </article>
     </main>
 </div>

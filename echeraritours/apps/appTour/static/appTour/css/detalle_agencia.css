@@ -59,6 +59,61 @@ a {
     transition: transform 0.3s ease;
 }
 
+.fondo-verde-claro {
+    background-color: #CDFFDD;
+}
+
+.card-reviews {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    background-color: #fff;
+}
+
+.card-body-reviews {
+    text-align: center;
+    background-color: #fff;
+}
+
+.card-reviews img {
+    border: 3px solid #1B1C1E;
+    margin-top: -5rem;
+    height: 6rem;
+    width: 6rem;
+    object-fit: cover;
+}
+
+.card-title-reviews {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.card-text-reviews {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.star {
+    font-size: 2rem; 
+    color: #d3d3d3; 
+    transition: color 0.2s ease;
+}
+
+.star.filled {
+    color: #FFD700;
+}
+
+.d-flex {
+    display: flex;
+    justify-content: center;
+}
+
+
+
 
 /* Responsividad para móviles */
 @media (max-width: 768px) {
