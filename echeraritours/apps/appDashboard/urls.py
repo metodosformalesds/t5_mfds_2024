@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import generate_report
+
 
 urlpatterns = [
      path('', views.dashboard, name='dashboard'),
@@ -40,9 +42,13 @@ urlpatterns = [
      path('agencia/dashboard/perfil/', views.agency_profile, name='agency_profile'),
      path('agencia/dashboard/metodos_pago/',
           views.payment_methods_agency, name='payment_methods_agency'),
+     path('agencia/dashboard/agregar_metodos_pago/', 
+          views.add_payment_methods_agency, name='add_payment_methods_agency'),
+     path('agencia/dashboard/eliminar_metodo_pago/<int:metodo_id>/', 
+          views.delete_payment_method, name='delete_payment_method'),
      path('agencia/dashboard/reportes/', views.reports, name='reports'),
-     path('agencia/dashboard/reportes/<int:tour_id>/',
-          views.generate_report, name='generate_report'),
+     path('agencia/dashboard/reportes/<int:tour_id>/', generate_report, name='generate_report'),
+
 
 ]
 

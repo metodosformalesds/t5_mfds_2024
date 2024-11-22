@@ -37,7 +37,7 @@ class Client(models.Model):
         ordering (list): The default ordering for the model's QuerySet.
     Methods:
         __str__(): Returns the first name of the client.
-         get_profile_image_url(): Returns the URL of the client's profile image.
+        get_profile_image_url(): Returns the URL of the client's profile image.
         generate_identificator(): Generates a random identificator for the client.
         save(*args, **kwargs): Saves the client instance and creates a Stripe customer if not already present.
         delete(*args, **kwargs): Deletes the client instance and removes the associated Stripe customer.
@@ -51,6 +51,7 @@ class Client(models.Model):
     birth_date = models.DateField()
     zip_code = models.CharField(max_length=10)
     identificator = models.IntegerField(blank=True, null=True, unique=True)
+    codigo_recuperacion = models.IntegerField(null=True, blank=True)
 
     identification = models.ImageField(upload_to='static/identifications/')
 
@@ -139,9 +140,13 @@ class Agency(models.Model):
     town = models.CharField(max_length=255, blank=True, null=True)  # Municipio
     phone = models.CharField(max_length=15)
     zip_code = models.CharField(max_length=10)
-    certificate = models.ImageField(upload_to='static/certificates/')
+    certificate = models.ImageField(upload_to='static/certificates/', null=True, blank=True)
     profile_image = models.ImageField(
         upload_to='profile_images/', null=True, blank=True)
+
+    codigo_recuperacion = models.IntegerField(null=True, blank=True)
+    cover_photo = models.ImageField(
+        upload_to='cover_photos/', null=True, blank=True)
 
     def get_profile_image_url(self):
         if self.profile_image:

@@ -3,7 +3,7 @@
 {% block title %}Tours - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static "appTour/css/agencias.css" %}"> 
+<link rel="stylesheet" href="{% static 'appTour/css/agencias.css' %}"> 
 {% endblock extra_styles %}
 
 {% block content %}
@@ -18,7 +18,7 @@
             <a href="{% url 'detalle_agencia' agencia.id %}" class="text-decoration-none card-link w-100">
                 <div class="card h-100">
                     <div class="card-body text-center">
-                        <img src="{% static 'img/cancun.jpg' %}" class="card-img-top" alt="{{ agencia.agency_name }} portada">
+                        <img src="{% if agencia.cover_photo %}{{ agencia.cover_photo.url }}{% else %}{% static 'img/cover_default.png' %}{% endif %}" class="card-img-top img-fluid" alt="{{ agencia.agency_name }} portada" style="height: 200px; object-fit: cover;">
                         <div class="card-body text-center">
                             <h5 class="card-title span-echerari">{{ agencia.agency_name }}</h5>
                             <hr class="divider">

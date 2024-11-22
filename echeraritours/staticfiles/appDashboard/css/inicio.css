@@ -12,6 +12,7 @@
 
 .dashboard-container .perfil {
     grid-area: perfil;
+<<<<<<< HEAD
     height: 480px;
     padding: 10px 15px;
     display: flex;
@@ -19,52 +20,97 @@
     justify-content: flex-start;
     align-items: center;
     text-align: center;
+=======
+    height: 480px; 
+    padding: 10px 15px;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     padding-top: 50px;
 }
 
 .dashboard-container .perfil .profile-image {
+<<<<<<< HEAD
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 15px;
+=======
+    width: 150px; 
+    height: 150px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin-bottom: 15px; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
 }
 
 .dashboard-container .perfil h5 {
     color: #68ddbd;
     font-weight: bold;
+<<<<<<< HEAD
     margin-top: 20px;
+=======
+    margin-top: 20px; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     margin-bottom: 5px;
 }
 
 .dashboard-container .perfil p {
+<<<<<<< HEAD
     color: #555;
     margin: 20px 0 0;
+=======
+    color: #555; 
+    margin: 20px 0 0; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
 }
 
 .dashboard-container .planes-activos,
 .dashboard-container .favoritos,
 .dashboard-container .metodos-pago {
+<<<<<<< HEAD
     height: 150px;
     font-size: 0.9rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+=======
+    height: 150px; 
+    font-size: 0.9rem;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     align-items: center;
 }
 
 .dashboard-container .historial {
     grid-area: historial;
+<<<<<<< HEAD
     height: 150px;
+=======
+    height: 150px; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     text-align: center;
 }
 
 .dashboard-container .card {
     display: flex;
+<<<<<<< HEAD
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);
+=======
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    background:  linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0);
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
@@ -99,16 +145,24 @@
 }
 
 .dashboard-header h1 {
+<<<<<<< HEAD
     transform: translate(25px, 25px);
     color: #68ddbd;
     display: inline-block;
 }
 
+=======
+    transform: translate(25px, 25px); 
+    color: #68ddbd;
+    display: inline-block; 
+}
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
 .dashboard-container .historial {
     grid-area: historial;
     height: 150px;
     display: flex;
     align-items: center;
+<<<<<<< HEAD
     justify-content: flex-start;
     padding: 10px 15px;
     text-align: left;
@@ -117,6 +171,15 @@
 
 .dashboard-container .historial img {
     width: 80px;
+=======
+    justify-content: space-between; 
+    padding: 10px 15px; 
+    text-align: left;
+}
+
+.dashboard-container .historial img {
+    width: 80px; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     height: 80px;
     object-fit: cover;
     margin-right: 550px;
@@ -124,10 +187,17 @@
 }
 
 .dashboard-container .historial .card-body {
+<<<<<<< HEAD
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+=======
+    flex: 1; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     margin-left: 5px;
     margin-right: 50px;
     margin-top: -125px;
@@ -136,11 +206,20 @@
 .dashboard-container .historial h5 {
     color: #68ddbd;
     font-weight: bold;
+<<<<<<< HEAD
     margin: 0;
+=======
+    margin: 0; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
 }
 
 .dashboard-container .historial p {
     color: #555;
     margin: 0;
+<<<<<<< HEAD
     font-size: 0.9rem;
 }
+=======
+    font-size: 0.9rem; 
+}
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727

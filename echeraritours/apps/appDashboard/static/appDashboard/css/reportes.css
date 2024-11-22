@@ -1,0 +1,39 @@
+.card {
+    margin-top: 60px;
+}
+
+.card-title{
+    margin-top: 20px;
+}
+
+.card-header{
+    background: linear-gradient(135deg, #ffffff, #f0f4f8, #bceae0); 
+    color: #68ddbd;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    text-align: left;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #68ddbd;
+    border-color: #68ddbd;
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #57bfa0; 
+    border-color: #57bfa0;
+    transform: scale(1.05); 
+}
+
+.btn-primary:active {
+    background-color: #4ca08d; 
+    border-color: #4ca08d;
+    transform: scale(1);
+}

@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 .btn-add-payment {
     background-color: #68ddbd;
     border-color: #68ddbd;
     color: white;
     font-weight: bold;
     display: inline-flex;
+=======
+
+.btn-add-payment {
+    background-color: #68ddbd; 
+    border-color: #68ddbd; 
+    color: white;
+    font-weight: bold;
+    display: inline-flex; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     align-items: center;
     gap: 8px;
     padding: 10px 15px;
@@ -15,12 +25,17 @@
 }
 
 .btn-add-payment:hover {
+<<<<<<< HEAD
     background-color: #57BFA0;
+=======
+    background-color: #57BFA0; 
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727
     border-color: #57BFA0;
     text-decoration: none;
 }
 
 .btn-add-payment i {
+<<<<<<< HEAD
     font-size: 1rem;
     color: white;
 }
@@ -28,3 +43,9 @@
 .metodos_pago {
     padding-top: 50px;
 }
+=======
+    font-size: 1rem; 
+    color: white; 
+}
+
+>>>>>>> 741b54206d31df37b203e5be5da00f22ff0fb727

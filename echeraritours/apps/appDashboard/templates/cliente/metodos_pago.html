@@ -18,10 +18,16 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 metodos_pago">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2 class="h4">Métodos de Pago</h2>
+            <h1 class="card-title" style="color: #68ddbd; font-size: 2rem; font-weight: 500; margin-top: 25px;">Métodos de Pago</h1>
             <a href="{% url 'add_payment_method' %}" class="btn btn-primary">Agregar Método de Pago</a>
         </div>
-
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
         {% if metodos %}
         <div class="row">
             {% for metodo in metodos %}
