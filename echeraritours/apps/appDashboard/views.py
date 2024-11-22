@@ -24,6 +24,11 @@ import qrcode
 from reportlab.lib.utils import ImageReader
 from reportlab.lib.pagesizes import letter
 import stripe
+from apps.appTour.models import Reservation
+from apps.appPayment.models import Payments
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -620,11 +625,18 @@ def generate_report(request, tour_id):
         - Destination place
         - Total clients
         - Total earnings
+        - Additional transaction details:
+            - Client name
+            - Client email
+            - Number of people
+            - Total price paid
+            - Date and time of transaction
     """
     tour = get_object_or_404(Tour, id=tour_id)
 
     report, created = Reports.objects.get_or_create(
-        agency=tour.agency, tour=tour)
+        agency=tour.agency, tour=tour
+    )
     report.save()
 
     buffer = io.BytesIO()
@@ -651,14 +663,68 @@ def generate_report(request, tour_id):
     x = 100
     y = 750
     for row in data:
+        if y < 50:  
+            p.showPage()
+            y = 750
         p.drawString(x, y, row[0])
         p.drawString(x + 200, y, str(row[1]))
         y -= 20
 
-    p.showPage()
+    p.setFont("Helvetica-Bold", 14)
+    y -= 30
+    p.drawString(100, y, "Detalles de las Transacciones:")
+    y -= 20
+
+    transactions = Payments.objects.filter(
+        reservation__tour=tour,
+        status='completado'
+    ).select_related('reservation__client__user' )
+
+    if not transactions:
+        if y < 50: 
+            p.showPage()
+            y = 750
+        p.drawString(100, y, "No hay transacciones completadas para este tour.")
+    else:
+        table_data = [["Nombre", "Correo", "Personas", "Precio Total", "Fecha"]] 
+        for transaction in transactions:
+            table_data = [["Folio", "Nombre", "Correo", "Personas", "Precio Total", "Fecha y hora"]] 
+            for payment in transactions:
+                reservation = payment.reservation
+                client = reservation.client.user
+                full_name = f"{client.first_name} {client.last_name}"
+                table_data.append([
+                    f"#{reservation.folio}",
+                    full_name,
+                    client.email,
+                    reservation.number_people,
+                    f"${payment.amount}",
+                    payment.payment_date.strftime('%d/%m/%Y %H:%M')
+                ])
+
+        table = Table(table_data, colWidths=[60, 80, 150, 50, 80, 100])
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ]))
+
+        table_height = 20 * len(table_data)  
+        if y - table_height < 50:  
+            p.showPage()
+            y = 750
+
+        table.wrapOn(p, 50, y)
+        table.drawOn(p, 50, y - table_height)
+
     p.save()
     buffer.seek(0)
     return HttpResponse(buffer, content_type='application/pdf')
+
 
 
 @login_required(login_url='login')

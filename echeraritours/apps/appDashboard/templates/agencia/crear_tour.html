@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/crear.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock extra_styles %}
 
 {% block title %}Crear Tour - Echérari Tours{% endblock title %}
-
 {% block content %}
 <div class="row">
     <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -10,9 +14,6 @@
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <header class="card-header">
-            <h5 class="card-title">Crear Tour</h5>
-        </header>
         <div class="container my-4">
             {% if form.errors %}
                 <div class="alert alert-danger">
@@ -23,50 +24,61 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <form method="POST" action="{% url "create_tour" %}" enctype="multipart/form-data">
+            <form method="POST" action="{% url "create_tour" %}" enctype="multipart/form-data" class="custom-form">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="title" class="form-label">Título</label>
-                    <input type="text" class="form-control" id="title" name="title" required>
+                <header class="card-header" style="margin-bottom: 20px;">
+                    <h5 class="card-title" style="margin-top: 0; font-weight: bold; transform: translateY(10px);font-size: 1.8rem;">Crear Tour</h5>
+                </header>                                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Título</label>
+                            <input type="text" class="form-control custom-input" id="title" name="title" placeholder="Escribe el título del tour" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="start_date" class="form-label">Fecha de inicio</label>
+                            <input type="date" class="form-control custom-input" id="start_date" name="start_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="place_of_origin" class="form-label">Lugar de origen</label>
+                            <input type="text" class="form-control custom-input" id="place_of_origin" name="place_of_origin" placeholder="Ciudad de salida" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lodging_place" class="form-label">Lugar de hospedaje</label>
+                            <input type="text" class="form-control custom-input" id="lodging_place" name="lodging_place" placeholder="Hotel o alojamiento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tour_image" class="form-label">Imagen del tour</label>
+                            <input type="file" class="form-control custom-input" id="tour_image" name="tour_image" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descripción</label>
+                            <textarea class="form-control custom-input" id="description" name="description" rows="3" placeholder="Describe el tour" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="end_date" class="form-label">Fecha de fin</label>
+                            <input type="date" class="form-control custom-input" id="end_date" name="end_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="destination_place" class="form-label">Lugar de destino</label>
+                            <input type="text" class="form-control custom-input" id="destination_place" name="destination_place" placeholder="Destino del tour" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="capacity" class="form-label">Capacidad</label>
+                            <input type="number" class="form-control custom-input" id="capacity" name="capacity" placeholder="Número de personas" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price_per_person" class="form-label">Precio por persona</label>
+                            <input type="number" class="form-control custom-input" id="price_per_person" name="price_per_person" placeholder="MXN $" required>
+                            <div id="priceHelp" class="form-text">El precio es en pesos mexicanos.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Descripción</label>
-                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary custom-btn">Crear tour</button>
                 </div>
-                <div class="mb-3">
-                    <label for="start_date" class="form-label">Fecha de inicio</label>
-                    <input type="date" class="form-control" id="start_date" name="start_date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="end_date" class="form-label">Fecha de fin</label>
-                    <input type="date" class="form-control" id="end_date" name="end_date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="place_of_origin" class="form-label">Lugar de origen</label>
-                    <input type="text" class="form-control" id="place_of_origin" name="place_of_origin" required>
-                </div>
-                <div class="mb-3">
-                    <label for="destination_place" class="form-label">Lugar de destino</label>
-                    <input type="text" class="form-control" id="destination_place" name="destination_place" required>
-                </div>
-                <div class="mb-3">
-                    <label for="lodging_place" class="form-label">Lugar de hospedaje</label>
-                    <input type="text" class="form-control" id="lodging_place" name="lodging_place" required>
-                </div>
-                <div class="mb-3">
-                    <label for="capacity" class="form-label">Capacidad</label>
-                    <input type="number" class="form-control" id="capacity" name="capacity" required>
-                </div>
-                <div class="mb-3">
-                    <label for="price_per_person" class="form-label">Precio por persona</label>
-                    <input type="number" class="form-control" id="price_per_person" name="price_per_person" required>
-                    <div id="priceHelp" class="form-text">El precio es en pesos mexicanos.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="tour_image" class="form-label">Imagen del tour</label>
-                    <input type="file" class="form-control" id="tour_image" name="tour_image" required> 
-                </div>
-                <button type="submit" class="btn btn-primary">Crear tour</button>
             </form>
         </div>
     </main>

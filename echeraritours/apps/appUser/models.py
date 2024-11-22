@@ -37,7 +37,7 @@ class Client(models.Model):
         ordering (list): The default ordering for the model's QuerySet.
     Methods:
         __str__(): Returns the first name of the client.
-         get_profile_image_url(): Returns the URL of the client's profile image.
+        get_profile_image_url(): Returns the URL of the client's profile image.
         generate_identificator(): Generates a random identificator for the client.
         save(*args, **kwargs): Saves the client instance and creates a Stripe customer if not already present.
         delete(*args, **kwargs): Deletes the client instance and removes the associated Stripe customer.

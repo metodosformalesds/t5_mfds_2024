@@ -394,7 +394,7 @@ def registrar_agencia(request):
 @login_required(login_url='login')
 def seleccion_registro(request):
     """
-    Author: Santiago Mendivil
+    Author: Leonardo Ortega
     Renders the selection page. If the user is already part of a user type (Client or Agency), redirects to the main page.
     Args:
         request (HttpRequest): The HTTP request object.

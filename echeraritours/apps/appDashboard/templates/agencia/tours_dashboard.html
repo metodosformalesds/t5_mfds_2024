@@ -3,7 +3,7 @@
 {% block title %}Dashboard Tours - Echérari Tours{% endblock title %}
 
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'appTour/css/tours.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/tours.css' %}">
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
 
 {% endblock extra_styles %}
@@ -15,12 +15,9 @@
         {% include "agency_sidebar.html" %}
     </div>
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-        <header class="card-header">
-            <h2 class="card-title">Tours</h2>
-        </header>
-        <div>
-            <a href="{% url 'create_tour' %}" class="btn btn-primary mt-3">Crear tour</a>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="dashboard-header d-flex justify-content-between align-items-center pt-3 pb-2 mb-3">
+            <h1 class="dashboard-title" style="color: #68ddbd; font-size: 2rem; font-weight: 500; margin-top: 40px; margin-left: 20px;">Planes activos</h1>
         </div>
         <div class="container my-4">
             {% if tours %}
@@ -29,6 +26,7 @@
                     <div class="col-lg-6 col-md-6 mb-4">
                         <a href="{% url 'detalle_tour' tour.id %}" class="card-link" style="text-decoration: none;">
                             <div class="card">
+                                <img src="{{ tour.tour_image.url }}" class="img-fluid" alt="Imagen del tour" style="width: 100%; height: 100%; max-height: 150px; object-fit: cover;">
                                 <div class="card-body">
                                     <h5 class="font-weight-bold text-center">{{ tour.title }}</h5>
                                     <p class="text-muted">Desde <span class="span-echerari">{{ tour.start_date|date:"d M Y" }}</span> hasta <span class="span-echerari">{{ tour.end_date|date:"d M Y" }}</span></p>
@@ -36,15 +34,16 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-airplane-fill" viewBox="0 0 16 16">
                                             <path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849"/>
                                         </svg>
-                                        De <span class="span-echerari">{{ tour.place_of_origin }}</span> a <span class="span-echerari">{{ tour.destination_place }}</span>
+                                        De {{ tour.place_of_origin }} a {{ tour.destination_place }}
                                     </p>
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                                         </svg>
-                                        Para <span class="span-echerari"> {{ tour.capacity }} personas</span></p>
+                                        Para {{ tour.capacity }} personas
+                                    </p>
                                     <div class="price-section">
-                                        <p class="precio"><span class="span-echerari">MXN ${{ tour.price_per_person }}</span> por persona</p>
+                                        MXN ${{ tour.price_per_person }} por persona
                                     </div>
                                 </div>
                             </div>
@@ -53,11 +52,23 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="alert alert-warning" role="alert">
-                No hay tours disponibles.
+            <div class="text-center my-5">
+                <div class="alert alert-light p-5">
+                    <div style="margin-top: 30px;">
+                        <div class="icon-container mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 16 16">
+                                <circle cx="8" cy="8" r="8" fill="#68ddbd" />
+                                <path d="M7 3.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.5H12a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H9v3.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5V9H4a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3V3.5z" fill="white" />
+                            </svg>
+                        </div>
+                        <h4 class="text-secondary">¡Ups! No tienes planes activos</h4>
+                        <p class="text-muted">Parece que aún no tienes tours creados. Explora nuestra plataforma y empieza a ofrecer tours ahora.</p>
+                    </div>
+                    <a href="{% url 'create_tour' %}" class="btn btn-primary mt-3">Crear tour</a>
+                </div>
             </div>
             {% endif %}
-        </div>   
+        </div>        
     </main>
 </div>
 

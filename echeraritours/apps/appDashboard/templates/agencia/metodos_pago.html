@@ -6,6 +6,7 @@
 {% block extra_styles %}
 <link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
 <link rel="stylesheet" href="{% static 'appDashboard/css/met_pago1.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/perfilA.css' %}">
 {% endblock extra_styles %}
 
 {% block content %}
@@ -35,17 +36,17 @@
                         {% for metodo in metodos %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    <strong>Número de Transferencia:</strong> {{ metodo.transfer_number }}
+                                    <i class="fas fa-university"></i> {{ metodo.transfer_number }}
                                 </div>
                                 <div>
                                     <!-- Botón para ver en Stripe -->
                                     {% if stripe_dashboard_link %}
-                                        <a href="{{ stripe_dashboard_link }}" class="btn btn-secondary" target="_blank">Ver Dashboard de Stripe</a>
+                                        <a href="{{ stripe_dashboard_link }}" class="btn btn-stripe btn-standard" target="_blank">Ver Dashboard de Stripe</a>
                                     {% endif %}
                                     <!-- Botón para eliminar método de pago -->
                                     <form action="{% url 'delete_payment_method' metodo.id %}" method="post" style="display: inline;">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                        <button type="submit" class="btn btn-danger btn-standard">Borrar</button>
                                     </form>
                                 </div>
                             </li>

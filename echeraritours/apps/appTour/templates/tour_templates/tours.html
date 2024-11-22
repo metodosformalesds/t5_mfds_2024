@@ -7,27 +7,33 @@
 {% endblock extra_styles %}
 
 {% block content %}
-<div class="container-fluid col-xl-10 col-xxl-8 px-4 py-5" style="background: linear-gradient(135deg, #68DDBD 0%, #12AB81 100%); border-radius: 15px;">
-    <div class="row align-items-center g-lg-5 py-5">
+<div class="container-fluid col-xl-10 col-xxl-8 px-4 py-5" 
+     style="background: linear-gradient(-180deg, #ffffff, #f0f4f8, #bceae0); 
+            border-radius: 15px; 
+            margin-top: 10px; 
+            width: 1200px; 
+            height: 320px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="row align-items-center g-lg-5 py-5" >
         <div class="col-lg-7 text-center text-lg-start">
-            <h1 class="display-4 fw-bold lh-1 mb-3" style="color: #fff;">Encuentra el viaje que quieres.</h1>
-            <p class="col-lg-10 fs-4">Ingresa el lugar al que quieres ir o el presupuesto que tienes, o ambos! Encontrarás viajes perfectos para ti.</p>
+            <h1 class="display-4 fw-bold lh-1 mb-3" style="color: #68ddbd; margin-bottom: 5px; font-size: 1.5 rem;">Encuentra el viaje que quieres.</h1>
+            <p class="col-lg-10 fs-4" style="color: #4B4B4B;">Ingresa el lugar al que quieres ir o el presupuesto que tienes, o ambos! Encontrarás viajes perfectos para ti.</p>
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
             <form method="get" action="{% url 'tours' %}" class="container mt-4">
-                <h2 style="color: #fff;">Filtrar viajes</h2>
+                <h2 style="color: #68ddbd;">Filtrar viajes</h2>
                 <div class="form-row mb-3">
                     <div class="col">
-                        <label for="destination_place" style="color: #e0e0e0;">Lugar de destino:</label>
+                        <label for="destination_place"  style="color: #4B4B4B;">Lugar de destino:</label>
                         <input type="text" name="destination_place" id="destination_place" placeholder="Lugar de destino" class="form-control" value="{{ request.GET.destination_place }}">
                     </div>
                     <div class="col">
-                        <label for="precio" style="color: #e0e0e0;">Precio máximo:</label>
+                        <label for="precio"  style="color: #4B4B4B;">Precio máximo:</label>
                         <input type="number" name="precio" id="precio" placeholder="Precio máximo" class="form-control" value="{{ request.GET.precio }}">
                     </div>
                     <div class="col-12 text-center mt-3">
-                        <button type="submit" class="btn btn-light btn-lg">Filtrar</button>
-                    </div>
+                        <button type="submit" class="btn btn-light btn-lg" style="background-color: #68ddbd; color: #ffffff; border: none; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);">Filtrar</button>
+                    </div>                    
                 </div>
             </form>
         </div>
