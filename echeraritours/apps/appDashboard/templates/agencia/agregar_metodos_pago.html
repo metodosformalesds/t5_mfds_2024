@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Agregar método de pago - Echérari Tours{% endblock title %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'appDashboard/css/sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'appDashboard/css/perfilA.css' %}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="row">
+    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        {% include "agency_sidebar.html" %}
+    </div>
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
+        <article class="card">
+            <header class="card-header">
+                <h2 class="card-title">Agregar Método de Pago</h2>
+            </header>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="transfer_number" class="form-label">Número de Transferencia</label>
+                        <input type="number" class="form-control" id="transfer_number" name="transfer_number" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar Método de Pago</button>
+                </form>
+            </div>
+        </article>
+    </main>
+</div>
+{% endblock content %}

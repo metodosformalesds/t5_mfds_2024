@@ -20,7 +20,7 @@
             </div>
         {% endif %}
 
-        <form method="post">
+        <form method="post" action="{% url "solicitar_correo" %}">
             {% csrf_token %}
             <label for="email">Correo Electrónico:</label>
             <input type="email" name="email" required>

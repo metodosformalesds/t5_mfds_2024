@@ -1,0 +1,28 @@
+
+.btn-add-payment {
+    background-color: #68ddbd; 
+    border-color: #68ddbd; 
+    color: white;
+    font-weight: bold;
+    display: inline-flex; 
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 8px;
+}
+
+.btn-add-payment:hover {
+    background-color: #57BFA0; 
+    border-color: #57BFA0;
+    text-decoration: none;
+}
+
+.btn-add-payment i {
+    font-size: 1rem; 
+    color: white; 
+}
+

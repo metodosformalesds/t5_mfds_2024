@@ -21,16 +21,16 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 1; 
-    padding: 30px 20px; 
+    flex-grow: 1;
+    padding: 30px 20px;
     position: relative;
-    z-index: 0; 
+    z-index: 0;
 }
 
 .login-box {
     background-color: white;
-    width: 30%; 
-    max-width: 600px; 
+    width: 80%;
+    max-width: 600px;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
@@ -65,7 +65,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: #68ddbd; 
+    background-color: #68ddbd;
 }
 
 .divider span {
@@ -78,12 +78,12 @@ body::before {
 .social-btn {
     margin-top: 10px;
     display: flex;
-    justify-content: space-between;
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
 }
 
 .social-btn a {
-    width: 32%; 
+    width: 32%;
     text-align: center;
     border-radius: 5px;
     text-decoration: none;
@@ -91,7 +91,6 @@ body::before {
 
 .social-btn a img {
     width: 100%;
-    height: 40px; 
+    height: 40px;
     object-fit: contain;
 }
-

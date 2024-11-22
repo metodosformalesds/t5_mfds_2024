@@ -8,6 +8,7 @@ import boto3
 import idanalyzer
 import io
 import base64
+import qrcode
 
 # Para los formularios
 from django.contrib.auth.forms import UserCreationForm
@@ -393,7 +394,7 @@ def registrar_agencia(request):
 @login_required(login_url='login')
 def seleccion_registro(request):
     """
-    Author: Santiago Mendivil
+    Author: Leonardo Ortega
     Renders the selection page. If the user is already part of a user type (Client or Agency), redirects to the main page.
     Args:
         request (HttpRequest): The HTTP request object.
@@ -479,8 +480,9 @@ def necesitas_ayuda(request):
 def solicitar_correo(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+
         try:
-            usuario = User.objects.get(email=email)
+            usuario = User.objects.filter(email=email).first()
             codigo = generar_codigo()
 
             if hasattr(usuario, 'client'):
@@ -493,6 +495,9 @@ def solicitar_correo(request):
                 messages.error(
                     request, 'El usuario no tiene un perfil válido.')
                 return redirect('solicitar_correo')
+
+            request.session['email'] = email
+            request.session['codigo'] = codigo
 
             send_mail(
                 'Código de recuperación',
