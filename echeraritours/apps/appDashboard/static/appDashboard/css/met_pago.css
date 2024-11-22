@@ -28,3 +28,50 @@
 .metodos_pago {
     padding-top: 50px;
 }
+@media (max-width: 992px) {
+    .btn-add-payment {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        gap: 6px;
+    }
+
+    .btn-add-payment i {
+        font-size: 0.9rem;
+    }
+
+    .metodos_pago {
+        padding-top: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-add-payment {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        gap: 5px;
+    }
+
+    .btn-add-payment i {
+        font-size: 0.85rem;
+    }
+
+    .metodos_pago {
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-add-payment {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+
+    .btn-add-payment i {
+        font-size: 0.8rem;
+    }
+
+    .metodos_pago {
+        padding-top: 20px;
+    }
+}

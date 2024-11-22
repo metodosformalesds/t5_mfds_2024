@@ -42,3 +42,81 @@
 .fondo-echerari {
     background-color: #a6f6e1;
 }
+
+@media (max-width: 992px) {
+    .btn-reservar {
+        font-size: 1.1rem;
+        padding: 0.7rem 1rem;
+        border-radius: 0.4rem;
+    }
+
+    .d-flex.align-items-center {
+        gap: 0.8rem;
+    }
+
+    .alert {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .hotel-image {
+        max-height: 250px;
+        border-radius: 6px;
+    }
+
+    .fondo-echerari {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-reservar {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: 0.3rem;
+    }
+
+    .d-flex.align-items-center {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .alert {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .hotel-image {
+        max-height: 200px;
+    }
+
+    .fondo-echerari {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-reservar {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+        border-radius: 0.25rem;
+    }
+
+    .d-flex.align-items-center {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .alert {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .hotel-image {
+        max-height: 150px;
+    }
+
+    .fondo-echerari {
+        padding: 8px;
+    }
+}

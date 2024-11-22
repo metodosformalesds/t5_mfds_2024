@@ -95,3 +95,56 @@ button:hover {
     background-color: #36d1a0;
     height: 210px;
 }
+
+@media (max-width: 768px) {
+    .registro-box {
+        max-width: 95%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .options-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .option {
+        margin: 20px 0;
+        max-width: 80%;
+    }
+
+    button {
+        font-size: 16px;
+    }
+
+    .divider {
+        height: 100px;
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    .option img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .option {
+        margin: 15px 0;
+        max-width: 80%;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    .divider {
+        height: 70px;
+        width: 80%;
+    }
+}

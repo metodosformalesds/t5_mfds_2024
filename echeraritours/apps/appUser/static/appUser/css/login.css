@@ -94,3 +94,62 @@ body::before {
     height: 40px;
     object-fit: contain;
 }
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 20px;
+    }
+
+    .login-box {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .login-box img {
+        border-radius: 10px 10px 0 0;
+    }
+
+    .divider {
+        margin: 15px 0;
+    }
+
+    .social-btn a {
+        width: 48%;
+        margin: 0 1%;
+    }
+
+    .btn-custom {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-container {
+        padding: 15px;
+    }
+
+    .login-box {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .login-box img {
+        width: 100%;
+    }
+
+    .divider {
+        margin: 10px 0;
+    }
+
+    .social-btn a {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .btn-custom {
+        font-size: 0.8rem;
+        padding: 10px;
+    }
+}

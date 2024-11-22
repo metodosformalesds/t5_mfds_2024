@@ -90,3 +90,122 @@ p{
     background-color: #68ddbd;
     color: #ffffff;
 }
+
+@media (max-width: 992px) {
+    .progressbar {
+        width: 80%;
+    }
+
+    .progressbar li {
+        font-size: 12px;
+    }
+
+    .progressbar li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+
+    .progressbar li p {
+        font-size: 10px;
+    }
+
+    .icon-marked {
+        width: 12rem;
+        height: 12rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .btn-dashboard {
+        padding: 8px 15px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .progressbar {
+        flex-direction: column;
+        width: 90%;
+        margin-bottom: 20px;
+    }
+
+    .progressbar li {
+        width: 100%;
+        text-align: left;
+        font-size: 11px;
+        margin-bottom: 15px;
+    }
+
+    .progressbar li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .progressbar li p {
+        font-size: 9px;
+    }
+
+    .icon-marked {
+        width: 10rem;
+        height: 10rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+
+    .btn-dashboard {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .progressbar {
+        width: 100%;
+    }
+
+    .progressbar li {
+        font-size: 10px;
+    }
+
+    .progressbar li::before {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+
+    .progressbar li p {
+        font-size: 8px;
+    }
+
+    .icon-marked {
+        width: 8rem;
+        height: 8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 0.8rem;
+    }
+
+    .btn-dashboard {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+}

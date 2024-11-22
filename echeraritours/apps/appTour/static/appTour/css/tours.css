@@ -104,3 +104,68 @@ a {
     color: gold;
     /* Color de estrella llena */
 }
+
+@media (max-width: 768px) {
+    .reviews-section {
+        padding: 30px 10px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .review-card {
+        padding: 15px;
+    }
+
+    .review-title {
+        font-size: 1.1rem;
+    }
+
+    .review-text {
+        font-size: 0.9rem;
+    }
+
+    .review-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .review-author {
+        font-size: 0.9rem;
+    }
+
+    .review-date {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .review-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .review-title {
+        font-size: 1rem;
+    }
+
+    .review-text {
+        font-size: 0.85rem;
+    }
+
+    .review-footer {
+        gap: 8px;
+    }
+}

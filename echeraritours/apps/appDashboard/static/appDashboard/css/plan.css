@@ -56,3 +56,86 @@
     margin-left: 0; 
     transform: none; 
 }
+
+@media (max-width: 992px) {
+    .no-plans-container {
+        padding: 20px;
+        min-height: 300px;
+    }
+
+    .no-plans-message {
+        max-width: 500px;
+    }
+
+    .no-plans-message h3 {
+        font-size: 1.5rem;
+    }
+
+    .no-plans-message p {
+        font-size: 0.9rem;
+    }
+
+    .explore-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .no-plans-container {
+        padding: 15px;
+        min-height: 250px;
+    }
+
+    .no-plans-message {
+        max-width: 400px;
+    }
+
+    .no-plans-message h3 {
+        font-size: 1.3rem;
+    }
+
+    .no-plans-message p {
+        font-size: 0.85rem;
+    }
+
+    .explore-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .no-plans-container {
+        padding: 10px;
+        min-height: 200px;
+    }
+
+    .no-plans-message {
+        max-width: 300px;
+    }
+
+    .no-plans-message i {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    .no-plans-message h3 {
+        font-size: 1.1rem;
+    }
+
+    .no-plans-message p {
+        font-size: 0.8rem;
+    }
+
+    .explore-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.25rem;
+        margin-top: 10px;
+    }
+}

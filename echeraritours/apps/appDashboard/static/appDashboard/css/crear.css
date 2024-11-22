@@ -61,3 +61,94 @@
     max-width: 700px; 
     padding: 0 25px;
 }
+
+@media (max-width: 992px) {
+    .card-header {
+        padding: 12px;
+    }
+
+    .card-header h2 {
+        font-size: 1.4rem;
+        margin-top: 10px;
+    }
+
+    .custom-form {
+        padding: 15px;
+        max-width: calc(100% - 30px);
+    }
+
+    .custom-input {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .custom-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .custom-form-container {
+        max-width: 600px;
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-header {
+        padding: 10px;
+    }
+
+    .card-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .custom-form {
+        padding: 12px;
+        max-width: calc(100% - 20px);
+    }
+
+    .custom-input {
+        font-size: 0.85rem;
+        padding: 7px;
+    }
+
+    .custom-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .custom-form-container {
+        max-width: 500px;
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-header {
+        padding: 8px;
+    }
+
+    .card-header h2 {
+        font-size: 1rem;
+    }
+
+    .custom-form {
+        padding: 10px;
+        max-width: calc(100% - 10px);
+    }
+
+    .custom-input {
+        font-size: 0.8rem;
+        padding: 5px;
+    }
+
+    .custom-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .custom-form-container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+}
