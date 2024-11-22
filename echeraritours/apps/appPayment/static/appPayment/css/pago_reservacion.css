@@ -104,3 +104,137 @@
     width: 40px;
     margin-right: 5px; 
 }
+
+@media (max-width: 992px) {
+    .progressbar {
+        width: 80%;
+    }
+
+    .progressbar li {
+        font-size: 12px;
+    }
+
+    .progressbar li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+
+    .progressbar li p {
+        font-size: 10px;
+    }
+
+    .form-check-input {
+        margin-right: 8px;
+    }
+
+    .payment-icons img {
+        width: 35px;
+        margin-left: 8px;
+    }
+
+    .btn-success {
+        padding: 10px 25px;
+        font-size: 16px;
+    }
+
+    .btn-success:hover {
+        background-color: #56c1a5;
+        border-color: #56c1a5;
+    }
+
+    .payment-icons {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .progressbar {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .progressbar li {
+        width: 100%;
+        text-align: left;
+        font-size: 11px;
+        margin-bottom: 15px;
+    }
+
+    .progressbar li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .progressbar li p {
+        font-size: 9px;
+    }
+
+    .form-check-input {
+        margin-right: 5px;
+    }
+
+    .payment-icons img {
+        width: 30px;
+        margin-right: 5px;
+    }
+
+    .btn-success {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+
+    .btn-success:hover {
+        background-color: #56c1a5;
+        border-color: #56c1a5;
+    }
+
+    .payment-icons {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .progressbar {
+        width: 100%;
+    }
+
+    .progressbar li {
+        font-size: 10px;
+    }
+
+    .progressbar li::before {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+
+    .progressbar li p {
+        font-size: 8px;
+    }
+
+    .form-check-input {
+        margin-right: 5px;
+    }
+
+    .payment-icons img {
+        width: 25px;
+        margin-right: 3px;
+    }
+
+    .btn-success {
+        padding: 6px 15px;
+        font-size: 12px;
+    }
+
+    .btn-success:hover {
+        background-color: #56c1a5;
+        border-color: #56c1a5;
+    }
+
+    .payment-icons {
+        flex-direction: column;
+        margin-top: 25px;
+    }
+}

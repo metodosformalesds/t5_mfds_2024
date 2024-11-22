@@ -94,3 +94,123 @@ p.lead {
     color: #fff;
     border-color: #68ddbd;
 }
+
+@media (max-width: 992px) {
+    .progressbar {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .progressbar li {
+        font-size: 12px;
+    }
+
+    .progressbar li::before {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+
+    .progressbar li p {
+        font-size: 10px;
+    }
+
+    .icon-check {
+        font-size: 50px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    p.lead {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .btn-outline-success {
+        padding: 8px 18px;
+        font-size: 1rem;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .progressbar {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .progressbar li {
+        width: 100%;
+        text-align: left;
+        font-size: 11px;
+        margin-bottom: 15px;
+    }
+
+    .progressbar li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .progressbar li p {
+        font-size: 9px;
+    }
+
+    .icon-check {
+        font-size: 40px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    p.lead {
+        font-size: 0.9rem;
+    }
+
+    .btn-outline-success {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .progressbar {
+        width: 100%;
+    }
+
+    .progressbar li {
+        font-size: 10px;
+    }
+
+    .progressbar li::before {
+        width: 18px;
+        height: 18px;
+        font-size: 9px;
+    }
+
+    .progressbar li p {
+        font-size: 8px;
+    }
+
+    .icon-check {
+        font-size: 35px;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    p.lead {
+        font-size: 0.8rem;
+    }
+
+    .btn-outline-success {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        border-radius: 15px;
+    }
+}
